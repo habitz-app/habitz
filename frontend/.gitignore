@@ -79,3 +79,6 @@ $RECYCLE.BIN/
 # Ignore all local history of files
 .history
 .ionide
+## Panda
+styled-system
+styled-system-studio
