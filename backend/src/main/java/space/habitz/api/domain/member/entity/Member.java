@@ -61,7 +61,7 @@ public class Member extends MutableTimeEntity {
 	public Member update(OAuthUserInfoResponse response) {
 		this.image = response.getProfile();
 		this.name = response.getName();
-		this.nickname = response.getNickName();
+		this.nickname = response.getNickname();
 		return this;
 	}
 }
