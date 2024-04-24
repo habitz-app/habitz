@@ -13,11 +13,11 @@ public record ScheduleRequestDto(
 	String childUUID,
 	LocalDate startDate,
 	LocalDate endDate,
-	Boolean [] weekDays, // size 7
+	Boolean[] weekDays, // size 7
 	Integer point
-	) {
+) {
 
-	public Schedule toEntity(){
+	public Schedule toEntity() {
 		return Schedule.builder()
 			.title(title)
 			.content(content)
