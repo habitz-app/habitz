@@ -18,7 +18,7 @@ spring:
             token-uri: https://kauth.kakao.com/oauth/token
             user-info-uri: https://kapi.kakao.com/v1/oidc/userinfo
             user-name-attribute: sub
-            logout-uri: https://kapi.kakao.com/v1
+            logout-uri: https://kapi.kakao.com/v1/user/logout
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
