@@ -8,12 +8,13 @@ import space.habitz.api.domain.point.entity.ChildPointHistory;
 
 import java.util.List;
 
+
 @Entity
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
 @DiscriminatorValue("Child")
 @PrimaryKeyJoinColumn(name = "member_id")
-@AllArgsConstructor
 public class Child extends Member {
 
 	@Column(name = "point")
@@ -21,9 +22,4 @@ public class Child extends Member {
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "child")
 	private List<ChildPointHistory> childPointHistories;
-
-	public Child(Member member, Long point) {
-		super(member);
-		this.point = point;
-	}
 }

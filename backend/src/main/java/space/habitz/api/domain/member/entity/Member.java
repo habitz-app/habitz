@@ -6,14 +6,12 @@ import space.habitz.api.domain.member.dto.OAuthUserInfoResponse;
 import space.habitz.api.global.entity.MutableTimeEntity;
 
 @Entity
-@Table(name = "member")
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
-@Setter
+@Getter @Setter @Builder
 @DiscriminatorColumn
 @Inheritance(strategy = InheritanceType.JOINED)
-@Builder
+@Table(name = "member")
 public class Member extends MutableTimeEntity {
 
 	@Id
@@ -41,23 +39,6 @@ public class Member extends MutableTimeEntity {
 
 	@Enumerated(EnumType.STRING)
 	private Role role;
-
-	public Member(Member member) {
-		this.id = member.getId();
-		this.name = member.getName();
-		this.nickname = member.getNickname();
-		this.image = member.getImage();
-		this.uuid = member.getImage();
-		this.memberProfile = member.getMemberProfile();
-		this.socialInform = member.getSocialInform();
-		this.role = member.getRole();
-	}
-
-	public void setMemberInform(MemberProfile memberProfile, SocialInform socialInform) {
-		this.socialInform = socialInform;
-		this.memberProfile = memberProfile;
-	}
-
 	public Member update(OAuthUserInfoResponse response) {
 		this.image = response.getProfile();
 		this.name = response.getName();
