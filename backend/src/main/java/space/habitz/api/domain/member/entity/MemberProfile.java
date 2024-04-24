@@ -2,15 +2,15 @@ package space.habitz.api.domain.member.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 import space.habitz.api.domain.member.dto.OAuthUserInfoResponse;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
-@Getter @Setter @Builder
+@Getter
+@Setter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "member_profile")
@@ -34,14 +34,6 @@ public class MemberProfile {
 	@Column(name = "birth_date")
 	private LocalDate birthDate;
 
-	@Column(name = "created_at")
-	@CreationTimestamp
-	private LocalDateTime createdAt;
-
-	@Column(name = "updated_at")
-	@UpdateTimestamp
-	private LocalDateTime updatedAt;
-
 	@Column(name = "deleted_at")
 	private LocalDateTime deletedAt;
 
@@ -52,4 +44,3 @@ public class MemberProfile {
 		return this;
 	}
 }
-
