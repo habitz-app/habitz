@@ -1,7 +1,7 @@
 package space.habitz.api.domain.product.service;
 
-import space.habitz.api.domain.product.domain.Product;
+import space.habitz.api.domain.product.dto.ResponseProductDto;
 
 public interface ProductService {
-	Product getProductDetail(Long id);
+	ResponseProductDto getProductDetail(Long id);
 }
