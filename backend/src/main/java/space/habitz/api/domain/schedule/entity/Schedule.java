@@ -4,7 +4,7 @@ import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
-import space.habitz.api.global.entity.BaseTimeEntity;
+import space.habitz.api.domain.member.entity.Member;
 import space.habitz.api.global.entity.MutableTimeEntity;
 
 import java.time.LocalDate;
@@ -53,9 +53,11 @@ public class Schedule extends MutableTimeEntity {
 
 	Boolean sunday;
 
-	Long childId;
+	@ManyToOne(fetch = FetchType.LAZY)
+	Member child; // change to Member
 
-	Long parentId;
+	@ManyToOne(fetch = FetchType.LAZY)
+	Member parent; // change to Member
 
 	@Column(name = "repeat_yn")
 	Boolean repeatable;
