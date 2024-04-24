@@ -10,12 +10,10 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "member_profile")
+@Getter @Setter @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
-@Setter
-@Builder
+@Table(name = "member_profile")
 public class MemberProfile {
 
 	@Id

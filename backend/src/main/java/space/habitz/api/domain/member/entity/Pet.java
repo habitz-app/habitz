@@ -7,10 +7,10 @@ import lombok.NoArgsConstructor;
 import space.habitz.api.global.entity.MutableTimeEntity;
 
 @Entity
-@Table(name = "pet")
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
+@Table(name = "pet")
 public class Pet extends MutableTimeEntity {
 
 	@Id

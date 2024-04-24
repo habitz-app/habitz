@@ -7,10 +7,10 @@ import lombok.NoArgsConstructor;
 import space.habitz.api.global.entity.MutableTimeEntity;
 
 @Entity
-@Table(name = "family_member")
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
+@Table(name = "family_member")
 public class FamilyMember extends MutableTimeEntity {
 
 	@Id
@@ -24,9 +24,4 @@ public class FamilyMember extends MutableTimeEntity {
 	@ManyToOne
 	@JoinColumn(name = "member_id", nullable = false)
 	private Member member;
-
-	public FamilyMember(Family family, Member member) {
-		this.family = family;
-		this.member = member;
-	}
 }

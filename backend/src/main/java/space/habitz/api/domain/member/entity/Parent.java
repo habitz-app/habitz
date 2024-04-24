@@ -10,14 +10,9 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
 @DiscriminatorValue("Parent")
 @PrimaryKeyJoinColumn(name = "member_id")
-@AllArgsConstructor
 public class Parent extends Member {
 	private Long point;
-
-	public Parent(Member member, Long point) {
-		super(member);
-		this.point = point;
-	}
 }

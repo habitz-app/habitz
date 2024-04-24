@@ -6,10 +6,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "pet_level")
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
+@Table(name = "pet_level")
 public class PetLevel {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
