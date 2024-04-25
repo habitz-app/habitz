@@ -9,8 +9,9 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import space.habitz.api.domain.product.dto.ResponseProductDto;
+import space.habitz.api.domain.product.dto.ProductInfoDto;
 import space.habitz.api.domain.product.service.ProductService;
+import space.habitz.api.global.response.ResponseData;
 
 @Slf4j
 @RestController
@@ -21,7 +22,7 @@ public class ProductController {
 
 	@ApiResponse(description = "상품 상세 조회")
 	@GetMapping("/{productId}")
-	public ResponseProductDto getProductDetail(
+	public ResponseData<ProductInfoDto> getProductDetail(
 		@Parameter(description = "상품 ID", required = true) @PathVariable("productId") long productId) {
 		return productService.getProductDetail(productId);
 	}
