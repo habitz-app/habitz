@@ -1,22 +1,60 @@
 package space.habitz.api.domain.member.dto;
 
-import lombok.Builder;
-import lombok.Getter;
+import space.habitz.api.domain.member.entity.Member;
+import space.habitz.api.domain.member.entity.MemberProfile;
+import space.habitz.api.domain.member.entity.SocialInform;
 
 import java.time.LocalDate;
 
-@Getter
-@Builder
-public class OAuthUserInfoResponse {
-	String profile;
+public interface OAuthUserInfoResponse {
+	String getName();
 
-	String name;
+	String getNickName();
 
-	String gender;
+	String getProfile();
 
-	String email;
+	String getEmail();
 
-	LocalDate birthDate;
+	LocalDate getBirthDate();
 
-	String nickname;
+	String getProvider();
+
+	String getSocialId();
+
+	String getGender();
+
+	String getPhoneNumber();
+
+	default SocialInform toSocialInformEntity() {
+		return SocialInform.builder()
+			.socialId(this.getSocialId())
+			.provider(this.getProvider())
+			.build();
+	}
+
+	default MemberProfile toMemberProfileEntity() {
+		return MemberProfile.builder()
+			.birthDate(this.getBirthDate())
+			.email(this.getEmail())
+			.gender(this.getGender())
+			.build();
+	}
+
+	default Member toMemberEntity(MemberProfile memberProfile, SocialInform socialInform) {
+		return Member.builder()
+			.image(this.getProfile())
+			.nickname(this.getNickName())
+			.name(this.getName())
+			.memberProfile(memberProfile)
+			.socialInform(socialInform)
+			.build();
+	}
+
+	default Member toMemberEntity() {
+		return Member.builder()
+			.image(this.getProfile())
+			.nickname(this.getNickName())
+			.name(this.getName())
+			.build();
+	}
 }
