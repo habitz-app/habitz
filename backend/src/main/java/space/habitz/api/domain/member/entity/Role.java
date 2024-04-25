@@ -11,7 +11,6 @@ public enum Role {
 	private final String role;
 
 	public String getRoleName() {
-		System.out.println(this.role);
 		return this.role.substring(5);
 	}
 

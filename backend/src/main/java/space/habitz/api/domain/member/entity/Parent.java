@@ -1,23 +1,31 @@
 package space.habitz.api.domain.member.entity;
 
-import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
-import jakarta.persistence.PrimaryKeyJoinColumn;
-import lombok.AllArgsConstructor;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
-@DiscriminatorValue("Parent")
-@PrimaryKeyJoinColumn(name = "member_id")
-@AllArgsConstructor
-public class Parent extends Member {
+public class Parent {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+
+	@OneToOne(fetch = FetchType.LAZY)
+	Member member;
+
 	private Long point;
 
 	public Parent(Member member, Long point) {
-		super(member);
+		this.member = member;
 		this.point = point;
 	}
 }
