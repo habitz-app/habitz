@@ -11,8 +11,6 @@ import space.habitz.api.global.entity.MutableTimeEntity;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@DiscriminatorColumn
-@Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "member")
 public class Member extends MutableTimeEntity {
 
@@ -36,16 +34,16 @@ public class Member extends MutableTimeEntity {
 	@OneToOne(fetch = FetchType.LAZY, mappedBy = "member")
 	private MemberProfile memberProfile;
 
-//	@OneToOne(fetch = FetchType.LAZY, mappedBy = "member")
-//	private SocialInform socialInform;
-//
-//	@Enumerated(EnumType.STRING)
-//	private Role role;
+	@OneToOne(fetch = FetchType.LAZY, mappedBy = "member")
+	private SocialInform socialInform;
+
+	@Enumerated(EnumType.STRING)
+	private Role role;
 
 	public Member update(OAuthUserInfoResponse response) {
 		this.image = response.getProfile();
 		this.name = response.getName();
-		this.nickname = response.getNickname();
+		this.nickname = response.getNickName();
 		return this;
 	}
 }
