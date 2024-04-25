@@ -13,13 +13,19 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@DiscriminatorValue("Child")
-@PrimaryKeyJoinColumn(name = "member_id")
 public class Child extends Member {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+
+	@OneToOne(fetch = FetchType.LAZY)
+	private Member member;
 
 	@Column(name = "point")
 	private Long point;
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "child")
-	private List<ChildPointHistory> childPointHistories;
+	public Child(Member member, Long point) {
+		this.member = member;
+		this.point = point;
+	}
 }
