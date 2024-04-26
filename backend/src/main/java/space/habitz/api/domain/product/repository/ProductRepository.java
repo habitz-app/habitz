@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import lombok.NonNull;
-import space.habitz.api.domain.product.domain.Product;
+import space.habitz.api.domain.product.entity.Product;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
