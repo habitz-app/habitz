@@ -404,6 +404,508 @@ export default defineConfig({
           },
         },
       },
+      textStyles: {
+        hero1: {
+          regular: {
+            value: {
+              fontWeight: '400',
+              fontSize: '3.5rem',
+              lineHeight: '4.5rem',
+              letterSpacing: '-0.0319em',
+            },
+          },
+          medium: {
+            value: {
+              fontWeight: '500',
+              fontSize: '3.5rem',
+              lineHeight: '4.5rem',
+              letterSpacing: '-0.0319em',
+            },
+          },
+          bold: {
+            value: {
+              fontWeight: '600',
+              fontSize: '3.5rem',
+              lineHeight: '4.5rem',
+              letterSpacing: '-0.0319em',
+            },
+          },
+        },
+        display1: {
+          regular: {
+            value: {
+              fontWeight: '400',
+              fontSize: '3.5rem',
+              lineHeight: '4.5rem',
+              letterSpacing: '-0.0319em',
+            },
+          },
+          medium: {
+            value: {
+              fontWeight: '500',
+              fontSize: '3.5rem',
+              lineHeight: '4.5rem',
+              letterSpacing: '-0.0319em',
+            },
+          },
+          bold: {
+            value: {
+              fontWeight: '600',
+              fontSize: '3.5rem',
+              lineHeight: '4.5rem',
+              letterSpacing: '-0.0319em',
+            },
+          },
+        },
+        display2: {
+          regular: {
+            value: {
+              fontWeight: '400',
+              fontSize: '2.5rem',
+              lineHeight: '3.25rem',
+              letterSpacing: '-0.0282em',
+            },
+          },
+          medium: {
+            value: {
+              fontWeight: '500',
+              fontSize: '2.5rem',
+              lineHeight: '3.25rem',
+              letterSpacing: '-0.0282em',
+            },
+          },
+          bold: {
+            value: {
+              fontWeight: '600',
+              fontSize: '2.5rem',
+              lineHeight: '3.25rem',
+              letterSpacing: '-0.0282em',
+            },
+          },
+        },
+        title1: {
+          regular: {
+            value: {
+              fontWeight: '400',
+              fontSize: '2.25rem',
+              lineHeight: '3rem',
+              letterSpacing: '-0.027em',
+            },
+          },
+          medium: {
+            value: {
+              fontWeight: '500',
+              fontSize: '2.25rem',
+              lineHeight: '3rem',
+              letterSpacing: '-0.027em',
+            },
+          },
+          bold: {
+            value: {
+              fontWeight: '600',
+              fontSize: '2.25rem',
+              lineHeight: '3rem',
+              letterSpacing: '-0.027em',
+            },
+          },
+        },
+        title2: {
+          regular: {
+            value: {
+              fontWeight: '400',
+              fontSize: '1.75rem',
+              lineHeight: '2.375rem',
+              letterSpacing: '-0.0236em',
+            },
+          },
+          medium: {
+            value: {
+              fontWeight: '500',
+              fontSize: '1.75rem',
+              lineHeight: '2.375rem',
+              letterSpacing: '-0.0236em',
+            },
+          },
+          bold: {
+            value: {
+              fontWeight: '600',
+              fontSize: '1.75rem',
+              lineHeight: '2.375rem',
+              letterSpacing: '-0.0236em',
+            },
+          },
+        },
+        title3: {
+          regular: {
+            value: {
+              fontWeight: '400',
+              fontSize: '1.5rem',
+              lineHeight: '2rem',
+              letterSpacing: '-0.023em',
+            },
+          },
+          medium: {
+            value: {
+              fontWeight: '500',
+              fontSize: '1.5rem',
+              lineHeight: '2rem',
+              letterSpacing: '-0.023em',
+            },
+          },
+          bold: {
+            value: {
+              fontWeight: '600',
+              fontSize: '1.5rem',
+              lineHeight: '2rem',
+              letterSpacing: '-0.023em',
+            },
+          },
+        },
+        heading1: {
+          regular: {
+            value: {
+              fontWeight: '400',
+              fontSize: '1.375rem',
+              lineHeight: '1.875rem',
+              letterSpacing: '-0.0194em',
+            },
+          },
+          medium: {
+            value: {
+              fontWeight: '500',
+              fontSize: '1.375rem',
+              lineHeight: '1.875rem',
+              letterSpacing: '-0.0194em',
+            },
+          },
+          bold: {
+            value: {
+              fontWeight: '600',
+              fontSize: '1.375rem',
+              lineHeight: '1.875rem',
+              letterSpacing: '-0.0194em',
+            },
+          },
+        },
+        heading2: {
+          regular: {
+            value: {
+              fontWeight: '400',
+              fontSize: '1.25rem',
+              lineHeight: '1.75rem',
+              letterSpacing: '-0.012em',
+            },
+          },
+          medium: {
+            value: {
+              fontWeight: '500',
+              fontSize: '1.25rem',
+              lineHeight: '1.75rem',
+              letterSpacing: '-0.012em',
+            },
+          },
+          bold: {
+            value: {
+              fontWeight: '600',
+              fontSize: '1.25rem',
+              lineHeight: '1.75rem',
+              letterSpacing: '-0.012em',
+            },
+          },
+        },
+        headline1: {
+          regular: {
+            value: {
+              fontWeight: '400',
+              fontSize: '1.125rem',
+              lineHeight: '1.625rem',
+              letterSpacing: '-0.002em',
+            },
+          },
+          medium: {
+            value: {
+              fontWeight: '500',
+              fontSize: '1.125rem',
+              lineHeight: '1.625rem',
+              letterSpacing: '-0.002em',
+            },
+          },
+          bold: {
+            value: {
+              fontWeight: '600',
+              fontSize: '1.125rem',
+              lineHeight: '1.625rem',
+              letterSpacing: '-0.002em',
+            },
+          },
+        },
+        headline2: {
+          regular: {
+            value: {
+              fontWeight: '400',
+              fontSize: '1.0625rem',
+              lineHeight: '1.412rem',
+              letterSpacing: '0em',
+            },
+          },
+          medium: {
+            value: {
+              fontWeight: '500',
+              fontSize: '1.0625rem',
+              lineHeight: '1.412rem',
+              letterSpacing: '0em',
+            },
+          },
+          bold: {
+            value: {
+              fontWeight: '600',
+              fontSize: '1.0625rem',
+              lineHeight: '1.412rem',
+              letterSpacing: '0em',
+            },
+          },
+        },
+        body1: {
+          normal: {
+            regular: {
+              value: {
+                fontWeight: '400',
+                fontSize: '1rem',
+                lineHeight: '1.5rem',
+                letterSpacing: '0.0057em',
+              },
+            },
+            medium: {
+              value: {
+                fontWeight: '500',
+                fontSize: '1rem',
+                lineHeight: '1.5rem',
+                letterSpacing: '0.0057em',
+              },
+            },
+            bold: {
+              value: {
+                fontWeight: '600',
+                fontSize: '1rem',
+                lineHeight: '1.5rem',
+                letterSpacing: '0.0057em',
+              },
+            },
+          },
+          reading: {
+            regular: {
+              value: {
+                fontWeight: '400',
+                fontSize: '1rem',
+                lineHeight: '1.625rem',
+                letterSpacing: '0.0057em',
+              },
+            },
+            medium: {
+              value: {
+                fontWeight: '500',
+                fontSize: '1rem',
+                lineHeight: '1.625rem',
+                letterSpacing: '0.0057em',
+              },
+            },
+            bold: {
+              value: {
+                fontWeight: '600',
+                fontSize: '1rem',
+                lineHeight: '1.625rem',
+                letterSpacing: '0.0057em',
+              },
+            },
+          },
+        },
+        body2: {
+          normal: {
+            regular: {
+              value: {
+                fontWeight: '400',
+                fontSize: '0.938rem',
+                lineHeight: '1.467rem',
+                letterSpacing: '0.0096em',
+              },
+            },
+            medium: {
+              value: {
+                fontWeight: '500',
+                fontSize: '0.938rem',
+                lineHeight: '1.467rem',
+                letterSpacing: '0.0096em',
+              },
+            },
+            bold: {
+              value: {
+                fontWeight: '600',
+                fontSize: '0.938rem',
+                lineHeight: '1.467rem',
+                letterSpacing: '0.0096em',
+              },
+            },
+          },
+          reading: {
+            regular: {
+              value: {
+                fontWeight: '400',
+                fontSize: '0.938rem',
+                lineHeight: '1.6rem',
+                letterSpacing: '0.0096em',
+              },
+            },
+            medium: {
+              value: {
+                fontWeight: '500',
+                fontSize: '0.938rem',
+                lineHeight: '1.6rem',
+                letterSpacing: '0.0096em',
+              },
+            },
+            bold: {
+              value: {
+                fontWeight: '600',
+                fontSize: '0.938rem',
+                lineHeight: '1.6rem',
+                letterSpacing: '0.0096em',
+              },
+            },
+          },
+        },
+        label1: {
+          normal: {
+            regular: {
+              value: {
+                fontWeight: '400',
+                fontSize: '0.875rem',
+                lineHeight: '1.429rem',
+                letterSpacing: '0.0145em',
+              },
+            },
+            medium: {
+              value: {
+                fontWeight: '500',
+                fontSize: '0.875rem',
+                lineHeight: '1.429rem',
+                letterSpacing: '0.0145em',
+              },
+            },
+            bold: {
+              value: {
+                fontWeight: '600',
+                fontSize: '0.875rem',
+                lineHeight: '1.429rem',
+                letterSpacing: '0.0145em',
+              },
+            },
+          },
+          reading: {
+            regular: {
+              value: {
+                fontWeight: '400',
+                fontSize: '0.875rem',
+                lineHeight: '1.571rem',
+                letterSpacing: '0.0145em',
+              },
+            },
+            medium: {
+              value: {
+                fontWeight: '500',
+                fontSize: '0.875rem',
+                lineHeight: '1.571rem',
+                letterSpacing: '0.0145em',
+              },
+            },
+            bold: {
+              value: {
+                fontWeight: '600',
+                fontSize: '0.875rem',
+                lineHeight: '1.571rem',
+                letterSpacing: '0.0145em',
+              },
+            },
+          },
+        },
+        label2: {
+          regular: {
+            value: {
+              fontWeight: '400',
+              fontSize: '0.8125rem',
+              lineHeight: '1.385rem',
+              letterSpacing: '0.0194em',
+            },
+          },
+          medium: {
+            value: {
+              fontWeight: '500',
+              fontSize: '0.8125rem',
+              lineHeight: '1.385rem',
+              letterSpacing: '0.0194em',
+            },
+          },
+          bold: {
+            value: {
+              fontWeight: '600',
+              fontSize: '0.8125rem',
+              lineHeight: '1.385rem',
+              letterSpacing: '0.0194em',
+            },
+          },
+        },
+        caption1: {
+          regular: {
+            value: {
+              fontWeight: '400',
+              fontSize: '0.75rem',
+              lineHeight: '1.334rem',
+              letterSpacing: '0.0252em',
+            },
+          },
+          medium: {
+            value: {
+              fontWeight: '500',
+              fontSize: '0.75rem',
+              lineHeight: '1.334rem',
+              letterSpacing: '0.0252em',
+            },
+          },
+          bold: {
+            value: {
+              fontWeight: '600',
+              fontSize: '0.75rem',
+              lineHeight: '1.334rem',
+              letterSpacing: '0.0252em',
+            },
+          },
+        },
+        caption2: {
+          regular: {
+            value: {
+              fontWeight: '400',
+              fontSize: '0.6875rem',
+              lineHeight: '1.273rem',
+              letterSpacing: '0.0311em',
+            },
+          },
+          medium: {
+            value: {
+              fontWeight: '500',
+              fontSize: '0.6875rem',
+              lineHeight: '1.273rem',
+              letterSpacing: '0.0311em',
+            },
+          },
+          bold: {
+            value: {
+              fontWeight: '600',
+              fontSize: '0.6875rem',
+              lineHeight: '1.273rem',
+              letterSpacing: '0.0311em',
+            },
+          },
+        },
+      },
     },
   },
 
