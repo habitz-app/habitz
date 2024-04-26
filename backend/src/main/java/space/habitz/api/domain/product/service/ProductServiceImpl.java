@@ -1,12 +1,11 @@
 package space.habitz.api.domain.product.service;
 
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
-import space.habitz.api.domain.product.domain.Product;
+import space.habitz.api.domain.product.entity.Product;
 import space.habitz.api.domain.product.dto.ProductInfoDto;
 import space.habitz.api.domain.product.repository.ProductRepository;
 import space.habitz.api.global.response.ResponseData;
