@@ -2,6 +2,7 @@ package space.habitz.api.domain.product.service;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
@@ -37,8 +38,8 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public Page<ProductInfoDto> getProductList(int page, int size) {
-		return productRepository.findAll(PageRequest.of(page, size))
+	public Page<ProductInfoDto> getProductList(Pageable pageable ){
+		return productRepository.findAll(pageable)
 			.map(product -> ProductInfoDto.builder()
 				.productId(product.getId())
 				.productName(product.getName())
