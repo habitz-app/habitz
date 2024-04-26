@@ -1,8 +1,11 @@
 'use client';
-import React, { useState } from 'react';
+import { useRouter, usePathname } from 'next/navigation';
+import React, { use, useState } from 'react';
 import { HStack } from 'styled-system/jsx';
 
 const Charge = () => {
+  const router = useRouter();
+  const currentPath = usePathname();
   const dummyHabitz: number = 7400;
   const dummyChargeButtonArray: number[] = [10000, 50000, 100000, 500000];
   const [charge, setCharge] = useState<number | null>(null);
@@ -16,10 +19,12 @@ const Charge = () => {
   const chargeHandler = () => {
     if (charge !== null) {
       // Charge Logic
-      if (charge !== 0) {
+      if (charge >= 1000) {
         alert(`${charge}원이 충전되었습니다.`);
+        router.push(currentPath + '/success');
       } else {
-        alert('0원 이상의 금액을 입력해주세요.');
+        alert('1000원 이상의 금액을 입력해주세요.');
+        router.push(currentPath + '/fail');
       }
     } else {
       alert('충전할 금액을 입력해주세요.');
