@@ -1,4 +1,4 @@
-package space.habitz.api.domain.quiz.domain;
+package space.habitz.api.domain.quiz.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
