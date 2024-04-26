@@ -14,4 +14,7 @@ public class CustomNotFoundException extends RuntimeException {
 		super(message, cause);
 	}
 
+	public CustomNotFoundException(ErrorCode errorCode) {
+		super(errorCode.getErrorMessage());
+	}
 }
