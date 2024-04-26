@@ -1,6 +1,7 @@
 package space.habitz.api.domain.product.controller;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,10 +32,8 @@ public class ProductController {
 
 	@ApiResponse(description = "상품 리스트 조회")
 	@GetMapping("/list")
-	public ResponseData<Page<ProductInfoDto>> getProductList(
-		@Parameter(description = "페이지 번호", required = false) @RequestParam("page") int page,
-		@Parameter(description = "페이지 크기", required = false) @RequestParam("size") int size) {
-		return new ResponseData<>("success", "상품 리스트 조회 성공", productService.getProductList(page, size));
+	public ResponseData<Page<ProductInfoDto>> getProductList(Pageable pageable) {
+		return new ResponseData<>("success", "상품 리스트 조회 성공", productService.getProductList(pageable));
 	}
 
 }
