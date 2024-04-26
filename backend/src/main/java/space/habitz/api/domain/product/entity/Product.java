@@ -1,4 +1,4 @@
-package space.habitz.api.domain.product.domain;
+package space.habitz.api.domain.product.entity;
 
 import java.sql.Timestamp;
 
