@@ -34,4 +34,13 @@ public class ScheduleController {
 		return ResponseData.success(scheduleDto);
 	}
 
+	@Operation(
+		summary = "일정 삭제",
+		description = "일정을 삭제합니다."
+	)
+	@DeleteMapping("/{scheduleId}")
+	public ResponseData<String> deleteSchedule(@AuthenticationPrincipal Member member, @PathVariable Long scheduleId) {
+		return ResponseData.success(scheduleService.deleteSchedule(member, scheduleId));
+	}
+
 }
