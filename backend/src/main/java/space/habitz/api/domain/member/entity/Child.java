@@ -4,16 +4,14 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import space.habitz.api.domain.point.entity.ChildPointHistory;
-
-import java.util.List;
+import space.habitz.api.global.entity.MutableTimeEntity;
 
 
 @Entity
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Child extends Member {
+public class Child extends MutableTimeEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
