@@ -3,7 +3,8 @@ package space.habitz.api.domain.member.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import space.habitz.api.domain.member.dto.OAuthUserInfoResponse;
-import space.habitz.api.global.entity.MutableTimeEntity;
+
+import java.util.List;
 
 @Entity
 @Getter
@@ -12,11 +13,10 @@ import space.habitz.api.global.entity.MutableTimeEntity;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "member")
-public class Member extends MutableTimeEntity {
+public class Member {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "member_id")
 	private Long id;
 
 	@Column(name = "name", length = 30)
@@ -40,10 +40,18 @@ public class Member extends MutableTimeEntity {
 	@Enumerated(EnumType.STRING)
 	private Role role;
 
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "member")
+	private List<FamilyMember> familyMemberList;
+
 	public Member update(OAuthUserInfoResponse response) {
 		this.image = response.getProfile();
 		this.name = response.getName();
 		this.nickname = response.getNickName();
 		return this;
+	}
+
+	public void setMemberInform(MemberProfile memberProfile, SocialInform socialInform) {
+		this.socialInform = socialInform;
+		this.memberProfile = memberProfile;
 	}
 }
