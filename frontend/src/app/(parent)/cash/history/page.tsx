@@ -1,5 +1,3 @@
-import { Item } from 'node_modules/@ark-ui/react/accordion/accordion';
-import React from 'react';
 import { css } from 'styled-system/css';
 import { HStack, Stack } from 'styled-system/jsx';
 import { stack } from 'styled-system/patterns';

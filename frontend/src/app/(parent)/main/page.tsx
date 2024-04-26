@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import Image from 'next/image';
 import { Circle, HStack } from 'styled-system/jsx';
 import { circle, hstack, stack } from 'styled-system/patterns';
@@ -12,67 +12,79 @@ const testCss = {
   },
 };
 
-type activity = {
-  id: number;
-  title: string;
-  date: string;
-  habitz: number;
+type pointhistory = {
+  pointHistoryId: number;
+  content: string;
+  changedDate: Date;
+  amount: number;
+  totalPoint: number;
+  type: 'gain' | 'loss';
 };
 
 interface dummyChild {
-  id: number;
+  memberId: number;
   name: string;
-  habitz: number;
+  point: number;
   imageUrl: string;
-  activity: activity[];
+  histories?: pointhistory[];
 }
 
 const dummyChildren: dummyChild[] = [
   {
-    id: 1,
+    memberId: 1,
     name: '김싸피',
-    habitz: 10450,
+    point: 10450,
     imageUrl:
       'https://th.bing.com/th/id/OIG3.XjJC_rWVtDY_8a5.T.ux?w=1024&h=1024&rs=1&pid=ImgDetMain',
-    activity: [
+    histories: [
       {
-        id: 1,
-        title: '플라스틱 줍기',
-        date: '2021-09-01',
-        habitz: 100,
+        pointHistoryId: 1,
+        content: '플라스틱 줍기',
+        changedDate: new Date('2024-04-16T00:10:56'),
+        amount: 100,
+        type: 'gain',
+        totalPoint: 10450,
       },
       {
-        id: 2,
-        title: '캔 줍기',
-        date: '2021-09-01',
-        habitz: 100,
+        pointHistoryId: 2,
+        content: '캔 줍기',
+        changedDate: new Date('2024-04-16T00:12:56'),
+        amount: 100,
+        type: 'gain',
+        totalPoint: 10450,
       },
     ],
   },
   {
-    id: 2,
+    memberId: 2,
     name: '김첫째',
-    habitz: 12250,
+    point: 12250,
     imageUrl:
       'https://th.bing.com/th/id/OIG1.cyZykh.a17LIEHsNeBLo?w=1024&h=1024&rs=1&pid=ImgDetMain',
-    activity: [
+    histories: [
       {
-        id: 1,
-        title: '강아지 산책시키기',
-        date: '2021-09-01',
-        habitz: 200,
+        pointHistoryId: 1,
+        content: '강아지 산책시키기',
+        changedDate: new Date('2021-09-01'),
+        amount: 200,
+        type: 'gain',
+        totalPoint: 10450,
       },
       {
-        id: 2,
-        title: '수학 숙제 5 페이지',
-        date: '2021-08-01',
-        habitz: 100,
+        pointHistoryId: 2,
+        content: '수학 숙제 5 페이지',
+        changedDate: new Date('2021-08-01'),
+        amount: 100,
+        type: 'gain',
+        totalPoint: 10450,
       },
       {
-        id: 3,
-        title: '닌텐도 스위치 구매',
-        date: '2021-08-04',
-        habitz: -330000,
+        pointHistoryId: 3,
+        content: '닌텐도 스위치 구매',
+        changedDate: new Date('2021-08-04'),
+        amount: 330000,
+        type: 'loss',
+        totalPoint: 10450,
       },
     ],
   },
@@ -80,7 +92,7 @@ const dummyChildren: dummyChild[] = [
 
 const Page: React.FC = () => {
   const [selectedChild, setSelectedChild] = useState<dummyChild>(
-    dummyChildren[1],
+    dummyChildren[0],
   );
   return (
     <div>
@@ -88,7 +100,7 @@ const Page: React.FC = () => {
       <HStack>
         {dummyChildren.map((child) => (
           <div
-            key={child.id}
+            key={child.memberId}
             className={circle({
               size: 50,
               overflow: 'hidden',
@@ -113,7 +125,7 @@ const Page: React.FC = () => {
         <h1>{selectedChild.name} 어린이</h1>
         <div>
           보유 해빗
-          <div>{selectedChild.habitz}</div>
+          <div>{selectedChild.point}</div>
         </div>
       </div>
       <div>
@@ -122,14 +134,15 @@ const Page: React.FC = () => {
           <div>{'>'}</div>
         </HStack>
         <ul>
-          {selectedChild.activity.map((activity) => {
+          {selectedChild.histories?.map((history) => {
             return (
               <li
-                key={activity.id}
+                key={history.pointHistoryId}
                 className={hstack({ justify: 'space-between' })}
               >
-                <div>{activity.title}</div>
-                <div>{activity.habitz}</div>
+                <div>{history.content}</div>
+                <div>{history.changedDate.toISOString().split('T', 1)}</div>
+                <div>{history.amount}</div>
               </li>
             );
           })}
