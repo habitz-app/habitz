@@ -78,6 +78,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 			new AntPathRequestMatcher("/login/oauth2/code/**"),
 			new AntPathRequestMatcher("/swagger-ui/**"),
 			new AntPathRequestMatcher("/v3/api-docs/**"),
+			new AntPathRequestMatcher("/api/v1/test/**"),
 		};
 
 		for (AntPathRequestMatcher matcher : whiteList) {
