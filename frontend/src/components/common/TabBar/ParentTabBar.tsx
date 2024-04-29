@@ -3,25 +3,17 @@
 import { css } from 'styled-system/css';
 import { home, people, star, storefront, grid } from 'ionicons/icons';
 import { IonIcon } from '@ionic/react';
-import { useState } from 'react';
-const ParentTabBar = () => {
-  const [isActive, setIsActive] = useState({
-    home: true,
-    child: false,
-    mission: false,
-    store: false,
-    menu: false,
-  });
+import { useEffect, useState } from 'react';
+import type { MenuType } from '@/types/tabBar/parentTabBar';
+const ParentTabBar = ({ menu }: { menu: MenuType }) => {
+  const [currentMenu, setCurrentMenu] = useState(menu);
 
-  const handleClick = (menu: string) => {
-    setIsActive((prevState) => ({
-      ...prevState,
-      home: menu === 'home',
-      child: menu === 'child',
-      mission: menu === 'mission',
-      store: menu === 'store',
-      menu: menu === 'menu',
-    }));
+  useEffect(() => {
+    setCurrentMenu(menu);
+  }, [menu]);
+
+  const handleClick = (menu: MenuType) => {
+    setCurrentMenu(menu);
   };
 
   return (
@@ -54,7 +46,8 @@ const ParentTabBar = () => {
             alignSelf: 'center',
             flexDir: 'column',
             flexGrow: 1,
-            color: isActive.home ? 'label.normal' : 'label.alternative',
+            color:
+              currentMenu === 'home' ? 'label.normal' : 'label.alternative',
           })}
         >
           <IonIcon
@@ -76,7 +69,8 @@ const ParentTabBar = () => {
             alignSelf: 'center',
             flexDir: 'column',
             flexGrow: 1,
-            color: isActive.child ? 'label.normal' : 'label.alternative',
+            color:
+              currentMenu === 'child' ? 'label.normal' : 'label.alternative',
           })}
         >
           <IonIcon
@@ -98,7 +92,8 @@ const ParentTabBar = () => {
             alignSelf: 'center',
             flexDir: 'column',
             flexGrow: 1,
-            color: isActive.mission ? 'label.normal' : 'label.alternative',
+            color:
+              currentMenu === 'mission' ? 'label.normal' : 'label.alternative',
           })}
         >
           <IonIcon
@@ -120,7 +115,8 @@ const ParentTabBar = () => {
             alignSelf: 'center',
             flexDir: 'column',
             flexGrow: 1,
-            color: isActive.store ? 'label.normal' : 'label.alternative',
+            color:
+              currentMenu === 'store' ? 'label.normal' : 'label.alternative',
           })}
         >
           <IonIcon
@@ -142,7 +138,8 @@ const ParentTabBar = () => {
             alignSelf: 'center',
             flexDir: 'column',
             flexGrow: 1,
-            color: isActive.menu ? 'label.normal' : 'label.alternative',
+            color:
+              currentMenu === 'menu' ? 'label.normal' : 'label.alternative',
           })}
         >
           <IonIcon
