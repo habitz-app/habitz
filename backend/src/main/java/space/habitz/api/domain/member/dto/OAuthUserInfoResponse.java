@@ -1,7 +1,5 @@
 package space.habitz.api.domain.member.dto;
 
-import lombok.Builder;
-import lombok.Getter;
 import space.habitz.api.domain.member.entity.Member;
 import space.habitz.api.domain.member.entity.MemberProfile;
 import space.habitz.api.domain.member.entity.SocialInform;
@@ -27,36 +25,27 @@ public interface OAuthUserInfoResponse {
 
 	String getPhoneNumber();
 
+
 	default SocialInform toSocialInformEntity() {
 		return SocialInform.builder()
-				.socialId(this.getSocialId())
-				.provider(this.getProvider())
-				.build();
+			.socialId(this.getSocialId())
+			.provider(this.getProvider())
+			.build();
 	}
 
 	default MemberProfile toMemberProfileEntity() {
 		return MemberProfile.builder()
-				.birthDate(this.getBirthDate())
-				.email(this.getEmail())
-				.gender(this.getGender())
-				.build();
-	}
-
-	default Member toMemberEntity(MemberProfile memberProfile, SocialInform socialInform) {
-		return Member.builder()
-				.image(this.getProfile())
-				.nickname(this.getNickName())
-				.name(this.getName())
-				.memberProfile(memberProfile)
-				.socialInform(socialInform)
-				.build();
+			.birthDate(this.getBirthDate())
+			.email(this.getEmail())
+			.gender(this.getGender())
+			.build();
 	}
 
 	default Member toMemberEntity() {
 		return Member.builder()
-				.image(this.getProfile())
-				.nickname(this.getNickName())
-				.name(this.getName())
-				.build();
+			.image(this.getProfile())
+			.nickname(this.getNickName())
+			.name(this.getName())
+			.build();
 	}
 }
