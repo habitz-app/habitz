@@ -1,13 +1,12 @@
 package space.habitz.api.domain.member.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import space.habitz.api.global.entity.MutableTimeEntity;
+
+import java.util.List;
 
 @Entity
 @Getter
@@ -22,4 +21,12 @@ public class Family extends MutableTimeEntity {
 
 	@Column(name = "family_point")
 	private Long familyPoint;
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "family")
+	private List<FamilyMember> familyMemberList;
+
+	public Family(String id, Long familyPoint) {
+		this.id = id;
+		this.familyPoint = familyPoint;
+	}
 }
