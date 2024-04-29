@@ -34,4 +34,18 @@ public class ScheduleService {
 		Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(() -> new CustomErrorException(ErrorCode.SCHEDULE_NOT_FOUND));
 		return ScheduleDto.of(schedule);
 	}
+
+	/**
+	 * 일정 삭제
+	 *
+	 * @param member     로그인한 사용자 정보
+	 * @param scheduleId 일정 ID
+	 */
+	public String deleteSchedule(Member member, Long scheduleId) {
+
+		// schedule을 기준으로 today ~ endDate 까지의 일정을 모두 삭제
+
+		scheduleRepository.deleteById(scheduleId);
+		return scheduleId + " 일정이 삭제 되었습니다.";
+	}
 }
