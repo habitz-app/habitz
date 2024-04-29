@@ -149,7 +149,7 @@ public class JwtTokenProvider {
 
 	public Authentication getAuthentication(Member member) {
 		return new UsernamePasswordAuthenticationToken(member, "",
-			List.of(new SimpleGrantedAuthority(member.getRole().getRoleName())));
+			List.of(new SimpleGrantedAuthority("ROLE_" + member.getRole().getRoleName())));
 	}
 
 	private String buildToken(Map<String, Object> extraClaims, long expiration) {
