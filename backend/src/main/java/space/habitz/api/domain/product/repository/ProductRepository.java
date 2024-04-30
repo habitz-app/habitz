@@ -13,5 +13,6 @@ import space.habitz.api.domain.product.entity.Product;
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
 	Optional<Product> findProductById(Long id);
+
 	@NonNull Page<Product> findAll(@NonNull Pageable pageable);
 }
