@@ -64,4 +64,19 @@ public class ScheduleService {
 		scheduleRepository.deleteById(scheduleId);
 		return scheduleId + " 일정이 삭제 되었습니다.";
 	}
+
+
+	/**
+	 * 같은 가족인지 확인하는 validation
+	 *
+	 * @param parent 가족 관계를 확인할 사용자
+	 * @param child  가족 관계를 확인할 사용자
+	 */
+	public boolean validateFamily(Member parent, Member child) {
+		if (!parent.getFamily().getId().equals(child.getFamily().getId())) {
+			throw new CustomErrorException(ErrorCode.FAMILY_NOT_MATCH);
+		}
+		return true;
+	}
+
 }
