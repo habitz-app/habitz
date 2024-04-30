@@ -1,13 +1,17 @@
 package space.habitz.api.domain.mission.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 import space.habitz.api.domain.member.entity.Member;
 import space.habitz.api.domain.schedule.entity.Schedule;
 import space.habitz.api.global.entity.MutableTimeEntity;
 
 @Entity
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Table(name = "mission")
 public class Mission extends MutableTimeEntity {
 

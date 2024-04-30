@@ -5,6 +5,6 @@ import lombok.Builder;
 @Builder
 public record MemberProfileDto(
 	String name,
-	String UUID
+	String memberUUID
 ) {
 }
