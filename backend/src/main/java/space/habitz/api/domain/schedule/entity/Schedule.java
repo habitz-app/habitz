@@ -18,46 +18,49 @@ import java.time.LocalDate;
 @Table(name = "schedule")
 public class Schedule extends MutableTimeEntity {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    Long id;
 
-	String emoji;
+    String emoji;
 
-	@NotNull
-	String title;
+    @NotNull
+    String title;
 
-	String content;
+    String content;
 
-	@NotNull
-	int point;
+    @NotNull
+    int point;
 
-	@NotNull
-	LocalDate startDate;
+    @NotNull
+    LocalDate startDate;
 
-	@NotNull
-	LocalDate endDate;
+    @NotNull
+    LocalDate endDate;
 
-	Boolean monday;
+    Boolean monday;
 
-	Boolean tuesday;
+    Boolean tuesday;
 
-	Boolean wednesday;
+    Boolean wednesday;
 
-	Boolean thursday;
+    Boolean thursday;
 
-	Boolean friday;
+    Boolean friday;
 
-	Boolean saturday;
+    Boolean saturday;
 
-	Boolean sunday;
+    Boolean sunday;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	Member child; // change to Member
+    @ManyToOne(fetch = FetchType.LAZY)
+    Member child;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	Member parent; // change to Member
+    @ManyToOne(fetch = FetchType.LAZY)
+    Member parent;
 
-	@Column(name = "repeat_yn")
-	Boolean repeatable;
+    @Column(name = "repeat_yn")
+    Boolean repeatable;
+
+    @Column(name = "is_deleted")
+    Boolean isDeleted;
 }
