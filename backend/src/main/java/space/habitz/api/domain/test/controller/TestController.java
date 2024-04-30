@@ -3,10 +3,7 @@ package space.habitz.api.domain.test.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import space.habitz.api.domain.member.dto.MemberLoginResponseDto;
 import space.habitz.api.domain.test.dto.DummyMemberLoginRequestDto;
 import space.habitz.api.domain.test.dto.DummyMemberRegisterRequestDto;
@@ -32,4 +29,11 @@ public class TestController {
 		MemberLoginResponseDto accessToken = testService.getAccessToken(request);
 		return ResponseEntity.status(HttpStatus.OK).body(ResponseData.success("로그인 성공", accessToken));
 	}
+
+	@PostMapping("/makeFamily/{memberId}/{targetId}")
+	public ResponseEntity<?> makeFamily(@PathVariable("memberId") Long memberId, @PathVariable("targetId") Long targetId) {
+		testService.makeFamily(memberId, targetId);
+		return ResponseEntity.status(HttpStatus.OK).body(ResponseData.success("가족 등록 성공", null));
+	}
+
 }

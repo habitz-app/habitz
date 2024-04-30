@@ -6,15 +6,13 @@ import space.habitz.api.domain.member.dto.JwtTokenDto;
 import space.habitz.api.domain.member.dto.MemberLoginResponseDto;
 import space.habitz.api.domain.member.entity.*;
 import space.habitz.api.domain.member.exeption.MemberNotFoundException;
-import space.habitz.api.domain.member.repository.MemberProfileRepository;
-import space.habitz.api.domain.member.repository.MemberRepository;
-import space.habitz.api.domain.member.repository.RefreshTokenRepository;
-import space.habitz.api.domain.member.repository.SocialInformRepository;
+import space.habitz.api.domain.member.repository.*;
 import space.habitz.api.domain.member.service.JwtTokenProvider;
 import space.habitz.api.domain.test.dto.DummyMemberLoginRequestDto;
 import space.habitz.api.domain.test.dto.DummyMemberRegisterRequestDto;
 import space.habitz.api.domain.test.dto.DummyMemberRegisterResponseDto;
-import space.habitz.api.global.util.RandomUtils;
+
+import static space.habitz.api.global.util.RandomUtils.generateRandomCode;
 
 
 @Service
@@ -25,6 +23,7 @@ public class TestServiceImpl implements TestService {
 	private final MemberProfileRepository memberProfileRepository;
 	private final JwtTokenProvider jwtTokenProvider;
 	private final RefreshTokenRepository refreshTokenRepository;
+	private final FamilyRepository familyRepository;
 
 	@Override
 	public DummyMemberRegisterResponseDto register(DummyMemberRegisterRequestDto requestDto) {
@@ -32,7 +31,7 @@ public class TestServiceImpl implements TestService {
 			.name(requestDto.getName())
 			.nickname(requestDto.getNickName())
 			.image(requestDto.getImage())
-			.uuid(RandomUtils.generateRandomCode(6))
+			.uuid(generateRandomCode(6))
 			.role(Role.findEnum(requestDto.getRole()))
 			.build();
 
@@ -45,7 +44,7 @@ public class TestServiceImpl implements TestService {
 			.build();
 
 		SocialInform socialInform = SocialInform.builder()
-			.socialId(RandomUtils.generateRandomCode(6))
+			.socialId(generateRandomCode(6))
 			.provider("kakao")
 			.build();
 
@@ -73,5 +72,30 @@ public class TestServiceImpl implements TestService {
 		refreshTokenRepository.save(refreshToken);
 
 		return new MemberLoginResponseDto(member, jwtToken);
+	}
+
+	@Override
+	public void makeFamily(Long memberId, Long targetId) {
+
+		Member member = memberRepository.findByUserId(memberId)
+			.orElseThrow(() -> new MemberNotFoundException(memberId));
+		Member target = memberRepository.findByUserId(targetId)
+			.orElseThrow(() -> new MemberNotFoundException(targetId));
+
+		if (member.getFamily() == null) {
+			String familyId = generateRandomCode(6);
+			Family family = Family.builder()
+				.id(familyId)
+				.build();
+			familyRepository.save(family);
+			member.setFamily(family);
+			target.setFamily(family);
+			memberRepository.save(member);
+			memberRepository.save(target);
+		} else {
+			Family family = member.getFamily();
+			target.setFamily(family);
+			memberRepository.save(target);
+		}
 	}
 }

@@ -10,4 +10,5 @@ public interface TestService {
 
 	MemberLoginResponseDto getAccessToken(DummyMemberLoginRequestDto requestDto);
 
+	void makeFamily(Long memberId, Long targetId);
 }
