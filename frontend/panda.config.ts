@@ -332,6 +332,7 @@ export default defineConfig({
         },
         fonts: {
           pretendard: { value: 'var(--font-pretendard), sans-serif' },
+          yeoljeong: {value: 'var(--font-yeoljeong), sans-serif'},
         },
       },
       semanticTokens: {
@@ -408,6 +409,7 @@ export default defineConfig({
         hero1: {
           regular: {
             value: {
+              fontFamily: '{fonts.yeoljeong}',
               fontWeight: '400',
               fontSize: '3.5rem',
               lineHeight: '4.5rem',
@@ -416,6 +418,7 @@ export default defineConfig({
           },
           medium: {
             value: {
+              fontFamily: '{fonts.yeoljeong}',
               fontWeight: '500',
               fontSize: '3.5rem',
               lineHeight: '4.5rem',
@@ -424,6 +427,7 @@ export default defineConfig({
           },
           bold: {
             value: {
+              fontFamily: '{fonts.yeoljeong}',
               fontWeight: '600',
               fontSize: '3.5rem',
               lineHeight: '4.5rem',
@@ -434,6 +438,7 @@ export default defineConfig({
         display1: {
           regular: {
             value: {
+              fontFamily: '{fonts.pretendard}',
               fontWeight: '400',
               fontSize: '3.5rem',
               lineHeight: '4.5rem',
@@ -442,6 +447,7 @@ export default defineConfig({
           },
           medium: {
             value: {
+              fontFamily: '{fonts.pretendard}',
               fontWeight: '500',
               fontSize: '3.5rem',
               lineHeight: '4.5rem',
@@ -450,6 +456,7 @@ export default defineConfig({
           },
           bold: {
             value: {
+              fontFamily: '{fonts.pretendard}',
               fontWeight: '600',
               fontSize: '3.5rem',
               lineHeight: '4.5rem',
@@ -460,6 +467,7 @@ export default defineConfig({
         display2: {
           regular: {
             value: {
+              fontFamily: '{fonts.pretendard}',
               fontWeight: '400',
               fontSize: '2.5rem',
               lineHeight: '3.25rem',
@@ -468,6 +476,7 @@ export default defineConfig({
           },
           medium: {
             value: {
+              fontFamily: '{fonts.pretendard}',
               fontWeight: '500',
               fontSize: '2.5rem',
               lineHeight: '3.25rem',
@@ -476,6 +485,7 @@ export default defineConfig({
           },
           bold: {
             value: {
+              fontFamily: '{fonts.pretendard}',
               fontWeight: '600',
               fontSize: '2.5rem',
               lineHeight: '3.25rem',
@@ -486,6 +496,7 @@ export default defineConfig({
         title1: {
           regular: {
             value: {
+              fontFamily: '{fonts.pretendard}',
               fontWeight: '400',
               fontSize: '2.25rem',
               lineHeight: '3rem',
@@ -494,6 +505,7 @@ export default defineConfig({
           },
           medium: {
             value: {
+              fontFamily: '{fonts.pretendard}',
               fontWeight: '500',
               fontSize: '2.25rem',
               lineHeight: '3rem',
@@ -502,6 +514,7 @@ export default defineConfig({
           },
           bold: {
             value: {
+              fontFamily: '{fonts.pretendard}',
               fontWeight: '600',
               fontSize: '2.25rem',
               lineHeight: '3rem',
@@ -512,6 +525,7 @@ export default defineConfig({
         title2: {
           regular: {
             value: {
+              fontFamily: '{fonts.pretendard}',
               fontWeight: '400',
               fontSize: '1.75rem',
               lineHeight: '2.375rem',
@@ -520,6 +534,7 @@ export default defineConfig({
           },
           medium: {
             value: {
+              fontFamily: '{fonts.pretendard}',
               fontWeight: '500',
               fontSize: '1.75rem',
               lineHeight: '2.375rem',
@@ -528,6 +543,7 @@ export default defineConfig({
           },
           bold: {
             value: {
+              fontFamily: '{fonts.pretendard}',
               fontWeight: '600',
               fontSize: '1.75rem',
               lineHeight: '2.375rem',
@@ -538,6 +554,7 @@ export default defineConfig({
         title3: {
           regular: {
             value: {
+              fontFamily: '{fonts.pretendard}',
               fontWeight: '400',
               fontSize: '1.5rem',
               lineHeight: '2rem',
@@ -546,6 +563,7 @@ export default defineConfig({
           },
           medium: {
             value: {
+              fontFamily: '{fonts.pretendard}',
               fontWeight: '500',
               fontSize: '1.5rem',
               lineHeight: '2rem',
@@ -554,6 +572,7 @@ export default defineConfig({
           },
           bold: {
             value: {
+              fontFamily: '{fonts.pretendard}',
               fontWeight: '600',
               fontSize: '1.5rem',
               lineHeight: '2rem',
@@ -564,6 +583,7 @@ export default defineConfig({
         heading1: {
           regular: {
             value: {
+              fontFamily: '{fonts.pretendard}',
               fontWeight: '400',
               fontSize: '1.375rem',
               lineHeight: '1.875rem',
@@ -572,6 +592,7 @@ export default defineConfig({
           },
           medium: {
             value: {
+              fontFamily: '{fonts.pretendard}',
               fontWeight: '500',
               fontSize: '1.375rem',
               lineHeight: '1.875rem',
@@ -580,6 +601,7 @@ export default defineConfig({
           },
           bold: {
             value: {
+              fontFamily: '{fonts.pretendard}',
               fontWeight: '600',
               fontSize: '1.375rem',
               lineHeight: '1.875rem',
@@ -590,6 +612,7 @@ export default defineConfig({
         heading2: {
           regular: {
             value: {
+              fontFamily: '{fonts.pretendard}',
               fontWeight: '400',
               fontSize: '1.25rem',
               lineHeight: '1.75rem',
@@ -598,6 +621,7 @@ export default defineConfig({
           },
           medium: {
             value: {
+              fontFamily: '{fonts.pretendard}',
               fontWeight: '500',
               fontSize: '1.25rem',
               lineHeight: '1.75rem',
@@ -606,6 +630,7 @@ export default defineConfig({
           },
           bold: {
             value: {
+              fontFamily: '{fonts.pretendard}',
               fontWeight: '600',
               fontSize: '1.25rem',
               lineHeight: '1.75rem',
@@ -616,6 +641,7 @@ export default defineConfig({
         headline1: {
           regular: {
             value: {
+              fontFamily: '{fonts.pretendard}',
               fontWeight: '400',
               fontSize: '1.125rem',
               lineHeight: '1.625rem',
@@ -624,6 +650,7 @@ export default defineConfig({
           },
           medium: {
             value: {
+              fontFamily: '{fonts.pretendard}',
               fontWeight: '500',
               fontSize: '1.125rem',
               lineHeight: '1.625rem',
@@ -632,6 +659,7 @@ export default defineConfig({
           },
           bold: {
             value: {
+              fontFamily: '{fonts.pretendard}',
               fontWeight: '600',
               fontSize: '1.125rem',
               lineHeight: '1.625rem',
@@ -642,6 +670,7 @@ export default defineConfig({
         headline2: {
           regular: {
             value: {
+              fontFamily: '{fonts.pretendard}',
               fontWeight: '400',
               fontSize: '1.0625rem',
               lineHeight: '1.412rem',
@@ -650,6 +679,7 @@ export default defineConfig({
           },
           medium: {
             value: {
+              fontFamily: '{fonts.pretendard}',
               fontWeight: '500',
               fontSize: '1.0625rem',
               lineHeight: '1.412rem',
@@ -658,6 +688,7 @@ export default defineConfig({
           },
           bold: {
             value: {
+              fontFamily: '{fonts.pretendard}',
               fontWeight: '600',
               fontSize: '1.0625rem',
               lineHeight: '1.412rem',
@@ -669,6 +700,7 @@ export default defineConfig({
           normal: {
             regular: {
               value: {
+                fontFamily: '{fonts.pretendard}',
                 fontWeight: '400',
                 fontSize: '1rem',
                 lineHeight: '1.5rem',
@@ -677,6 +709,7 @@ export default defineConfig({
             },
             medium: {
               value: {
+                fontFamily: '{fonts.pretendard}',
                 fontWeight: '500',
                 fontSize: '1rem',
                 lineHeight: '1.5rem',
@@ -685,6 +718,7 @@ export default defineConfig({
             },
             bold: {
               value: {
+                fontFamily: '{fonts.pretendard}',
                 fontWeight: '600',
                 fontSize: '1rem',
                 lineHeight: '1.5rem',
@@ -695,6 +729,7 @@ export default defineConfig({
           reading: {
             regular: {
               value: {
+                fontFamily: '{fonts.pretendard}',
                 fontWeight: '400',
                 fontSize: '1rem',
                 lineHeight: '1.625rem',
@@ -703,6 +738,7 @@ export default defineConfig({
             },
             medium: {
               value: {
+                fontFamily: '{fonts.pretendard}',
                 fontWeight: '500',
                 fontSize: '1rem',
                 lineHeight: '1.625rem',
@@ -711,6 +747,7 @@ export default defineConfig({
             },
             bold: {
               value: {
+                fontFamily: '{fonts.pretendard}',
                 fontWeight: '600',
                 fontSize: '1rem',
                 lineHeight: '1.625rem',
@@ -723,6 +760,7 @@ export default defineConfig({
           normal: {
             regular: {
               value: {
+                fontFamily: '{fonts.pretendard}',
                 fontWeight: '400',
                 fontSize: '0.938rem',
                 lineHeight: '1.467rem',
@@ -731,6 +769,7 @@ export default defineConfig({
             },
             medium: {
               value: {
+                fontFamily: '{fonts.pretendard}',
                 fontWeight: '500',
                 fontSize: '0.938rem',
                 lineHeight: '1.467rem',
@@ -739,6 +778,7 @@ export default defineConfig({
             },
             bold: {
               value: {
+                fontFamily: '{fonts.pretendard}',
                 fontWeight: '600',
                 fontSize: '0.938rem',
                 lineHeight: '1.467rem',
@@ -749,6 +789,7 @@ export default defineConfig({
           reading: {
             regular: {
               value: {
+                fontFamily: '{fonts.pretendard}',
                 fontWeight: '400',
                 fontSize: '0.938rem',
                 lineHeight: '1.6rem',
@@ -757,6 +798,7 @@ export default defineConfig({
             },
             medium: {
               value: {
+                fontFamily: '{fonts.pretendard}',
                 fontWeight: '500',
                 fontSize: '0.938rem',
                 lineHeight: '1.6rem',
@@ -765,6 +807,7 @@ export default defineConfig({
             },
             bold: {
               value: {
+                fontFamily: '{fonts.pretendard}',
                 fontWeight: '600',
                 fontSize: '0.938rem',
                 lineHeight: '1.6rem',
@@ -777,6 +820,7 @@ export default defineConfig({
           normal: {
             regular: {
               value: {
+                fontFamily: '{fonts.pretendard}',
                 fontWeight: '400',
                 fontSize: '0.875rem',
                 lineHeight: '1.429rem',
@@ -785,6 +829,7 @@ export default defineConfig({
             },
             medium: {
               value: {
+                fontFamily: '{fonts.pretendard}',
                 fontWeight: '500',
                 fontSize: '0.875rem',
                 lineHeight: '1.429rem',
@@ -793,6 +838,7 @@ export default defineConfig({
             },
             bold: {
               value: {
+                fontFamily: '{fonts.pretendard}',
                 fontWeight: '600',
                 fontSize: '0.875rem',
                 lineHeight: '1.429rem',
@@ -803,6 +849,7 @@ export default defineConfig({
           reading: {
             regular: {
               value: {
+                fontFamily: '{fonts.pretendard}',
                 fontWeight: '400',
                 fontSize: '0.875rem',
                 lineHeight: '1.571rem',
@@ -811,6 +858,7 @@ export default defineConfig({
             },
             medium: {
               value: {
+                fontFamily: '{fonts.pretendard}',
                 fontWeight: '500',
                 fontSize: '0.875rem',
                 lineHeight: '1.571rem',
@@ -819,6 +867,7 @@ export default defineConfig({
             },
             bold: {
               value: {
+                fontFamily: '{fonts.pretendard}',
                 fontWeight: '600',
                 fontSize: '0.875rem',
                 lineHeight: '1.571rem',
@@ -830,6 +879,7 @@ export default defineConfig({
         label2: {
           regular: {
             value: {
+              fontFamily: '{fonts.pretendard}',
               fontWeight: '400',
               fontSize: '0.8125rem',
               lineHeight: '1.385rem',
@@ -838,6 +888,7 @@ export default defineConfig({
           },
           medium: {
             value: {
+              fontFamily: '{fonts.pretendard}',
               fontWeight: '500',
               fontSize: '0.8125rem',
               lineHeight: '1.385rem',
@@ -846,6 +897,7 @@ export default defineConfig({
           },
           bold: {
             value: {
+              fontFamily: '{fonts.pretendard}',
               fontWeight: '600',
               fontSize: '0.8125rem',
               lineHeight: '1.385rem',
@@ -856,6 +908,7 @@ export default defineConfig({
         caption1: {
           regular: {
             value: {
+              fontFamily: '{fonts.pretendard}',
               fontWeight: '400',
               fontSize: '0.75rem',
               lineHeight: '1.334rem',
@@ -864,6 +917,7 @@ export default defineConfig({
           },
           medium: {
             value: {
+              fontFamily: '{fonts.pretendard}',
               fontWeight: '500',
               fontSize: '0.75rem',
               lineHeight: '1.334rem',
@@ -872,6 +926,7 @@ export default defineConfig({
           },
           bold: {
             value: {
+              fontFamily: '{fonts.pretendard}',
               fontWeight: '600',
               fontSize: '0.75rem',
               lineHeight: '1.334rem',
@@ -882,6 +937,7 @@ export default defineConfig({
         caption2: {
           regular: {
             value: {
+              fontFamily: '{fonts.pretendard}',
               fontWeight: '400',
               fontSize: '0.6875rem',
               lineHeight: '1.273rem',
@@ -890,6 +946,7 @@ export default defineConfig({
           },
           medium: {
             value: {
+              fontFamily: '{fonts.pretendard}',
               fontWeight: '500',
               fontSize: '0.6875rem',
               lineHeight: '1.273rem',
@@ -898,6 +955,7 @@ export default defineConfig({
           },
           bold: {
             value: {
+              fontFamily: '{fonts.pretendard}',
               fontWeight: '600',
               fontSize: '0.6875rem',
               lineHeight: '1.273rem',

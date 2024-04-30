@@ -1,7 +1,7 @@
 import type { Preview } from '@storybook/react';
 import React from 'react';
 import '../src/app/globals.css';
-import { Pretendard } from '../src/app/fonts';
+import { Pretendard, Yeoljeong } from '../src/app/fonts';
 
 const customViewports = {
   android: {
@@ -27,7 +27,7 @@ const preview: Preview = {
   },
   decorators: [
     (Story) => (
-      <div className={Pretendard.variable}>
+      <div className={(Pretendard.variable, Yeoljeong.variable)}>
         <Story />
       </div>
     ),
