@@ -7,9 +7,9 @@ import space.habitz.api.domain.member.entity.SocialInform;
 
 import java.util.Optional;
 
-import java.util.Optional;
-
 @Repository
 public interface MemberRepository extends JpaRepository<Member, Long>, MemberCustomRepository {
-	Optional<Member> findBySocialInform(SocialInform socialInform);
+    Optional<Member> findBySocialInform(SocialInform socialInform);
+
+    Optional<Member> findByUuid(String uuid);
 }
