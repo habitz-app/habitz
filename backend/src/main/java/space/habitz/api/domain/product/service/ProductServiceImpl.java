@@ -5,8 +5,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
+import space.habitz.api.domain.member.entity.Member;
 import space.habitz.api.domain.product.entity.Product;
 import space.habitz.api.domain.product.dto.ProductInfoDto;
+import space.habitz.api.domain.product.repository.BannedProductRepository;
 import space.habitz.api.domain.product.repository.ProductRepository;
 import space.habitz.api.global.response.ResponseData;
 
@@ -15,6 +17,7 @@ import space.habitz.api.global.response.ResponseData;
 public class ProductServiceImpl implements ProductService {
 
 	private final ProductRepository productRepository;
+	private final BannedProductRepository bannedProductRepository;
 
 	@Override
 	public ResponseData<ProductInfoDto> getProductDetail(Long id) {
@@ -37,7 +40,7 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public Page<ProductInfoDto> getProductList(Pageable pageable ){
+	public Page<ProductInfoDto> getProductList(Pageable pageable) {
 		return productRepository.findAll(pageable)
 			.map(product -> ProductInfoDto.builder()
 				.productId(product.getId())
@@ -48,5 +51,18 @@ public class ProductServiceImpl implements ProductService {
 				.category(product.getCategory())
 				.build());
 
+	}
+
+	@Override
+	public Page<ProductInfoDto> getBannedProductInfo(Long childId, Pageable pageable) {
+		return bannedProductRepository.findProductsByChildId(childId, pageable)
+			.map(product -> ProductInfoDto.builder()
+				.productId(product.getId())
+				.productName(product.getName())
+				.price(product.getPrice())
+				.productImage(product.getImage())
+				.description(product.getDescription())
+				.category(product.getCategory())
+				.build());
 	}
 }
