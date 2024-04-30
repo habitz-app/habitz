@@ -8,41 +8,43 @@ import space.habitz.api.global.entity.MutableTimeEntity;
 
 @Entity
 @Data
+@Table(name = "mission")
 public class Mission extends MutableTimeEntity {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
 
-	@ManyToOne
-	@JoinColumn(name = "schedule_id")
-	private Schedule schedule;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	@ManyToOne
-	@JoinColumn(name = "child_id")
-	private Member child;
+    @ManyToOne
+    @JoinColumn(name = "schedule_id")
+    private Schedule schedule;
 
-	@ManyToOne
-	@JoinColumn(name = "parent_id")
-	private Member parent;
+    @ManyToOne
+    @JoinColumn(name = "child_id")
+    private Member child;
 
-	@Column(name = "content")
-	private String content;
+    @ManyToOne
+    @JoinColumn(name = "parent_id")
+    private Member parent;
 
-	@Column(name = "title")
-	private String title;
+    @Column(name = "content")
+    private String content;
 
-	@Column(name = "emoji")
-	private String emoji;
+    @Column(name = "title")
+    private String title;
 
-	@Column(name = "point")
-	private int point;
+    @Column(name = "emoji")
+    private String emoji;
 
-	@Column(name = "status")
-	private String status;
+    @Column(name = "point")
+    private int point;
 
-	@Column(name = "is_deleted")
-	private boolean isDeleted;
+    @Column(name = "status")
+    private String status;
 
-	@Column(name = "repeat_yn")
-	private boolean repeatable;
+    @Column(name = "is_deleted")
+    private boolean isDeleted;
+
+    @Column(name = "repeat_yn")
+    private boolean repeatable;
 }
