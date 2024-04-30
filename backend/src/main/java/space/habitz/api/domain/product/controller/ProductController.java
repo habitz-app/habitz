@@ -36,4 +36,11 @@ public class ProductController {
 		return new ResponseData<>("success", "상품 리스트 조회 성공", productService.getProductList(pageable));
 	}
 
+	@ApiResponse(description = "제한한 상품 조회")
+	@GetMapping("/banned-product-list/{childId}")
+	public ResponseData<Page<ProductInfoDto>> getBannedProductList(
+		Pageable pageable,
+		@Parameter(description = "상품 ID", required = true) @PathVariable("childId") long childId) {
+		return new ResponseData<>("success", "제한한 상품 조회 성공", productService.getBannedProductInfo(childId, pageable));
+	}
 }
