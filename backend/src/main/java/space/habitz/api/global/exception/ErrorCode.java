@@ -24,6 +24,7 @@ public enum ErrorCode {
     /**
      * Child, Parent Authority
      */
+    CHILD_NOT_FOUND(NOT_FOUND, "찾을 수 없는 아이입니다."),
     CHILD_CAN_NOT_CREATE_SCHEDULE(UNAUTHORIZED, "아이는 스케줄을 생성할 수 없습니다."),
 
     /**
