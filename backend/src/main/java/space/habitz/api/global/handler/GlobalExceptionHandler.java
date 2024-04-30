@@ -4,6 +4,7 @@ import io.jsonwebtoken.ExpiredJwtException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -41,5 +42,11 @@ public class GlobalExceptionHandler {
 	public ResponseEntity<?> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
 		log.error("GlobalExceptionHandler: " + e.getMessage());
 		return new ResponseEntity<>(ResponseData.error("401"), HttpStatus.BAD_REQUEST);
+	}
+
+	@ExceptionHandler(AccessDeniedException.class)
+	public ResponseEntity<?> AccessDeniedException(AccessDeniedException e) {
+		log.error("GlobalExceptionHandler: " + e.getMessage());
+		return new ResponseEntity<>(ResponseData.unauthorized(), HttpStatus.FORBIDDEN);
 	}
 }
