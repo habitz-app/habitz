@@ -17,6 +17,11 @@ public enum ErrorCode {
     MEMBER_NOT_FOUND(NOT_FOUND, "찾을 수 없는 회원입니다."),
 
     /**
+     * Family
+     */
+    FAMILY_NOT_MATCH(UNAUTHORIZED, "가족 관계가 일치하지 않습니다."),
+
+    /**
      * Child, Parent Authority
      */
     CHILD_CAN_NOT_CREATE_SCHEDULE(UNAUTHORIZED, "아이는 스케줄을 생성할 수 없습니다."),
