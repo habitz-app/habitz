@@ -40,7 +40,6 @@ public class BannedProductCustomRepositoryImpl implements BannedProductCustomRep
 			.limit(pageable.getPageSize())
 			.fetch();
 
-		// To return a Page object, we also need to fetch the total count
 		long total = query.fetchCount();
 
 		return new PageImpl<>(products, pageable, total);

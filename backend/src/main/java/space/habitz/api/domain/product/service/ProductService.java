@@ -7,7 +7,7 @@ import space.habitz.api.domain.product.dto.ProductInfoDto;
 import space.habitz.api.global.response.ResponseData;
 
 public interface ProductService {
-	ResponseData<ProductInfoDto> getProductDetail(Long id);
+	ProductInfoDto getProductDetail(Long id);
 
 	Page<ProductInfoDto> getProductList(Pageable pageable);
 

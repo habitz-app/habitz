@@ -2,6 +2,7 @@ package space.habitz.api.domain.product.controller;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,7 +28,7 @@ public class ProductController {
 	@GetMapping("/{productId}")
 	public ResponseData<ProductInfoDto> getProductDetail(
 		@Parameter(description = "상품 ID", required = true) @PathVariable("productId") long productId) {
-		return productService.getProductDetail(productId);
+		return new ResponseData<>("success", "상품 상세 조회 성공", productService.getProductDetail(productId));
 	}
 
 	@ApiResponse(description = "상품 리스트 조회")
