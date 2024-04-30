@@ -27,7 +27,7 @@ const preview: Preview = {
   },
   decorators: [
     (Story) => (
-      <div className={(Pretendard.variable, Yeoljeong.variable)}>
+      <div className={`${Pretendard.variable} ${Yeoljeong.variable}`}>
         <Story />
       </div>
     ),
