@@ -29,7 +29,7 @@ public record ScheduleDto(
 				// 아이의 member Profile 정보
 				MemberProfileDto.builder()
 					.name(schedule.getChild().getName())
-					.UUID(schedule.getChild().getUuid())
+					.memberUUID(schedule.getChild().getUuid())
 					.build())
 			.startDate(schedule.getStartDate())
 			.endDate(schedule.getEndDate())
