@@ -43,11 +43,15 @@ public class ScheduleService {
 	/**
 	 * 일정 상세 조회
 	 *
-	 * @param member     로그인한 사용자 정보
+	 * @param member     로그인한 사용자
 	 * @param scheduleId 일정 ID
 	 */
 	public ScheduleDto getScheduleDetail(Member member, Long scheduleId) {
+
 		Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(() -> new CustomErrorException(ErrorCode.SCHEDULE_NOT_FOUND));
+
+		validateFamily(member, schedule.getChild());    // 가족 관계 확인
+
 		return ScheduleDto.of(schedule);
 	}
 
