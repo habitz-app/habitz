@@ -10,6 +10,7 @@ import space.habitz.api.domain.product.entity.Product;
 import space.habitz.api.domain.product.dto.ProductInfoDto;
 import space.habitz.api.domain.product.repository.BannedProductRepository;
 import space.habitz.api.domain.product.repository.ProductRepository;
+import space.habitz.api.global.exception.CustomNotFoundException;
 import space.habitz.api.global.response.ResponseData;
 
 @RequiredArgsConstructor
@@ -20,22 +21,18 @@ public class ProductServiceImpl implements ProductService {
 	private final BannedProductRepository bannedProductRepository;
 
 	@Override
-	public ResponseData<ProductInfoDto> getProductDetail(Long id) {
+	public ProductInfoDto getProductDetail(Long id) {
 		Product get = productRepository.findProductById(id)
-			.orElse(null);
-		if (get == null) {
-			return new ResponseData<>("fail", "상품 정보가 없습니다.", null);
-		}
+			.orElseThrow(() -> new CustomNotFoundException(id));
 
-		return
-			new ResponseData<>("success", "상품 정보 조회 성공", ProductInfoDto.builder()
-				.productId(get.getId())
-				.productName(get.getName())
-				.price(get.getPrice())
-				.productImage(get.getImage())
-				.description(get.getDescription())
-				.category(get.getCategory())
-				.build());
+		return ProductInfoDto.builder()
+			.productId(get.getId())
+			.productName(get.getName())
+			.price(get.getPrice())
+			.productImage(get.getImage())
+			.description(get.getDescription())
+			.category(get.getCategory())
+			.build();
 
 	}
 
@@ -50,7 +47,6 @@ public class ProductServiceImpl implements ProductService {
 				.description(product.getDescription())
 				.category(product.getCategory())
 				.build());
-
 	}
 
 	@Override
