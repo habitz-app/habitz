@@ -14,6 +14,12 @@ importers:
       '@ionic/react':
         specifier: ^8.0.1
         version: 8.0.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+      '@lottiefiles/react-lottie-player':
+        specifier: ^3.5.3
+        version: 3.5.3(react@18.2.0)
+      '@storybook/addon-viewport':
+        specifier: ^8.0.9
+        version: 8.0.9
       ionicons:
         specifier: ^7.3.1
         version: 7.3.1
@@ -1051,6 +1057,11 @@ packages:
   '@jridgewell/trace-mapping@0.3.25':
     resolution: {integrity: sha512-vNk6aEwybGtawWmy/PzwnGDOjCkLWSD2wqvjGGAgOAwCGWySYXfYoxt00IJkTF+8Lb57DwOb3Aa0o9CApepiYQ==}
 
+  '@lottiefiles/react-lottie-player@3.5.3':
+    resolution: {integrity: sha512-6pGbiTMjGnPddR1ur8M/TIDCiogZMc1aKIUbMEKXKAuNeYwZ2hvqwBJ+w5KRm88ccdcU88C2cGyLVsboFlSdVQ==}
+    peerDependencies:
+      react: 16 - 18
+
   '@mdx-js/react@3.0.1':
     resolution: {integrity: sha512-9ZrPIU4MGf6et1m1ov3zKf+q9+deetI51zprKB1D/z3NOb+rUxxtEl3mCjW5wTGh6VhRdwPueh1oRzi6ezkA8A==}
     peerDependencies:
@@ -1289,6 +1300,9 @@ packages:
 
   '@storybook/addon-viewport@8.0.8':
     resolution: {integrity: sha512-nOuc6DquGvm24c/A0HFTgeEN/opd58ebs1KLaEEq1f6iYV0hT2Gpnk0Usg/seOiFtJnj3NyAM46HSkZz06T8Sw==}
+
+  '@storybook/addon-viewport@8.0.9':
+    resolution: {integrity: sha512-Ao4+D56cO7biaw+iTlMU1FBec1idX0cmdosDeCFZin06MSawcPkeBlRBeruaSQYdLes8TBMdZPFgfuqI5yIk6g==}
 
   '@storybook/blocks@8.0.8':
     resolution: {integrity: sha512-kwsjhvnmFEaIl51QHJt/83G7mZ5YbzFKnWCwy8WUpi0xvVcyoFQSGGgwR3XRrzGfUEPK8P2FDHeKw1bLzyIejA==}
@@ -3999,6 +4013,9 @@ packages:
   loose-envify@1.4.0:
     resolution: {integrity: sha512-lyuxPGr/Wfhrlem2CL/UcnUc1zcqKAImBDzukY7Y5F/yQiNdko6+fRLevlw1HgMySw7f611UIY408EtxRSoK3Q==}
     hasBin: true
+
+  lottie-web@5.12.2:
+    resolution: {integrity: sha512-uvhvYPC8kGPjXT3MyKMrL3JitEAmDMp30lVkuq/590Mw9ok6pWcFCwXJveo0t5uqYw1UREQHofD+jVpdjBv8wg==}
 
   loupe@2.3.7:
     resolution: {integrity: sha512-zSMINGVYkdpYSOBmLi0D1Uo7JU9nVdQKrHxC8eYlV+9YKK9WePqAlL7lSlorG/U2Fw1w0hTBmaa/jrQ3UbPHtA==}
@@ -6835,6 +6852,11 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.4.15
 
+  '@lottiefiles/react-lottie-player@3.5.3(react@18.2.0)':
+    dependencies:
+      lottie-web: 5.12.2
+      react: 18.2.0
+
   '@mdx-js/react@3.0.1(@types/react@18.2.79)(react@18.2.0)':
     dependencies:
       '@types/mdx': 2.0.13
@@ -7224,6 +7246,10 @@ snapshots:
   '@storybook/addon-toolbars@8.0.8': {}
 
   '@storybook/addon-viewport@8.0.8':
+    dependencies:
+      memoizerific: 1.11.3
+
+  '@storybook/addon-viewport@8.0.9':
     dependencies:
       memoizerific: 1.11.3
 
@@ -11054,6 +11080,8 @@ snapshots:
   loose-envify@1.4.0:
     dependencies:
       js-tokens: 4.0.0
+
+  lottie-web@5.12.2: {}
 
   loupe@2.3.7:
     dependencies:
