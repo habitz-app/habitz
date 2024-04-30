@@ -4,6 +4,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import space.habitz.api.domain.member.entity.Member;
+import space.habitz.api.domain.member.repository.MemberRepository;
 import space.habitz.api.domain.schedule.dto.ScheduleDto;
 import space.habitz.api.domain.schedule.dto.ScheduleRequestDto;
 import space.habitz.api.domain.schedule.entity.Schedule;
@@ -11,17 +12,32 @@ import space.habitz.api.domain.schedule.repository.ScheduleRepository;
 import space.habitz.api.global.exception.CustomErrorException;
 import space.habitz.api.global.exception.ErrorCode;
 
+import java.util.Map;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
 public class ScheduleService {
 
+	private final MemberRepository memberRepository;
 	private final ScheduleRepository scheduleRepository;
+	private final ScheduleCustomRepositoryImpl scheduleCustomRepository;
 
-	public void createSchedule(ScheduleRequestDto scheduleRequestDto) {
+	/**
+	 * 일정 생성
+	 *
+	 * @param member             로그인한 사용자
+	 * @param scheduleRequestDto 일정 생성 요청 DTO
+	 */
+	public Map<String, Long> createSchedule(Member member, ScheduleRequestDto scheduleRequestDto) {
 
-		Schedule schedule = scheduleRequestDto.toEntity();
+		Member child = memberRepository.findByUuid(scheduleRequestDto.childUUID()).orElseThrow(() -> new CustomErrorException(ErrorCode.CHILD_NOT_FOUND));
+
+		validateFamily(member, child);    // 가족 관계 확인
+
+		Schedule schedule = scheduleRequestDto.toEntity(member, child);
 		scheduleRepository.save(schedule);
+		return Map.of("scheduleId", schedule.getId());
 	}
 
 	/**

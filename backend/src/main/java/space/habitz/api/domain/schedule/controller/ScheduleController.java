@@ -7,6 +7,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import space.habitz.api.domain.member.entity.Member;
 import space.habitz.api.domain.schedule.dto.ScheduleDto;
+import space.habitz.api.domain.schedule.dto.ScheduleRequestDto;
 import space.habitz.api.domain.schedule.service.ScheduleService;
 import space.habitz.api.global.response.ResponseData;
 
@@ -16,12 +17,16 @@ import space.habitz.api.global.response.ResponseData;
 @RequestMapping("/schedule")
 public class ScheduleController {
 
-	private final ScheduleService scheduleService;
+    private final ScheduleService scheduleService;
 
-	@PostMapping
-	public ResponseData<Integer> createSchedule(@RequestHeader String auth) {
-		return ResponseData.success(1);
-	}
+    @Operation(
+            summary = "일정 생성",
+            description = "일정을 생성합니다."
+    )
+    @PostMapping
+    public ResponseData<?> createSchedule(@AuthenticationPrincipal Member member, @RequestBody ScheduleRequestDto scheduleRequestDto) {
+        return ResponseData.success(scheduleService.createSchedule(member, scheduleRequestDto));
+    }
 
 
 	@Operation(
