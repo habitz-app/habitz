@@ -11,6 +11,7 @@ const ChargeInput = ({ points }: { points: number }) => {
       min={0}
       step={1000}
       value={points}
+      textStyle={'body1.reading.medium'}
     />
   );
 };

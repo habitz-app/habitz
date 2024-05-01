@@ -9,6 +9,7 @@ const ChargeButton = () => {
       bg={'primary.normal'}
       color={'label.normal'}
       borderRadius={'1rem'}
+      textStyle={'headline1.bold'}
     >
       충전하기
     </Button>

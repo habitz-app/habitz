@@ -34,6 +34,7 @@ const ParentTabBar = ({ menu }: { menu: MenuType }) => {
           alignItems: 'center',
           px: '1rem',
           h: '5rem',
+          textStyle: 'caption1.regular',
         })}
       >
         <li
