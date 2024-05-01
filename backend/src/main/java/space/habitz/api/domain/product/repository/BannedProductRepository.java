@@ -12,4 +12,6 @@ import space.habitz.api.domain.product.entity.BannedProductID;
 @Repository
 public interface BannedProductRepository
 	extends JpaRepository<BannedProduct, BannedProductID>, BannedProductCustomRepository {
+
+	BannedProduct findByBannedProductID_ProductIdAndBannedProductID_ChildId(Long productId, Long childId);
 }
