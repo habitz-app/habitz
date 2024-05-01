@@ -80,5 +80,14 @@ public class ProductServiceImpl implements ProductService {
 		return result;
 	}
 
+	@Override
+	public void deleteBanProduct(Member parent, Long productId, Long childId) {
+		Product product = productRepository.findProductById(productId)
+			.orElseThrow(() -> new CustomNotFoundException(productId));
+		Child child = childRepository.findById_AndMember_Family_Id(childId, parent.getFamily().getId())
+			.orElseThrow(() -> new CustomNotFoundException(childId));
+		bannedProductRepository.deleteByBannedProductID_ProductIdAndBannedProductID_ChildId(product.getId(), child.getId());
+	}
+
 
 }
