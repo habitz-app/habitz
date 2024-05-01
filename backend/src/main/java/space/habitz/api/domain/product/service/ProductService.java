@@ -4,7 +4,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import space.habitz.api.domain.product.dto.ProductInfoDto;
-import space.habitz.api.global.response.ResponseData;
+import space.habitz.api.domain.product.entity.BannedProduct;
+import space.habitz.api.domain.member.entity.Member;
 
 public interface ProductService {
 	ProductInfoDto getProductDetail(Long id);
@@ -12,4 +13,7 @@ public interface ProductService {
 	Page<ProductInfoDto> getProductList(Pageable pageable);
 
 	Page<ProductInfoDto> getBannedProductInfo(Long childId, Pageable pageable);
+
+	BannedProduct setBanProduct(Member parent, Long productId, Long childId);
+
 }
