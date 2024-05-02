@@ -5,10 +5,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import space.habitz.api.domain.mission.dto.MissionDto;
 import space.habitz.api.domain.mission.entity.Mission;
 import space.habitz.api.domain.mission.repository.MissionRepository;
 import space.habitz.api.domain.schedule.entity.Schedule;
 import space.habitz.api.domain.schedule.repository.ScheduleCustomRepositoryImpl;
+import space.habitz.api.global.exception.CustomErrorException;
+import space.habitz.api.global.exception.ErrorCode;
 import space.habitz.api.global.type.StatusCode;
 
 import java.time.LocalDate;
@@ -22,6 +25,17 @@ public class MissionService {
 
 	private final MissionRepository missionRepository;
 	private final ScheduleCustomRepositoryImpl scheduleCustomRepository;
+
+	/**
+	 * 미션 상세 조회
+	 *
+	 * @param missionId 미션 ID
+	 */
+	public MissionDto getMissionDetail(Long missionId) {
+		Mission mission = missionRepository.findById(missionId).orElseThrow(() -> new CustomErrorException(ErrorCode.MISSION_NOT_FOUND));
+		return MissionDto.of(mission);
+	}
+
 
 	/**
 	 * 미션 생성 스케줄러
