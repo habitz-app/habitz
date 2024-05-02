@@ -84,6 +84,23 @@ public class MissionService {
 	}
 
 	/**
+	 * 미션 목록 조회
+	 * - 로그인한 사용자의 미션 목록을 조회한다.
+	 * - 날짜를 기준으로 미션 목록을 조회한다.
+	 *
+	 * @param member 로그인한 사용자
+	 * @param date 조회할 날짜
+	 * */
+	@Transactional(readOnly = true)
+	public List<MissionDto> getMissionList(Member member, LocalDate date) {
+		List<Mission> missionList = missionRepository.findByChildIdAndDate(member.getId(), date);
+
+		return missionList.stream()
+			.map(MissionDto::of)
+			.collect(Collectors.toList());
+	}
+
+	/**
 	 * 미션 생성 스케줄러
 	 * - 매일 자정 00시 00분 00초에 실행
 	 * - 오늘 날짜에 해당하는 스케줄을 조회하여 미션을 생성한다.
@@ -108,6 +125,7 @@ public class MissionService {
 				.title(schedule.getTitle())
 				.emoji(schedule.getEmoji())
 				.point(schedule.getPoint())
+				.date(today)
 				.status(StatusCode.EMPTY)
 				.isDeleted(false)
 				.repeatable(schedule.getRepeatable())
