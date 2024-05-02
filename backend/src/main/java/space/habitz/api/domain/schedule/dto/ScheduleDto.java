@@ -12,7 +12,7 @@ public record ScheduleDto(
 	String title,
 	String content,
 	String emoji,
-	MemberProfileDto member,
+	MemberProfileDto child,
 	LocalDate startDate,
 	LocalDate endDate,
 	Boolean[] weekDays,
@@ -25,7 +25,7 @@ public record ScheduleDto(
 			.title(schedule.getTitle())
 			.content(schedule.getContent())
 			.emoji(schedule.getEmoji())
-			.member(
+			.child(
 				// 아이의 member Profile 정보
 				MemberProfileDto.builder()
 					.name(schedule.getChild().getName())

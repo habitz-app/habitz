@@ -1,18 +1,21 @@
 package space.habitz.api.domain.schedule.service;
 
-import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
+import java.util.Map;
+
 import org.springframework.stereotype.Service;
+
+import org.springframework.transaction.annotation.Transactional;
+
+import lombok.RequiredArgsConstructor;
 import space.habitz.api.domain.member.entity.Member;
 import space.habitz.api.domain.member.repository.MemberRepository;
 import space.habitz.api.domain.schedule.dto.ScheduleDto;
 import space.habitz.api.domain.schedule.dto.ScheduleRequestDto;
 import space.habitz.api.domain.schedule.entity.Schedule;
+import space.habitz.api.domain.schedule.repository.ScheduleCustomRepositoryImpl;
 import space.habitz.api.domain.schedule.repository.ScheduleRepository;
 import space.habitz.api.global.exception.CustomErrorException;
 import space.habitz.api.global.exception.ErrorCode;
-
-import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -31,7 +34,8 @@ public class ScheduleService {
 	 */
 	public Map<String, Long> createSchedule(Member member, ScheduleRequestDto scheduleRequestDto) {
 
-		Member child = memberRepository.findByUuid(scheduleRequestDto.childUUID()).orElseThrow(() -> new CustomErrorException(ErrorCode.CHILD_NOT_FOUND));
+		Member child = memberRepository.findByUuid(scheduleRequestDto.childUUID())
+			.orElseThrow(() -> new CustomErrorException(ErrorCode.CHILD_NOT_FOUND));
 
 		validateFamily(member, child);    // 가족 관계 확인
 
@@ -46,9 +50,11 @@ public class ScheduleService {
 	 * @param member     로그인한 사용자
 	 * @param scheduleId 일정 ID
 	 */
+	@Transactional(readOnly = true)
 	public ScheduleDto getScheduleDetail(Member member, Long scheduleId) {
 
-		Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(() -> new CustomErrorException(ErrorCode.SCHEDULE_NOT_FOUND));
+		Schedule schedule = scheduleRepository.findById(scheduleId)
+			.orElseThrow(() -> new CustomErrorException(ErrorCode.SCHEDULE_NOT_FOUND));
 
 		validateFamily(member, schedule.getChild());    // 가족 관계 확인
 
@@ -68,7 +74,6 @@ public class ScheduleService {
 		scheduleRepository.deleteById(scheduleId);
 		return scheduleId + " 일정이 삭제 되었습니다.";
 	}
-
 
 	/**
 	 * 같은 가족인지 확인하는 validation
