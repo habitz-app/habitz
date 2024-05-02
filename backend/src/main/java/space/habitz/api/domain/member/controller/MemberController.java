@@ -52,6 +52,10 @@ public class MemberController {
 		return ResponseEntity.status(HttpStatus.OK).body(ResponseData.success("회원 로그아웃 성공"));
 	}
 
-
+	@DeleteMapping("/exit")
+	public ResponseEntity<?> exit() throws Exception {
+		memberService.exit();
+		return ResponseEntity.status(HttpStatus.OK).body(ResponseData.success("회원 탈퇴 성공"));
+	}
 
 }

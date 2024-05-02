@@ -9,6 +9,8 @@ import space.habitz.api.domain.member.dto.*;
 import space.habitz.api.domain.member.entity.*;
 import space.habitz.api.domain.member.exeption.*;
 import space.habitz.api.domain.member.repository.*;
+
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.List;
 import space.habitz.api.domain.member.utils.AuthUtils;
@@ -143,5 +145,13 @@ public class MemberServiceImpl implements MemberService {
 	public void logout() throws Exception {
 		Member authenticatedMember = AuthUtils.getAuthenticatedMember();
 		refreshTokenRepository.deleteAllById(List.of(authenticatedMember.getId()));
+	}
+
+	@Override
+	public void exit() {
+		Member authenticatedMember = AuthUtils.getAuthenticatedMember();
+		MemberProfile memberProfile = authenticatedMember.getMemberProfile();
+		memberProfile.setDeletedAt(LocalDateTime.now());
+		memberProfileRepository.save(memberProfile);
 	}
 }
