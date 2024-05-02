@@ -1,12 +1,19 @@
 package space.habitz.api.domain.mission.service;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import space.habitz.api.domain.member.entity.Member;
 import space.habitz.api.domain.mission.dto.MissionDto;
+import space.habitz.api.domain.mission.dto.UpdateMissionRequestDto;
 import space.habitz.api.domain.mission.entity.Mission;
 import space.habitz.api.domain.mission.repository.MissionRepository;
 import space.habitz.api.domain.schedule.entity.Schedule;
@@ -14,11 +21,6 @@ import space.habitz.api.domain.schedule.repository.ScheduleCustomRepositoryImpl;
 import space.habitz.api.global.exception.CustomErrorException;
 import space.habitz.api.global.exception.ErrorCode;
 import space.habitz.api.global.type.StatusCode;
-
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -35,7 +37,8 @@ public class MissionService {
 	 */
 	@Transactional
 	public MissionDto getMissionDetail(Long missionId) {
-		Mission mission = missionRepository.findById(missionId).orElseThrow(() -> new CustomErrorException(ErrorCode.MISSION_NOT_FOUND));
+		Mission mission = missionRepository.findById(missionId)
+			.orElseThrow(() -> new CustomErrorException(ErrorCode.MISSION_NOT_FOUND));
 		return MissionDto.of(mission);
 	}
 
@@ -44,11 +47,13 @@ public class MissionService {
 	 * - ACCEPT 일 경우 삭제가 불가능하다.
 	 * - Mission은 Soft Delete로 처리한다. // Mission Entity에서 SQLDelete 어노테이션 Overriding 사용
 	 *
+	 * @param member 로그인한 사용자
 	 * @param missionId 미션 ID
 	 */
 	public Map<String, Long> deleteMission(Member member, Long missionId) {
 
-		Mission mission = missionRepository.findById(missionId).orElseThrow(() -> new CustomErrorException(ErrorCode.MISSION_NOT_FOUND));
+		Mission mission = missionRepository.findById(missionId)
+			.orElseThrow(() -> new CustomErrorException(ErrorCode.MISSION_NOT_FOUND));
 
 		if (mission.getStatus().equals(StatusCode.ACCEPT)) {
 			throw new CustomErrorException(ErrorCode.MISSION_ACCEPTED_CAN_NOT_DELETE);
@@ -58,6 +63,25 @@ public class MissionService {
 		return Map.of("missionId", missionId);
 	}
 
+	/**
+	 * 미션 수정
+	 * - 일정 수정이 아닌 한개의 미션에 대한 수정
+	 * - Status는 수정 불가능
+	 * - 미션의 날짜 변경 가능
+	 *
+	 * @param member 로그인한 사용자
+	 * @param missionId 미션 ID
+	 * @param requestDto 미션 수정 요청 DTO
+	 * */
+	@Transactional
+	public MissionDto updateMission(Member member, Long missionId, UpdateMissionRequestDto requestDto) {
+
+		Mission mission = missionRepository.findById(missionId)
+			.orElseThrow(() -> new CustomErrorException(ErrorCode.MISSION_NOT_FOUND));
+
+		mission.updateMission(requestDto);
+		return MissionDto.of(mission);
+	}
 
 	/**
 	 * 미션 생성 스케줄러
@@ -93,4 +117,5 @@ public class MissionService {
 		missionRepository.saveAll(missionList);
 		log.info("Scheduled generateDailyMissions finished");
 	}
+
 }
