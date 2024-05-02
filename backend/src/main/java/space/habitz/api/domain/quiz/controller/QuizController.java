@@ -43,10 +43,7 @@ public class QuizController {
 		if (member.getRole() != Role.CHILD) {
 			return new ResponseData<>("fail", "어린이만 접근 가능한 페이지입니다.", null);
 		}
-
 		return new ResponseData<>("success", "퀴즈 풀기 성공", quizService.solveQuiz(member, quizSolveInfoDto.getAnswer()));
 	}
-
-
 
 }

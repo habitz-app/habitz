@@ -80,8 +80,7 @@ public class QuizServiceImpl implements QuizService {
 
 		quizHistoryRepository.findByChildAndQuiz(child, quiz).ifPresent(quizHistory -> {
 			throw new CustomNotFoundException("이미 푼 퀴즈입니다.");
-		} );
-
+		});
 
 		QuizHistory quizHistory = QuizHistory
 			.builder()
@@ -91,7 +90,6 @@ public class QuizServiceImpl implements QuizService {
 			.isCorrect(quiz.getAnswer().equals(answer))
 			.createdAt(new java.sql.Timestamp(System.currentTimeMillis()))
 			.build();
-
 
 		quizHistoryRepository.save(quizHistory);
 
