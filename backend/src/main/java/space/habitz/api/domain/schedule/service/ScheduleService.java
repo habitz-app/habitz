@@ -3,11 +3,13 @@ package space.habitz.api.domain.schedule.service;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import space.habitz.api.domain.member.entity.Member;
 import space.habitz.api.domain.member.repository.MemberRepository;
 import space.habitz.api.domain.schedule.dto.ScheduleDto;
 import space.habitz.api.domain.schedule.dto.ScheduleRequestDto;
 import space.habitz.api.domain.schedule.entity.Schedule;
+import space.habitz.api.domain.schedule.repository.ScheduleCustomRepositoryImpl;
 import space.habitz.api.domain.schedule.repository.ScheduleRepository;
 import space.habitz.api.global.exception.CustomErrorException;
 import space.habitz.api.global.exception.ErrorCode;
@@ -46,6 +48,7 @@ public class ScheduleService {
 	 * @param member     로그인한 사용자
 	 * @param scheduleId 일정 ID
 	 */
+	@Transactional(readOnly = true)
 	public ScheduleDto getScheduleDetail(Member member, Long scheduleId) {
 
 		Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(() -> new CustomErrorException(ErrorCode.SCHEDULE_NOT_FOUND));
