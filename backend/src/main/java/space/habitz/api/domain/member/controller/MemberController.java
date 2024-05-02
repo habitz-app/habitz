@@ -58,4 +58,10 @@ public class MemberController {
 		return ResponseEntity.status(HttpStatus.OK).body(ResponseData.success("회원 탈퇴 성공"));
 	}
 
+	@PutMapping("/edit")
+	public ResponseEntity<?> edit(@RequestBody MemberUpdateRequestDto dto) throws Exception {
+		memberService.updateMemberInfo(dto);
+		return ResponseEntity.status(HttpStatus.OK).body(ResponseData.success("회원 수정 성공"));
+	}
+
 }
