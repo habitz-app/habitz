@@ -1,6 +1,7 @@
 package space.habitz.api.domain.mission.controller;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -72,10 +73,20 @@ public class MissionController {
 		description = "아이는 날짜를 기준으로 미션 목록을 조회합니다."
 	)
 	@GetMapping("/list")
-	public ResponseData<?> getMissionList(
+	public ResponseData<List<MissionDto>> getMissionList(
 		@AuthenticationPrincipal Member member,
 		@RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
 		return ResponseData.success(missionService.getMissionList(member, date));
 	}
 
+	@Operation(
+		summary = "날짜를 기준으로 전체 아이들에 대한 미션 리스트 조회 (부모)",
+		description = "부모는 날짜를 기준으로 아이의 미션 목록을 조회합니다."
+	)
+	@GetMapping("/children/list")
+	public ResponseData<?> getChildrenMissionList(
+		@AuthenticationPrincipal Member member,
+		@RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
+		return ResponseData.success(missionService.getChildrenMissionList(member, date));
+	}
 }

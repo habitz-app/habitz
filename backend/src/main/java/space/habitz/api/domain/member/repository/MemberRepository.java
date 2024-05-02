@@ -1,15 +1,20 @@
 package space.habitz.api.domain.member.repository;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import space.habitz.api.domain.member.entity.Member;
-import space.habitz.api.domain.member.entity.SocialInform;
 
-import java.util.Optional;
+import space.habitz.api.domain.member.entity.Member;
+import space.habitz.api.domain.member.entity.Role;
+import space.habitz.api.domain.member.entity.SocialInform;
 
 @Repository
 public interface MemberRepository extends JpaRepository<Member, Long>, MemberCustomRepository {
-    Optional<Member> findBySocialInform(SocialInform socialInform);
+	Optional<Member> findBySocialInform(SocialInform socialInform);
 
-    Optional<Member> findByUuid(String uuid);
+	Optional<Member> findByUuid(String uuid);
+
+	List<Member> findByFamilyIdAndRole(String familyId, Role role);
 }
