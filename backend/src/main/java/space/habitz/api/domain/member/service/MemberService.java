@@ -11,4 +11,6 @@ public interface MemberService {
 	MemberFindResponseDto memberType(Member member);
 
 	void register(MemberRegisterRequestDto requestDto);
+
+	MemberMypageResponseDto getMemberInfo();
 }
