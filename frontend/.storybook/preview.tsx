@@ -24,7 +24,17 @@ const preview: Preview = {
         date: /Date$/i,
       },
     },
+    backgrounds: {
+      default: 'light',
+      values: [
+        {
+          name: 'light',
+          value: '#fafaf9',
+        },
+      ],
+    },
   },
+
   decorators: [
     (Story) => (
       <div className={`${Pretendard.variable} ${Yeoljeong.variable}`}>
