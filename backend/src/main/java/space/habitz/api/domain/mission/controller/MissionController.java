@@ -1,13 +1,16 @@
 package space.habitz.api.domain.mission.controller;
 
-
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
+import space.habitz.api.domain.member.entity.Member;
 import space.habitz.api.domain.mission.dto.MissionDto;
 import space.habitz.api.domain.mission.service.MissionService;
 import space.habitz.api.global.response.ResponseData;
@@ -27,5 +30,15 @@ public class MissionController {
 	@GetMapping("/{missionId}")
 	public ResponseData<MissionDto> getMissionDetail(@PathVariable("missionId") Long missionId) {
 		return ResponseData.success(missionService.getMissionDetail(missionId));
+	}
+
+	@Operation(
+		summary = "미션 삭제",
+		description = "미션을 삭제합니다."
+	)
+	@DeleteMapping("/{missionId}")
+	public ResponseData<?> deleteMission(@AuthenticationPrincipal Member member,
+		@PathVariable("missionId") Long missionId) {
+		return ResponseData.success(missionService.deleteMission(member, missionId));
 	}
 }
