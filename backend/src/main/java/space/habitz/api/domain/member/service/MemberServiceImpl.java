@@ -131,4 +131,10 @@ public class MemberServiceImpl implements MemberService {
 			childRepository.save(child);
 		}
 	}
+
+	@Override
+	public MemberMypageResponseDto getMemberInfo() {
+		Member authenticatedMember = AuthUtils.getAuthenticatedMember();
+		return new MemberMypageResponseDto(authenticatedMember);
+	}
 }

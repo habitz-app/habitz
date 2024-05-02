@@ -39,4 +39,10 @@ public class MemberController {
 		MemberFindResponseDto result = memberService.memberType(member);
 		return ResponseEntity.status(HttpStatus.OK).body(ResponseData.success("회원 여부 조회 성공", result));
 	}
+
+	@GetMapping("")
+	public ResponseEntity<?> memberInfo() {
+		MemberMypageResponseDto result = memberService.getMemberInfo();
+		return ResponseEntity.status(HttpStatus.OK).body(ResponseData.success("회원 정보 조회 성공", result));
+	}
 }
