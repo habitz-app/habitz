@@ -7,8 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import space.habitz.api.domain.member.dto.MemberLoginRequestDto;
-import space.habitz.api.domain.member.dto.MemberLoginResponseDto;
+import space.habitz.api.domain.member.dto.*;
 import space.habitz.api.domain.member.service.MemberService;
 import space.habitz.api.global.response.ResponseData;
 
@@ -23,5 +22,11 @@ public class MemberController {
 		MemberLoginResponseDto login = memberService.login(request);
 		return ResponseEntity.status(HttpStatus.OK).body(ResponseData.success("회원 정보 로드 성공", login));
 
+	}
+
+	@PostMapping("/refreshToken")
+	public ResponseEntity<?> login(@RequestBody RefreshTokenRequestDto requestDto) throws Exception {
+		JwtTokenDto login = memberService.refreshToken(requestDto.getRefreshToken());
+		return ResponseEntity.status(HttpStatus.OK).body(ResponseData.success("리프레시 토큰 발급 완료", login));
 	}
 }

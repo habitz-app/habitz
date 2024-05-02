@@ -6,12 +6,11 @@ import org.springframework.security.oauth2.client.registration.ClientRegistratio
 import org.springframework.stereotype.Service;
 import space.habitz.api.domain.member.dto.*;
 import space.habitz.api.domain.member.entity.*;
-import space.habitz.api.domain.member.repository.MemberProfileRepository;
-import space.habitz.api.domain.member.repository.MemberRepository;
-import space.habitz.api.domain.member.repository.RefreshTokenRepository;
-import space.habitz.api.domain.member.repository.SocialInformRepository;
-
+import space.habitz.api.domain.member.exeption.*;
+import space.habitz.api.domain.member.repository.*;
 import java.util.Optional;
+
+import static space.habitz.api.domain.member.service.JwtTokenProvider.TOKEN_TYPE;
 
 @Service
 @RequiredArgsConstructor
@@ -66,5 +65,21 @@ public class MemberServiceImpl implements MemberService {
 		member.setMemberInform(memberProfileEntity, socialInformEntity);
 
 		return memberRepository.saveAndFlush(member);
+	}
+
+	@Override
+	public JwtTokenDto refreshToken(String refreshToken) {
+		if (refreshToken == null || !refreshToken.startsWith(TOKEN_TYPE))
+			throw new MemberUnAuthorizedException("유효하지 않은 검증 타입 입니다.");
+
+		refreshToken = refreshToken.replace(TOKEN_TYPE + " ", "");
+
+		jwtTokenProvider.validateRefreshToken(refreshToken);
+
+		Long userId = jwtTokenProvider.extractUserId(refreshToken);
+		Member member = memberRepository.findByUserId(userId)
+			.orElseThrow(() ->new MemberNotFoundException(userId));
+
+		return jwtTokenProvider.generateToken(member);
 	}
 }
