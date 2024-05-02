@@ -10,6 +10,7 @@ import space.habitz.api.domain.member.entity.*;
 import space.habitz.api.domain.member.exeption.*;
 import space.habitz.api.domain.member.repository.*;
 import java.util.Optional;
+import java.util.List;
 import space.habitz.api.domain.member.utils.AuthUtils;
 import space.habitz.api.global.util.RandomUtils;
 
@@ -136,5 +137,11 @@ public class MemberServiceImpl implements MemberService {
 	public MemberMypageResponseDto getMemberInfo() {
 		Member authenticatedMember = AuthUtils.getAuthenticatedMember();
 		return new MemberMypageResponseDto(authenticatedMember);
+	}
+
+	@Override
+	public void logout() throws Exception {
+		Member authenticatedMember = AuthUtils.getAuthenticatedMember();
+		refreshTokenRepository.deleteAllById(List.of(authenticatedMember.getId()));
 	}
 }
