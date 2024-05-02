@@ -17,4 +17,6 @@ public interface MemberService {
 	void logout() throws Exception;
 
 	void exit();
+
+	void updateMemberInfo(MemberUpdateRequestDto requestDto);
 }

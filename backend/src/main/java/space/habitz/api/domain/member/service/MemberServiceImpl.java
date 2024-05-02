@@ -154,4 +154,13 @@ public class MemberServiceImpl implements MemberService {
 		memberProfile.setDeletedAt(LocalDateTime.now());
 		memberProfileRepository.save(memberProfile);
 	}
+
+	@Override
+	public void updateMemberInfo(MemberUpdateRequestDto requestDto) {
+		Member authenticatedMember = AuthUtils.getAuthenticatedMember();
+		authenticatedMember.setNickname(requestDto.getNickName());
+		authenticatedMember.setImage(requestDto.getProfileImage());
+
+		memberRepository.save(authenticatedMember);
+	}
 }
