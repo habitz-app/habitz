@@ -80,13 +80,21 @@ public class MissionController {
 	}
 
 	@Operation(
-		summary = "날짜를 기준으로 전체 아이들에 대한 미션 리스트 조회 (부모)",
-		description = "부모는 날짜를 기준으로 아이의 미션 목록을 조회합니다."
+		summary = "날짜를 기준으로 아이들에 대한 미션 리스트 조회 (부모)",
+		description = "부모는 날짜를 기준으로 아이의 미션 목록을 조회합니다. <br> child 값은 memberUUID 를 사용합니다. <br> child는 nullable 하며, null일 경우 전체 아이들의 목록 / null이 아닐 경우 특정 아이에 대한 목록을 조회합니다."
 	)
 	@GetMapping("/children/list")
 	public ResponseData<?> getChildrenMissionList(
 		@AuthenticationPrincipal Member member,
-		@RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
-		return ResponseData.success(missionService.getChildrenMissionList(member, date));
+		@RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date,
+		@RequestParam(name = "child", required = false) String childUUID
+	) {
+		if (childUUID == null) {
+			// 전체 아이의 미션 목록 조회
+			return ResponseData.success(missionService.getChildrenMissionList(member, date));
+		} else {
+			// 특정 아이의 미션 목록 조회
+			return ResponseData.success(missionService.getChildMissionList(member, childUUID, date));
+		}
 	}
 }

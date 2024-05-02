@@ -138,6 +138,26 @@ public class MissionService {
 	}
 
 	/**
+	 * 부모 유저가 특정 자식의 미션 목록을 조회
+	 * - 부모 유저와 child의 가족 관계가 성립해야 한다.
+	 *
+	 * @param member 로그인한 사용자
+	 * @param childUUID 조회할 자식의 UUID
+	 * @param date 조회할 날짜
+	 * */
+	@Transactional(readOnly = true)
+	public List<MissionDto> getChildMissionList(Member member, String childUUID, LocalDate date) {
+		// 자식의 정보 조회
+		Member child = memberRepository.findByUuid(childUUID)
+			.orElseThrow(() -> new CustomErrorException(ErrorCode.MEMBER_NOT_FOUND));
+
+		validateFamily(member.getFamily().getId(), child.getFamily().getId());    // 가족 관계 확인
+
+		// 자식의 missionList 조회 (날짜 기준)
+		return getMissionList(child, date);
+	}
+
+	/**
 	 * 미션 생성 스케줄러
 	 * - 매일 자정 00시 00분 00초에 실행
 	 * - 오늘 날짜에 해당하는 스케줄을 조회하여 미션을 생성한다.
@@ -171,6 +191,12 @@ public class MissionService {
 
 		missionRepository.saveAll(missionList);
 		log.info("Scheduled generateDailyMissions finished");
+	}
+
+	public void validateFamily(String memberFamilyId, String childFamilyId) {
+		if (!memberFamilyId.equals(childFamilyId)) {
+			throw new CustomErrorException(ErrorCode.FAMILY_NOT_MATCH);
+		}
 	}
 
 }
