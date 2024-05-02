@@ -1,7 +1,5 @@
 package space.habitz.api.domain.product.repository;
 
-import static space.habitz.api.domain.product.entity.QProduct.*;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -9,15 +7,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
-import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQuery;
-import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import space.habitz.api.domain.product.dto.ProductInfoDto;
-import space.habitz.api.domain.product.dto.QProductInfoDto;
 import space.habitz.api.domain.product.entity.Product;
 import space.habitz.api.domain.product.entity.QBannedProduct;
 import space.habitz.api.domain.product.entity.QProduct;
