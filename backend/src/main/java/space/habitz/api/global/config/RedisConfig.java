@@ -18,10 +18,10 @@ public class RedisConfig {
 	@Value("${spring.data.redis.host}")
 	private String host;
 
-	@Value("${spring.redis.username}")
+	@Value("${spring.data.redis.username}")
 	public String userName;
 
-	@Value("${spring.redis.password}")
+	@Value("${spring.data.redis.password}")
 	public String password;
 
 	@Bean
@@ -32,7 +32,7 @@ public class RedisConfig {
 		redisStandaloneConfiguration.setUsername(userName);
 		redisStandaloneConfiguration.setPassword(password);
 
-        return new LettuceConnectionFactory(redisStandaloneConfiguration);
+		return new LettuceConnectionFactory(redisStandaloneConfiguration);
 	}
 
 	@Bean
