@@ -2,6 +2,7 @@ package space.habitz.api.domain.mission.controller;
 
 import java.time.LocalDate;
 
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -16,6 +18,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import space.habitz.api.domain.member.entity.Member;
 import space.habitz.api.domain.mission.dto.MissionDto;
+import space.habitz.api.domain.mission.dto.UpdateMissionRequestDto;
 import space.habitz.api.domain.mission.service.MissionService;
 import space.habitz.api.global.response.ResponseData;
 
@@ -62,6 +65,17 @@ public class MissionController {
 		}
 
 		return ResponseData.success(missionService.updateMission(member, missionId, requestDto));
+	}
+
+	@Operation(
+		summary = "날짜를 기준으로 미션 리스트 조회 (아이)",
+		description = "아이는 날짜를 기준으로 미션 목록을 조회합니다."
+	)
+	@GetMapping("/list")
+	public ResponseData<?> getMissionList(
+		@AuthenticationPrincipal Member member,
+		@RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
+		return ResponseData.success(missionService.getMissionList(member, date));
 	}
 
 }
