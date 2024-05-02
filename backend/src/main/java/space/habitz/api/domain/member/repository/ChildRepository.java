@@ -9,6 +9,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface ChildRepository extends JpaRepository<Child, Long> {
 	Optional<Child> findById_AndMember_Family_Id(Long id, String familyId);
 
-	Child findChildByMember_Id(Long memberId);
+	Child findByMember_Id(Long memberId);
 
 }
