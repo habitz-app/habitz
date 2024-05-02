@@ -1,10 +1,28 @@
 package space.habitz.api.domain.mission.entity;
 
-import jakarta.persistence.*;
-import lombok.*;
+import java.time.LocalDate;
+
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import space.habitz.api.domain.member.entity.Member;
+import space.habitz.api.domain.mission.dto.UpdateMissionRequestDto;
 import space.habitz.api.domain.schedule.entity.Schedule;
 import space.habitz.api.global.entity.MutableTimeEntity;
 import space.habitz.api.global.type.StatusCode;
@@ -48,6 +66,9 @@ public class Mission extends MutableTimeEntity {
 	@Column(name = "point")
 	private int point;
 
+	@Column(name = "date")
+	private LocalDate date;
+
 	@Column(name = "status")
 	@Enumerated(EnumType.STRING)
 	private StatusCode status;
@@ -57,4 +78,12 @@ public class Mission extends MutableTimeEntity {
 
 	@Column(name = "repeat_yn")
 	private boolean repeatable;
+
+	public void updateMission(UpdateMissionRequestDto request) {
+		this.title = request.title();
+		this.content = request.content();
+		this.emoji = request.emoji();
+		this.point = request.point();
+		this.date = request.date();
+	}
 }
