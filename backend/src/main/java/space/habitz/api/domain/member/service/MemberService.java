@@ -15,4 +15,6 @@ public interface MemberService {
 	MemberMypageResponseDto getMemberInfo();
 
 	void logout() throws Exception;
+
+	void exit();
 }
