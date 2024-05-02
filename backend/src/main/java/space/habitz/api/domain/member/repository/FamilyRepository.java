@@ -5,5 +5,5 @@ import org.springframework.stereotype.Repository;
 import space.habitz.api.domain.member.entity.Family;
 
 @Repository
-public interface FamilyRepository extends JpaRepository<Family, String> {
+public interface FamilyRepository extends JpaRepository<Family, String>, FamilyCustomRepository {
 }
