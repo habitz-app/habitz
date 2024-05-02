@@ -13,4 +13,6 @@ public interface MemberService {
 	void register(MemberRegisterRequestDto requestDto);
 
 	MemberMypageResponseDto getMemberInfo();
+
+	void logout() throws Exception;
 }

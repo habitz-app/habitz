@@ -45,4 +45,13 @@ public class MemberController {
 		MemberMypageResponseDto result = memberService.getMemberInfo();
 		return ResponseEntity.status(HttpStatus.OK).body(ResponseData.success("회원 정보 조회 성공", result));
 	}
+
+	@GetMapping("/logout")
+	public ResponseEntity<?> logout() throws Exception {
+		memberService.logout();
+		return ResponseEntity.status(HttpStatus.OK).body(ResponseData.success("회원 로그아웃 성공"));
+	}
+
+
+
 }
