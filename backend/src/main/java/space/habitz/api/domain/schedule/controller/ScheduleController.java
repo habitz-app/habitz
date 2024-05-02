@@ -34,7 +34,7 @@ public class ScheduleController {
 		description = "일정 상세 정보를 조회합니다."
 	)
 	@GetMapping("/{scheduleId}")
-	public ResponseData<ScheduleDto> getScheduleDetail(@AuthenticationPrincipal Member member, @PathVariable Long scheduleId) {
+	public ResponseData<ScheduleDto> getScheduleDetail(@AuthenticationPrincipal Member member, @PathVariable("scheduleId") Long scheduleId) {
 		ScheduleDto scheduleDto = scheduleService.getScheduleDetail(member, scheduleId);
 		return ResponseData.success(scheduleDto);
 	}
