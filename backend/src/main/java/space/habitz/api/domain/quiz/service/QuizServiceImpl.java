@@ -71,4 +71,49 @@ public class QuizServiceImpl implements QuizService {
 			.build();
 
 	}
+
+	@Override
+	public QuizHistoryDto solveQuiz(Member member, String answer) {
+		Child child = childRepository.findByMember_Id(member.getId());
+		LocalDate today = LocalDate.now();
+		Quiz quiz = quizRepository.findByDate(today).orElseThrow(() -> new CustomNotFoundException("오늘의 퀴즈가 없습니다."));
+
+		quizHistoryRepository.findByChildAndQuiz(child, quiz).ifPresent(quizHistory -> {
+			throw new CustomNotFoundException("이미 푼 퀴즈입니다.");
+		} );
+
+
+		QuizHistory quizHistory = QuizHistory
+			.builder()
+			.quiz(quiz)
+			.child(child)
+			.chosenAnswer(answer)
+			.isCorrect(quiz.getAnswer().equals(answer))
+			.createdAt(new java.sql.Timestamp(System.currentTimeMillis()))
+			.build();
+
+
+		quizHistoryRepository.save(quizHistory);
+
+		return QuizHistoryDto
+			.builder()
+			.isSolved(true)
+			.quizHistoryInfoDto(
+				QuizHistoryInfoDto
+					.builder()
+					.isCorrect(quizHistory.isCorrect())
+					.chosenAnswer(quizHistory.getChosenAnswer())
+					.createdAt(quizHistory.getCreatedAt())
+					.build()
+			)
+			.quizInfoDto(
+				QuizInfoDto
+					.builder()
+					.id(quiz.getId())
+					.content(quiz.getContent())
+					.createdAt(quiz.getDate())
+					.build()
+			)
+			.build();
+	}
 }
