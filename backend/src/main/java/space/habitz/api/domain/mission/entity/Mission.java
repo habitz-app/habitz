@@ -5,6 +5,7 @@ import lombok.*;
 import space.habitz.api.domain.member.entity.Member;
 import space.habitz.api.domain.schedule.entity.Schedule;
 import space.habitz.api.global.entity.MutableTimeEntity;
+import space.habitz.api.global.type.StatusCode;
 
 @Entity
 @Getter
@@ -15,40 +16,41 @@ import space.habitz.api.global.entity.MutableTimeEntity;
 @Table(name = "mission")
 public class Mission extends MutableTimeEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "schedule_id")
-    private Schedule schedule;
+	@ManyToOne
+	@JoinColumn(name = "schedule_id")
+	private Schedule schedule;
 
-    @ManyToOne
-    @JoinColumn(name = "child_id")
-    private Member child;
+	@ManyToOne
+	@JoinColumn(name = "child_id")
+	private Member child;
 
-    @ManyToOne
-    @JoinColumn(name = "parent_id")
-    private Member parent;
+	@ManyToOne
+	@JoinColumn(name = "parent_id")
+	private Member parent;
 
-    @Column(name = "content")
-    private String content;
+	@Column(name = "content")
+	private String content;
 
-    @Column(name = "title")
-    private String title;
+	@Column(name = "title")
+	private String title;
 
-    @Column(name = "emoji")
-    private String emoji;
+	@Column(name = "emoji")
+	private String emoji;
 
-    @Column(name = "point")
-    private int point;
+	@Column(name = "point")
+	private int point;
 
-    @Column(name = "status")
-    private String status;
+	@Column(name = "status")
+	@Enumerated(EnumType.STRING)
+	private StatusCode status;
 
-    @Column(name = "is_deleted")
-    private boolean isDeleted;
+	@Column(name = "is_deleted")
+	private boolean isDeleted;
 
-    @Column(name = "repeat_yn")
-    private boolean repeatable;
+	@Column(name = "repeat_yn")
+	private boolean repeatable;
 }
