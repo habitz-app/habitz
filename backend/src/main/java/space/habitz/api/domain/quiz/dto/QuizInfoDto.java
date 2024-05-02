@@ -13,7 +13,6 @@ import lombok.NoArgsConstructor;
 @Getter
 public class QuizInfoDto {
 	Long id;
-	String title;
 
 	String content;
 

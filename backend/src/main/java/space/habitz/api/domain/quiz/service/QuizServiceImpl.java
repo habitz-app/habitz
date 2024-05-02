@@ -43,7 +43,6 @@ public class QuizServiceImpl implements QuizService {
 					QuizInfoDto
 						.builder()
 						.id(quiz.getId())
-						.title(quiz.getTitle())
 						.content(quiz.getContent())
 						.createdAt(quiz.getDate())
 						.build()
@@ -65,7 +64,6 @@ public class QuizServiceImpl implements QuizService {
 				QuizInfoDto
 					.builder()
 					.id(quiz.getId())
-					.title(quiz.getTitle())
 					.content(quiz.getContent())
 					.createdAt(quiz.getDate())
 					.build()
