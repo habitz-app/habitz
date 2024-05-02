@@ -17,8 +17,6 @@ public class Quiz {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	@Column(name = "title", nullable = false)
-	String title;
 	@Column(name = "content", nullable = false)
 	private String content;
 	@Column(name = "answer", nullable = false)
