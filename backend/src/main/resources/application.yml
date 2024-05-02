@@ -27,8 +27,6 @@ spring:
     url: jdbc:mysql://${DB_HOST}:${DB_PORT}/${DB_NAME}?serverTimezone=UTC&characterEncoding=UTF-8
 
   jpa:
-    hibernate:
-      ddl-auto: create-drop
     properties:
       hibernate:
         default_batch_fetch_size: 100
@@ -47,6 +45,6 @@ spring:
 jwt:
   secret-key: ${JWT_SECRET_KEY}
   access-token:
-    expiration: 86400000  # 1 day
+    expiration: 86400000 # 1 day
   refresh-token:
-    expiration: 604800000  # 7 days
+    expiration: 604800000 # 7 days
