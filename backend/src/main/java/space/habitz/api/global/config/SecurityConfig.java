@@ -1,6 +1,5 @@
 package space.habitz.api.global.config;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -12,6 +11,8 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+
+import lombok.RequiredArgsConstructor;
 import space.habitz.api.domain.member.filter.JwtAuthorizationFilter;
 
 @EnableWebSecurity
@@ -23,12 +24,13 @@ public class SecurityConfig {
 	private final AuthenticationEntryPoint authenticationEntryPoint;
 	private final AccessDeniedHandler accessDeniedHandler;
 
-	AntPathRequestMatcher[] whiteList = new AntPathRequestMatcher[]{
+	AntPathRequestMatcher[] whiteList = new AntPathRequestMatcher[] {
 		new AntPathRequestMatcher("/api/v1/member/login"),
 		new AntPathRequestMatcher("/login/oauth2/code/**"),
 		new AntPathRequestMatcher("/swagger-ui/**"),
 		new AntPathRequestMatcher("/v3/api-docs/**"),
 		new AntPathRequestMatcher("/api/v1/test/**"),
+		new AntPathRequestMatcher("/actuator/**")
 	};
 
 	@Bean
