@@ -1,10 +1,10 @@
 package space.habitz.api.domain.schedule.dto;
 
+import java.time.LocalDate;
+
 import lombok.Builder;
 import space.habitz.api.domain.member.dto.MemberProfileDto;
 import space.habitz.api.domain.schedule.entity.Schedule;
-
-import java.time.LocalDate;
 
 @Builder
 public record ScheduleDto(
@@ -27,14 +27,11 @@ public record ScheduleDto(
 			.emoji(schedule.getEmoji())
 			.child(
 				// 아이의 member Profile 정보
-				MemberProfileDto.builder()
-					.name(schedule.getChild().getName())
-					.memberUUID(schedule.getChild().getUuid())
-					.build())
+				MemberProfileDto.of(schedule.getChild()))
 			.startDate(schedule.getStartDate())
 			.endDate(schedule.getEndDate())
 			.weekDays(
-				new Boolean[]{
+				new Boolean[] {
 					schedule.getMonday(),
 					schedule.getTuesday(),
 					schedule.getWednesday(),
