@@ -1,11 +1,9 @@
 package space.habitz.api.domain.member.filter;
 
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import static space.habitz.api.domain.member.service.JwtTokenProvider.*;
+
+import java.io.IOException;
+
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -14,16 +12,18 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.filter.OncePerRequestFilter;
+
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import space.habitz.api.domain.member.entity.Member;
 import space.habitz.api.domain.member.exeption.MemberNotFoundException;
 import space.habitz.api.domain.member.exeption.MemberUnAuthorizedException;
 import space.habitz.api.domain.member.repository.MemberRepository;
 import space.habitz.api.domain.member.service.JwtTokenProvider;
-
-import java.io.IOException;
-
-import static space.habitz.api.domain.member.service.JwtTokenProvider.AUTHORIZATION_HEADER;
-import static space.habitz.api.domain.member.service.JwtTokenProvider.TOKEN_TYPE;
 
 @RequiredArgsConstructor
 @Component
@@ -36,7 +36,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
-									FilterChain filterChain) throws ServletException, IOException {
+		FilterChain filterChain) throws ServletException, IOException {
 		try {
 			log.info("AccessToken 검증시작");
 			String auth = request.getHeader(AUTHORIZATION_HEADER);
