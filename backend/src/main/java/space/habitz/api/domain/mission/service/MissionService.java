@@ -127,10 +127,7 @@ public class MissionService {
 		for (Member child : children) {
 			MemberProfileDto childInfo = MemberProfileDto.of(child);
 			// 자식들의 미션 목록 조회
-			List<Mission> missionList = missionRepository.findByChildIdAndDate(child.getId(), date);
-			List<MissionDto> missionDtoList = missionList.stream()
-				.map(MissionDto::of)
-				.toList();
+			List<MissionDto> missionDtoList = getMissionList(child, date);
 			totalMissionList.add(Map.of("childInfo", childInfo, "missions", missionDtoList));
 		}
 
@@ -169,7 +166,7 @@ public class MissionService {
 		log.info("Scheduled generateDailyMissions started");
 		LocalDate today = LocalDate.now();
 
-		List<Schedule> scheduleList = scheduleCustomRepository.findSchedulesByDate(today);
+		List<Schedule> scheduleList = scheduleCustomRepository.findByDate(today);
 		log.info("Make mission list size: {}", scheduleList.size());
 
 		// From Schedule To Daily Mission
