@@ -28,7 +28,7 @@ public class FamilyServiceImpl implements FamilyService {
 		Member member = AuthUtils.getAuthenticatedMember();
 		String familyId = member.getFamily().getId();
 
-		return familyRepository.findByFamilyId(familyId)
+		return familyRepository.findByFamilyIdOnlyChildMember(familyId, true)
 			.stream()
 			.map(FamilyListResponseDto::convertToDto)
 			.toList();

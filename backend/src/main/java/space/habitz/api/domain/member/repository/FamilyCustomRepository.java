@@ -8,4 +8,6 @@ import java.util.List;
 @Repository
 public interface FamilyCustomRepository {
     List<Member> findByFamilyId(String familyId);
+
+	List<Member> findByFamilyIdOnlyChildMember(String familyId, boolean isAcs);
 }
