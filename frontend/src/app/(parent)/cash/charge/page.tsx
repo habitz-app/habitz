@@ -1,11 +1,9 @@
 'use client';
-import { useRouter, usePathname } from 'next/navigation';
-import React, { use, useState } from 'react';
+import { useState } from 'react';
 import { HStack } from 'styled-system/jsx';
+import { loadTossPayments } from '@tosspayments/payment-sdk';
 
 const Charge = () => {
-  const router = useRouter();
-  const currentPath = usePathname();
   const dummyHabitz: number = 7400;
   const dummyChargeButtonArray: number[] = [10000, 50000, 100000, 500000];
   const [charge, setCharge] = useState<number | null>(null);
@@ -16,15 +14,22 @@ const Charge = () => {
     }
     setCharge(value);
   };
-  const chargeHandler = () => {
+  const handleClick = async () => {
     if (charge !== null) {
       // Charge Logic
       if (charge >= 1000) {
-        alert(`${charge}원이 충전되었습니다.`);
-        router.push(currentPath + '/success');
+        const tossPayments = await loadTossPayments(
+          process.env.NEXT_PUBLIC_TOSS_CLIENT_KEY ?? '',
+        );
+        await tossPayments.requestPayment('카드', {
+          amount: charge,
+          orderId: Math.random().toString(36).slice(2),
+          orderName: '(주)해비츠',
+          successUrl: 'http://localhost:3000/cash/charge/success',
+          failUrl: 'http://localhost:3000/cash/charge/fail',
+        });
       } else {
         alert('1000원 이상의 금액을 입력해주세요.');
-        router.push(currentPath + '/fail');
       }
     } else {
       alert('충전할 금액을 입력해주세요.');
@@ -65,7 +70,7 @@ const Charge = () => {
         ))}
       </HStack>
       <div>
-        <button onClick={chargeHandler}>충전하기</button>
+        <button onClick={handleClick}>충전하기</button>
       </div>
     </div>
   );
