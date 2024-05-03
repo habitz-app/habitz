@@ -103,7 +103,7 @@ public class MissionService {
 
 		return missionList.stream()
 			.map(MissionDto::of)
-			.collect(Collectors.toList());
+			.toList();
 	}
 
 	/**
@@ -193,6 +193,12 @@ public class MissionService {
 		log.info("Scheduled generateDailyMissions finished");
 	}
 
+	/**
+	 * 같은 가족인지 확인하는 validation
+	 *
+	 * @param memberFamilyId 가족 관계를 확인할 사용자
+	 * @param childFamilyId  가족 관계를 확인할 사용자
+	 */
 	public void validateFamily(String memberFamilyId, String childFamilyId) {
 		if (!memberFamilyId.equals(childFamilyId)) {
 			throw new CustomErrorException(ErrorCode.FAMILY_NOT_MATCH);
