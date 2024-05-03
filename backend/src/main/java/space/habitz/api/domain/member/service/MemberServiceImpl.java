@@ -1,17 +1,19 @@
 package space.habitz.api.domain.member.service;
 
+import io.micrometer.common.util.StringUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.stereotype.Service;
 import space.habitz.api.domain.member.dto.*;
 import space.habitz.api.domain.member.entity.*;
-import space.habitz.api.domain.member.repository.MemberProfileRepository;
-import space.habitz.api.domain.member.repository.MemberRepository;
-import space.habitz.api.domain.member.repository.RefreshTokenRepository;
-import space.habitz.api.domain.member.repository.SocialInformRepository;
-
+import space.habitz.api.domain.member.exeption.*;
+import space.habitz.api.domain.member.repository.*;
 import java.util.Optional;
+import space.habitz.api.domain.member.utils.AuthUtils;
+import space.habitz.api.global.util.RandomUtils;
+
+import static space.habitz.api.domain.member.service.JwtTokenProvider.TOKEN_TYPE;
 
 @Service
 @RequiredArgsConstructor
@@ -23,6 +25,9 @@ public class MemberServiceImpl implements MemberService {
 	private final MemberProfileRepository memberProfileRepository;
 	private final JwtTokenProvider jwtTokenProvider;
 	private final RefreshTokenRepository refreshTokenRepository;
+	private final FamilyRepository familyRepository;
+	private final ChildRepository childRepository;
+	private final ParentRepository parentRepository;
 
 	@Override
 	public MemberLoginResponseDto login(MemberLoginRequestDto dto) throws Exception {
@@ -66,5 +71,64 @@ public class MemberServiceImpl implements MemberService {
 		member.setMemberInform(memberProfileEntity, socialInformEntity);
 
 		return memberRepository.saveAndFlush(member);
+	}
+
+	@Override
+	public JwtTokenDto refreshToken(String refreshToken) {
+		if (refreshToken == null || !refreshToken.startsWith(TOKEN_TYPE))
+			throw new MemberUnAuthorizedException("유효하지 않은 검증 타입 입니다.");
+
+		refreshToken = refreshToken.replace(TOKEN_TYPE + " ", "");
+
+		jwtTokenProvider.validateRefreshToken(refreshToken);
+
+		Long userId = jwtTokenProvider.extractUserId(refreshToken);
+		Member member = memberRepository.findByUserId(userId)
+			.orElseThrow(() ->new MemberNotFoundException(userId));
+
+		return jwtTokenProvider.generateToken(member);
+	}
+
+	@Override
+	public MemberFindResponseDto memberType(Member member) {
+		String result = member.getRole().getRoleName();
+		return new MemberFindResponseDto(result);
+	}
+
+	@Override
+	public void register(MemberRegisterRequestDto requestDto) {
+		String familyId = requestDto.getFamilyId();
+		Member member = AuthUtils.getAuthenticatedMember();
+		String nickname = requestDto.getNickname();
+
+		Family family = familyRepository.findById(familyId)
+			.orElseGet(
+				() -> {
+					String randomCode = RandomUtils.generateRandomCode(6);
+					Family generatedFamily = new Family(randomCode, 0L);
+					return familyRepository.saveAndFlush(generatedFamily);
+				}
+			);
+
+		String memberRole = requestDto.getMemberRole().toUpperCase();
+		Role role = Role.findEnum(memberRole);
+
+		if (!member.getRole().equals(Role.GUEST))
+			throw new MemberAlreadyRegistedException("이미 등록된 회원입니다.");
+
+		if(!StringUtils.isBlank(nickname))
+			member.setNickname(nickname);
+
+		member.setRole(role);
+		member.setFamily(family);
+		member = memberRepository.save(member);
+
+		if (role.getRoleName().equals("PARENT")) {
+			Parent parent = new Parent(member, 0L);
+			parentRepository.save(parent);
+		} else if (role.getRoleName().equals("CHILD")) {
+			Child child = new Child(member, 0L);
+			childRepository.save(child);
+		}
 	}
 }
