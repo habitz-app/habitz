@@ -6,7 +6,9 @@ import { hstack, stack } from 'styled-system/patterns';
 import { Button } from '~/components/ui/button';
 import * as DatePicker from '~/components/ui/date-picker';
 import { IconButton } from '~/components/ui/icon-button';
+import { colors } from './colors';
 
+// 달력 조회 시 아이의 일정 조회 API Response
 interface calendarChildInfo {
   month: string;
   childInfo: string[];
@@ -15,6 +17,7 @@ interface calendarChildInfo {
   };
 }
 
+// Props 데이터 구조
 interface CalendarProps extends DatePicker.RootProps {
   data: calendarChildInfo;
   selectDate: (date: string) => void;
@@ -37,25 +40,16 @@ export default function Calendar({
     return `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
   };
 
-  const colors: string[] = [
-    'purple.500',
-    'yellow.500',
-    'blue.500',
-    '#22D3EE',
-    'red.500',
-    'green.500',
-    'gray.500',
-    'pink.500',
-    'teal.500',
-  ];
+  // 캘린더에 날짜별로 아이의 일정을 표시하는 컴포넌트입니다
   const ChildDot: React.FC<{ color: string }> = ({ color }) => (
     <div
       className={css({
         bg: color,
-        width: '3px',
-        height: '3px',
+        w: '4px',
+        h: '4px',
         rounded: '9999px',
       })}
+      style={{ background: color }}
     ></div>
   );
   const ChildrenDots: React.FC<{ childrenBoolean: boolean[] }> = ({

@@ -3,14 +3,17 @@ import Calendar from './calendar';
 import { useState } from 'react';
 import { css } from 'styled-system/css';
 import { hstack } from 'styled-system/patterns';
+import { colors } from './colors';
 
 const Page = () => {
+  // 선택한 날짜 관리하는 State
   const [selectedDate, setSelectedDate] = useState(
     new Date().toISOString().slice(0, 10),
   );
   const selectDateHandler = (date: string) => {
     setSelectedDate(date);
   };
+  // 달력 조회 시 아이의 일정 조회 API Response
   interface calendarChildInfo {
     month: string;
     childInfo: string[];
@@ -18,11 +21,10 @@ const Page = () => {
       [key: string]: boolean[];
     };
   }
-
-  interface dummyChildrenMission {
+  // 날짜 별 전체 아이에 대한 미션 목록 API Response
+  interface childMission {
     childInfo: {
       memberUUID: string;
-      color: string;
       name: string;
     };
     missions: {
@@ -37,12 +39,16 @@ const Page = () => {
       createdBy: string;
     }[];
   }
-
-  interface dummyDateMission {
-    [key: string]: dummyChildrenMission[];
+  // Color 적용을 위한 id 추가
+  interface childrenMission extends childMission {
+    id: number;
+  }
+  // 날짜 별 아이에 대한 미션 목록 API Response 날짜 별 정리
+  interface dateMission {
+    [key: string]: childMission[];
   }
 
-  let dummyCalendarData: calendarChildInfo = {
+  let calendarData: calendarChildInfo = {
     month: '2024-05',
     childInfo: [
       'udkdd-adkjf-dfsfs',
@@ -57,12 +63,11 @@ const Page = () => {
     },
   };
 
-  let dummyChildrenMissionData: dummyDateMission = {
+  let childMissionData: dateMission = {
     '2024-05-01': [
       {
         childInfo: {
           memberUUID: 'adfkjds-dfsfsd',
-          color: '#ff0000',
           name: '김첫째',
         },
         missions: [
@@ -93,7 +98,6 @@ const Page = () => {
       {
         childInfo: {
           memberUUID: 'adfkjds-dfsfsd',
-          color: '#ffd700',
           name: '김둘째',
         },
         missions: [
@@ -124,7 +128,6 @@ const Page = () => {
       {
         childInfo: {
           memberUUID: 'adfkjds-dfsfsd',
-          color: '#dda0dd',
           name: '김셋째',
         },
         missions: [
@@ -179,7 +182,6 @@ const Page = () => {
       {
         childInfo: {
           memberUUID: 'adfkjds-dfsfsd',
-          color: '#ff0000',
           name: '김첫째',
         },
         missions: [
@@ -210,7 +212,6 @@ const Page = () => {
       {
         childInfo: {
           memberUUID: 'adfkjds-dfsfsd',
-          color: '#ffd700',
           name: '김둘째',
         },
         missions: [
@@ -241,7 +242,6 @@ const Page = () => {
       {
         childInfo: {
           memberUUID: 'adfkjds-dfsfsd',
-          color: '#dda0dd',
           name: '김셋째',
         },
         missions: [
@@ -294,7 +294,9 @@ const Page = () => {
     ],
   };
 
-  const ChildMissionBoard: React.FC<dummyChildrenMission> = ({
+  // 선택한 날짜에 해당하는 아이들의 미션 목록을 보여주는 컴포넌트
+  const ChildMissionBoard: React.FC<childrenMission> = ({
+    id,
     childInfo,
     missions,
   }) => (
@@ -304,12 +306,12 @@ const Page = () => {
           <p>{childInfo.name}</p>{' '}
           <div
             className={css({
-              bg: childInfo.color,
-              // bg: '#ffd700',
-              width: '24px',
-              height: '24px',
+              bg: colors[id],
+              width: '20px',
+              height: '20px',
               rounded: '9999px',
             })}
+            style={{ background: colors[id] }}
           ></div>
         </div>
       </div>
@@ -326,14 +328,11 @@ const Page = () => {
 
   return (
     <div>
-      {selectedDate && <div>{selectedDate}</div>}
-      {/* <div className={css({ width: 'full', height: '500px' })}> */}
-      <Calendar data={dummyCalendarData} selectDate={selectDateHandler} />
-      {/* </div> */}
-      {dummyChildrenMissionData[selectedDate] && (
+      <Calendar data={calendarData} selectDate={selectDateHandler} />
+      {childMissionData[selectedDate] && (
         <div>
-          {dummyChildrenMissionData[selectedDate].map((child, id) => (
-            <ChildMissionBoard key={id} {...child} />
+          {childMissionData[selectedDate].map((child, id) => (
+            <ChildMissionBoard key={id} id={id} {...child} />
           ))}
         </div>
       )}
