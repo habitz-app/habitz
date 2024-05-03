@@ -9,7 +9,10 @@ import space.habitz.api.domain.member.dto.*;
 import space.habitz.api.domain.member.entity.*;
 import space.habitz.api.domain.member.exeption.*;
 import space.habitz.api.domain.member.repository.*;
+
+import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.List;
 import space.habitz.api.domain.member.utils.AuthUtils;
 import space.habitz.api.global.util.RandomUtils;
 
@@ -130,5 +133,34 @@ public class MemberServiceImpl implements MemberService {
 			Child child = new Child(member, 0L);
 			childRepository.save(child);
 		}
+	}
+
+	@Override
+	public MemberMypageResponseDto getMemberInfo() {
+		Member authenticatedMember = AuthUtils.getAuthenticatedMember();
+		return new MemberMypageResponseDto(authenticatedMember);
+	}
+
+	@Override
+	public void logout() throws Exception {
+		Member authenticatedMember = AuthUtils.getAuthenticatedMember();
+		refreshTokenRepository.deleteAllById(List.of(authenticatedMember.getId()));
+	}
+
+	@Override
+	public void exit() {
+		Member authenticatedMember = AuthUtils.getAuthenticatedMember();
+		MemberProfile memberProfile = authenticatedMember.getMemberProfile();
+		memberProfile.setDeletedAt(LocalDateTime.now());
+		memberProfileRepository.save(memberProfile);
+	}
+
+	@Override
+	public void updateMemberInfo(MemberUpdateRequestDto requestDto) {
+		Member authenticatedMember = AuthUtils.getAuthenticatedMember();
+		authenticatedMember.setNickname(requestDto.getNickName());
+		authenticatedMember.setImage(requestDto.getProfileImage());
+
+		memberRepository.save(authenticatedMember);
 	}
 }

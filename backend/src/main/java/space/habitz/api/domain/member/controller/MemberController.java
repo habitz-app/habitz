@@ -39,4 +39,29 @@ public class MemberController {
 		MemberFindResponseDto result = memberService.memberType(member);
 		return ResponseEntity.status(HttpStatus.OK).body(ResponseData.success("회원 여부 조회 성공", result));
 	}
+
+	@GetMapping("")
+	public ResponseEntity<?> memberInfo() {
+		MemberMypageResponseDto result = memberService.getMemberInfo();
+		return ResponseEntity.status(HttpStatus.OK).body(ResponseData.success("회원 정보 조회 성공", result));
+	}
+
+	@GetMapping("/logout")
+	public ResponseEntity<?> logout() throws Exception {
+		memberService.logout();
+		return ResponseEntity.status(HttpStatus.OK).body(ResponseData.success("회원 로그아웃 성공"));
+	}
+
+	@DeleteMapping("/exit")
+	public ResponseEntity<?> exit() throws Exception {
+		memberService.exit();
+		return ResponseEntity.status(HttpStatus.OK).body(ResponseData.success("회원 탈퇴 성공"));
+	}
+
+	@PutMapping("/edit")
+	public ResponseEntity<?> edit(@RequestBody MemberUpdateRequestDto dto) throws Exception {
+		memberService.updateMemberInfo(dto);
+		return ResponseEntity.status(HttpStatus.OK).body(ResponseData.success("회원 수정 성공"));
+	}
+
 }
