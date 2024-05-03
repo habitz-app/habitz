@@ -1,15 +1,21 @@
 package space.habitz.api.domain.schedule.service;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Service;
-
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
+import space.habitz.api.domain.member.dto.MemberProfileDto;
+import space.habitz.api.domain.member.entity.Family;
 import space.habitz.api.domain.member.entity.Member;
+import space.habitz.api.domain.member.entity.Role;
 import space.habitz.api.domain.member.repository.MemberRepository;
 import space.habitz.api.domain.schedule.dto.ScheduleDto;
+import space.habitz.api.domain.schedule.dto.ScheduleMissionDto;
 import space.habitz.api.domain.schedule.dto.ScheduleRequestDto;
 import space.habitz.api.domain.schedule.entity.Schedule;
 import space.habitz.api.domain.schedule.repository.ScheduleCustomRepositoryImpl;
@@ -19,7 +25,6 @@ import space.habitz.api.global.exception.ErrorCode;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
 public class ScheduleService {
 
 	private final MemberRepository memberRepository;
