@@ -5,9 +5,9 @@ spring:
         accessKey: ${S3_ACCESSKEY}
         secretKey: ${S3_SECRETKEY}
       s3:
-        bucket: ${S3_BUCKET}
+        bucket: ${S3_BUCKET_NAME}
       region:
-        static: ${S3_BUCKET}
+        static: ${S3_BUCKET_REGION}
       stack:
         auto: false
 
