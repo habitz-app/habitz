@@ -20,7 +20,7 @@ public class PayServiceImpl implements PayService {
 	@Override
 	public PayInfoDto getOrderId(Member member, int amount) {
 
-		String orderId = "H_" + LocalDateTime.now().toString().replace("-","").replace(":", "").replace(" ", "") + "_" + member.getUuid();
+		String orderId = "H" + LocalDateTime.now().toString().replace("-","").replace(":", "").replace(" ", "").replace(".", "").replace("T", "") + member.getUuid();
 		ParentPayment parentPayment = ParentPayment.builder()
 			.orderId(orderId)
 			.amount(amount)
