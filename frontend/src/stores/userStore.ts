@@ -7,6 +7,7 @@ type State = {
   name: string;
   nickName: string;
   profileImage: string;
+  role: string;
 };
 
 type Actions = {
@@ -15,6 +16,7 @@ type Actions = {
   setName: (name: string) => void;
   setNickName: (nickName: string) => void;
   setProfileImage: (url: string) => void;
+  setRole: (role: string) => void;
   clear: () => void;
 };
 
@@ -25,9 +27,10 @@ const initialState: State = {
   name: '',
   nickName: '',
   profileImage: '',
+  role: '',
 };
 
-const userStore = create<UserStore>()(
+const createUserStore = create<UserStore>()(
   devtools((set) => ({
     // states
     ...initialState,
@@ -37,10 +40,11 @@ const userStore = create<UserStore>()(
     setName: (name: string) => set({ name }),
     setNickName: (nickName: string) => set({ nickName }),
     setProfileImage: (profileImage: string) => set({ profileImage }),
+    setRole: (role: string) => set({ role }),
     clear: () => set(initialState),
   })),
 );
 
-const useUserStore = createSelectors(userStore);
+const useUserStore = createSelectors(createUserStore);
 
 export default useUserStore;
