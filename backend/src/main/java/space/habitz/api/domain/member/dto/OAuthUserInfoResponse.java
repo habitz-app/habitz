@@ -3,6 +3,7 @@ package space.habitz.api.domain.member.dto;
 import space.habitz.api.domain.member.entity.Member;
 import space.habitz.api.domain.member.entity.MemberProfile;
 import space.habitz.api.domain.member.entity.SocialInform;
+import space.habitz.api.global.util.RandomUtils;
 
 import java.time.LocalDate;
 
@@ -44,6 +45,7 @@ public interface OAuthUserInfoResponse {
 	default Member toMemberEntity() {
 		return Member.builder()
 			.image(this.getProfile())
+			.uuid(RandomUtils.generateRandomCode(7))
 			.nickname(this.getNickName())
 			.name(this.getName())
 			.build();
