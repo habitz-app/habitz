@@ -23,17 +23,25 @@ public class MemberController {
 	public ResponseEntity<?> login(@RequestBody MemberLoginRequestDto request, HttpServletResponse httpServletResponse) throws Exception {
 		MemberLoginResultDto login = memberService.login(request);
 
-		ResponseCookie refreshToken = ResponseCookie.from("refreshToken", login.getJwtTokenDto().getRefreshToken())
-			.httpOnly(true)
-			.secure(true)
-			.maxAge(Duration.ofDays(7))
-			.build();
+		ResponseCookie accessToken = getCookie("accessToken", login.getJwtTokenDto().getAccessToken(), 1);
+		ResponseCookie refreshToken = getCookie("refreshToken", login.getJwtTokenDto().getRefreshToken(), 7);
+		ResponseCookie tokenType = getCookie("tokenType", login.getJwtTokenDto().getTokenType(), 1);
 
 		MemberLoginResponseDto result = new MemberLoginResponseDto(login);
 
 		return ResponseEntity.status(HttpStatus.OK)
 			.header(HttpHeaders.SET_COOKIE, refreshToken.toString())
+			.header(HttpHeaders.SET_COOKIE, accessToken.toString())
+			.header(HttpHeaders.SET_COOKIE, tokenType.toString())
 			.body(ResponseData.success("회원 정보 로드 성공", result));
+	}
+
+	private static ResponseCookie getCookie(String key, String value, int days) {
+		return ResponseCookie.from(key, value)
+			.httpOnly(true)
+			.secure(true)
+			.maxAge(Duration.ofDays(days))
+			.build();
 	}
 
 	@PostMapping("/refreshToken")
