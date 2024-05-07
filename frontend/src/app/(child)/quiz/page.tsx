@@ -3,13 +3,7 @@ import KnowledgeTab from '@/components/quiz/KnowledgeTab';
 import QuizQuestion from '@/components/quiz/QuizQuestion';
 import { css } from 'styled-system/css';
 
-const Quiz = ({
-  isSolved,
-  content,
-}: {
-  isSolved: boolean;
-  content: string;
-}) => {
+const Quiz = () => {
   return (
     <div
       className={css({
