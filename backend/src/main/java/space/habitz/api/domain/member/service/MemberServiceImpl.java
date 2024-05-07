@@ -33,7 +33,7 @@ public class MemberServiceImpl implements MemberService {
 	private final ParentRepository parentRepository;
 
 	@Override
-	public MemberLoginResponseDto login(MemberLoginRequestDto dto) throws Exception {
+	public MemberLoginResultDto login(MemberLoginRequestDto dto) throws Exception {
 		String provider = dto.getProvider();
 		String code = dto.getCode();
 
@@ -46,7 +46,7 @@ public class MemberServiceImpl implements MemberService {
 		RefreshToken refreshToken = jwtTokenProvider.toRefreshToken(member, jwtToken);
 		refreshTokenRepository.save(refreshToken);
 
-		return new MemberLoginResponseDto(member, jwtToken);
+		return new MemberLoginResultDto(member, jwtToken);
 	}
 
 	private Member saveOrUpdate(OAuthUserInfoResponse userInfo) {
