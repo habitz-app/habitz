@@ -4,8 +4,10 @@ import { Button } from '@/components/ui/button';
 import { IonIcon } from '@ionic/react';
 import { heart } from 'ionicons/icons';
 import { css } from 'styled-system/css';
-
+import { usePathname } from 'next/navigation';
+import { MenuType } from '@/types/tabBar/childTabBar';
 const ChildLayout = ({ children }: { children: React.ReactNode }) => {
+  const path = usePathname()?.substring(1);
   return (
     <div
       className={css({
@@ -40,7 +42,7 @@ const ChildLayout = ({ children }: { children: React.ReactNode }) => {
         </Button>
       </header>
       {children}
-      <ChildTabBar menu={'home'} />
+      <ChildTabBar menu={path as MenuType} />
     </div>
   );
 };
