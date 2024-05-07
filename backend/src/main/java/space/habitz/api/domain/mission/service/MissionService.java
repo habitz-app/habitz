@@ -156,6 +156,19 @@ public class MissionService {
 	}
 
 	/**
+	 * 미션 생성
+	 * - 당일 생성되는 미션을 위해 Service 레이어에서 생성
+	 * - createSchedule 부분에서 메서드 호출
+	 *
+	 * @param schedule 입력된 일정
+	 * */
+	public Long createMission(Schedule schedule) {
+		Mission mission = MissionConverter.convertScheduleToMission(schedule, LocalDate.now()); // 오늘 날짜의 미션 생성
+		missionRepository.save(mission);
+		return mission.getId();
+	}
+
+	/**
 	 * 미션 생성 스케줄러
 	 * - 매일 자정 00시 00분 00초에 실행
 	 * - 오늘 날짜에 해당하는 스케줄을 조회하여 미션을 생성한다.
