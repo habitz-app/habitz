@@ -3,7 +3,6 @@ package space.habitz.api.domain.schedule.service;
 import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -22,6 +21,7 @@ import space.habitz.api.domain.mission.repository.MissionRepository;
 import space.habitz.api.domain.schedule.dto.CalendarDto;
 import space.habitz.api.domain.schedule.entity.Schedule;
 import space.habitz.api.domain.schedule.repository.ScheduleCustomRepositoryImpl;
+import space.habitz.api.domain.schedule.util.ScheduleDateUtil;
 
 @Service
 @RequiredArgsConstructor
@@ -56,7 +56,7 @@ public class CalendarService {
 			calendarList.add(
 				CalendarDto.builder()
 					.child(childProfile)
-					.days(sortDayList(daysList))
+					.days(ScheduleDateUtil.sortDayList(daysList))
 					.build()
 			);
 		}
@@ -163,43 +163,11 @@ public class CalendarService {
 		List<LocalDate> dateList = new ArrayList<>();
 		while (!current.isAfter(scheduleEnd)) {
 			// 반복 요일에 해당하는 지 확인
-			if (isActiveDay(schedule, current)) {
+			if (ScheduleDateUtil.isActiveDay(schedule, current)) {
 				dateList.add(current);
 			}
 			current = current.plusDays(1); // 다음 날
 		}
-		return dateList;
-	}
-
-	/**
-	 * 일정에 해당하는 요일 여부 확인
-	 * - date가 스케줄 내에서 요일에 부합한지 검증
-	 *
-	 * @param schedule 일정 엔티티
-	 * @param date 조회할 대상 date
-	 * */
-	private boolean isActiveDay(Schedule schedule, LocalDate date) {
-
-		return switch (date.getDayOfWeek()) {
-			case MONDAY -> schedule.getMonday();
-			case TUESDAY -> schedule.getTuesday();
-			case WEDNESDAY -> schedule.getWednesday();
-			case THURSDAY -> schedule.getThursday();
-			case FRIDAY -> schedule.getFriday();
-			case SATURDAY -> schedule.getSaturday();
-			case SUNDAY -> schedule.getSunday();
-			default -> false;
-		};
-	}
-
-	/**
-	 * LocalDate를 기준으로 정렬
-	 * - 명시적인 표현하기 위해 메서드 생성
-	 *
-	 * @param dateList date 목록
-	 * */
-	private List<LocalDate> sortDayList(List<LocalDate> dateList) {
-		Collections.sort(dateList);
 		return dateList;
 	}
 
