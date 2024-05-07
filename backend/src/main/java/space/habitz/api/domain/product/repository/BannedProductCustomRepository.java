@@ -7,4 +7,5 @@ import space.habitz.api.domain.product.entity.Product;
 
 public interface BannedProductCustomRepository {
 	Page<Product> findProductsByChildId(Long childId, Pageable pageable);
+
 }
