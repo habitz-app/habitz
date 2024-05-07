@@ -3,8 +3,8 @@ import QuizButton from '@/components/quiz/QuizButton';
 import { Player } from '@lottiefiles/react-lottie-player';
 const QuizQuestion = ({ content }: { content: string }) => {
   return (
-    <>
-      <Card.Root bg={'background.elevated.normal'}>
+    <div>
+      <Card.Root bg={'background.elevated.normal'} position="static">
         <Card.Header
           py={'2.5rem'}
           px={'1rem'}
@@ -44,7 +44,7 @@ const QuizQuestion = ({ content }: { content: string }) => {
           <QuizButton option={false} />
         </Card.Footer>
       </Card.Root>
-    </>
+    </div>
   );
 };
 

@@ -332,7 +332,7 @@ export default defineConfig({
         },
         fonts: {
           pretendard: { value: 'var(--font-pretendard), sans-serif' },
-          yeoljeong: {value: 'var(--font-yeoljeong), sans-serif'},
+          yeoljeong: { value: 'var(--font-yeoljeong), sans-serif' },
         },
       },
       semanticTokens: {
@@ -457,7 +457,7 @@ export default defineConfig({
           bold: {
             value: {
               fontFamily: '{fonts.pretendard}',
-              fontWeight: '600',
+              fontWeight: '700',
               fontSize: '3.5rem',
               lineHeight: '4.5rem',
               letterSpacing: '-0.0319em',
@@ -486,7 +486,7 @@ export default defineConfig({
           bold: {
             value: {
               fontFamily: '{fonts.pretendard}',
-              fontWeight: '600',
+              fontWeight: '700',
               fontSize: '2.5rem',
               lineHeight: '3.25rem',
               letterSpacing: '-0.0282em',
@@ -515,7 +515,7 @@ export default defineConfig({
           bold: {
             value: {
               fontFamily: '{fonts.pretendard}',
-              fontWeight: '600',
+              fontWeight: '700',
               fontSize: '2.25rem',
               lineHeight: '3rem',
               letterSpacing: '-0.027em',
@@ -544,7 +544,7 @@ export default defineConfig({
           bold: {
             value: {
               fontFamily: '{fonts.pretendard}',
-              fontWeight: '600',
+              fontWeight: '700',
               fontSize: '1.75rem',
               lineHeight: '2.375rem',
               letterSpacing: '-0.0236em',
@@ -573,7 +573,7 @@ export default defineConfig({
           bold: {
             value: {
               fontFamily: '{fonts.pretendard}',
-              fontWeight: '600',
+              fontWeight: '700',
               fontSize: '1.5rem',
               lineHeight: '2rem',
               letterSpacing: '-0.023em',
