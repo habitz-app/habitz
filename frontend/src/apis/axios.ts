@@ -35,6 +35,7 @@ const createInstance = () => {
   const instance = axios.create({
     baseURL: API_BASE_URL,
     timeout: 2000,
+    withCredentials: true,
   });
 
   setInterceptors(instance);
