@@ -61,8 +61,6 @@ public class ProductController {
 	@PostMapping("/banned-product/restrict")
 	public ResponseData<BannedProduct> getBannedProductList(@AuthenticationPrincipal Member member,
 		@RequestBody ProductBanDto productBanDto) {
-		System.out.println("member ");
-		System.out.println(member.getId());
 
 		return new ResponseData<>("success", "상품 제한 성공",
 			productService.setBanProduct(member, productBanDto.getProductId(), productBanDto.getChildId()));
