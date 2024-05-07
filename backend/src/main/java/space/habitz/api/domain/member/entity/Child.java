@@ -36,4 +36,8 @@ public class Child extends MutableTimeEntity {
 		this.member = member;
 		this.point = point;
 	}
+
+	public void setPoint(Long changePoint) {
+		this.point += changePoint;
+	}
 }
