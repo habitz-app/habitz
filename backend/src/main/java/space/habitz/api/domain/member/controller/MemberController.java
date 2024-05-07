@@ -1,17 +1,34 @@
 package space.habitz.api.domain.member.controller;
 
-import jakarta.servlet.http.Cookie;
+import java.time.Duration;
+
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.*;
-import org.springframework.web.bind.annotation.*;
-import space.habitz.api.domain.member.dto.*;
-import space.habitz.api.domain.member.entity.*;
+import space.habitz.api.domain.member.dto.JwtTokenDto;
+import space.habitz.api.domain.member.dto.MemberFindResponseDto;
+import space.habitz.api.domain.member.dto.MemberLoginRequestDto;
+import space.habitz.api.domain.member.dto.MemberLoginResponseDto;
+import space.habitz.api.domain.member.dto.MemberLoginResultDto;
+import space.habitz.api.domain.member.dto.MemberMypageResponseDto;
+import space.habitz.api.domain.member.dto.MemberRegisterRequestDto;
+import space.habitz.api.domain.member.dto.MemberUpdateRequestDto;
+import space.habitz.api.domain.member.dto.RefreshTokenRequestDto;
+import space.habitz.api.domain.member.entity.Member;
 import space.habitz.api.domain.member.service.MemberService;
 import space.habitz.api.global.response.ResponseData;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-
-import java.time.Duration;
 
 @RestController
 @RequestMapping("/api/v1/member")
@@ -20,19 +37,21 @@ public class MemberController {
 	private final MemberService memberService;
 
 	@PostMapping("/login")
-	public ResponseEntity<?> login(@RequestBody MemberLoginRequestDto request, HttpServletResponse httpServletResponse) throws Exception {
+	public ResponseEntity<?> login(@RequestBody MemberLoginRequestDto request,
+		HttpServletResponse httpServletResponse) throws Exception {
 		MemberLoginResultDto login = memberService.login(request);
 
 		ResponseCookie accessToken = getCookie("accessToken", login.getJwtTokenDto().getAccessToken(), 1);
-		ResponseCookie refreshToken = getCookie("refreshToken", login.getJwtTokenDto().getRefreshToken(), 7);
+		ResponseCookie refreshToken = getCookie("refreshToken", login.getJwtTokenDto().getRefreshToken(), 30);
 		ResponseCookie tokenType = getCookie("tokenType", login.getJwtTokenDto().getTokenType(), 1);
-
+		ResponseCookie role = getCookie("role", login.getRole().toString(), 1);
 		MemberLoginResponseDto result = new MemberLoginResponseDto(login);
 
 		return ResponseEntity.status(HttpStatus.OK)
 			.header(HttpHeaders.SET_COOKIE, refreshToken.toString())
 			.header(HttpHeaders.SET_COOKIE, accessToken.toString())
 			.header(HttpHeaders.SET_COOKIE, tokenType.toString())
+			.header(HttpHeaders.SET_COOKIE, role.toString())
 			.body(ResponseData.success("회원 정보 로드 성공", result));
 	}
 
