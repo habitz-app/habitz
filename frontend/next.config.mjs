@@ -4,6 +4,7 @@ const nextConfig = {
     // 테스트용 bing 이미지
     remotePatterns: [{ protocol: 'https', hostname: '*.bing.com' }],
   },
+  output: "standalone",
   async rewrites() {
     return [
       {
