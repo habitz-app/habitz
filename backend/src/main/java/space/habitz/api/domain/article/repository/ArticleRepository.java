@@ -5,11 +5,11 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import space.habitz.api.domain.article.dto.ArticleInfoDto;
+import lombok.NonNull;
 import space.habitz.api.domain.article.entity.Article;
-import space.habitz.api.domain.article.entity.ArticleCategory;
+import space.habitz.api.domain.article.entity.Category;
 
 @Repository
 public interface ArticleRepository extends JpaRepository<Article, Long> {
-	List<ArticleInfoDto> findAllByCategoryOrderByDateDesc(ArticleCategory category);
+	@NonNull List<Article> findByCategory(@NonNull Category category);
 }
