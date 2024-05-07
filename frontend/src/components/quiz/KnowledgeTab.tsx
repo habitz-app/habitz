@@ -72,18 +72,13 @@ const KnowledgeTab = () => {
           읽으면 똑똑해지는 어린이 지식
         </p>
       </span>
-      <Tabs.Root
-        defaultValue="1"
-        variant="enclosed"
-        size="lg"
-        width={'full'}
-        display={'flex'}
-      >
-        <Tabs.List display={'flex'} w={'full'} justifyContent={'space-between'}>
+      <Tabs.Root defaultValue="1" variant="enclosed" w="full" display="flex">
+        <Tabs.List display="flex" w="full" h="2.5rem">
           {options.map((option) => (
             <Tabs.Trigger
               key={option.id}
               value={option.id}
+              w="1/3"
               textStyle="caption1.bold"
             >
               {option.label}
@@ -91,13 +86,7 @@ const KnowledgeTab = () => {
           ))}
           <Tabs.Indicator />
         </Tabs.List>
-        <Tabs.Content
-          value="1"
-          px={0}
-          display={'flex'}
-          flexDir={'column'}
-          gap={'0.625rem'}
-        >
+        <Tabs.Content value="1" px={0} display={'flex'} flexDir={'column'}>
           {options[0].items?.map((item, index) => (
             <KnowledgeItem
               key={index}
@@ -106,13 +95,7 @@ const KnowledgeTab = () => {
             />
           ))}
         </Tabs.Content>
-        <Tabs.Content
-          value="2"
-          px={0}
-          display={'flex'}
-          flexDir={'column'}
-          gap={'0.625rem'}
-        >
+        <Tabs.Content value="2" px={0} display={'flex'} flexDir={'column'}>
           {options[1].items?.map((item, index) => (
             <KnowledgeItem
               key={index}
@@ -121,13 +104,7 @@ const KnowledgeTab = () => {
             />
           ))}
         </Tabs.Content>
-        <Tabs.Content
-          value="3"
-          px={0}
-          display={'flex'}
-          flexDir={'column'}
-          gap={'0.625rem'}
-        >
+        <Tabs.Content value="3" px={0} display={'flex'} flexDir={'column'}>
           {options[2].items?.map((item, index) => (
             <KnowledgeItem
               key={index}

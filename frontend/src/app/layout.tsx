@@ -22,11 +22,10 @@ const MobileLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <styled.div
       maxW="430px"
-      h="100dvh"
-      m="auto"
-      shadow="heavy"
+      minH="100vh"
       bgColor="background.normal.normal"
-      borderRadius="xl"
+      position="relative"
+      left="50vw"
     >
       {children}
     </styled.div>
@@ -51,9 +50,9 @@ export default function RootLayout({
           className={css({
             textStyle: 'hero1.bold',
             color: 'secondary.normal',
-            position: 'absolute',
+            position: 'fixed',
             bottom: '5rem',
-            right: '7rem',
+            left: '7rem',
           })}
         >
           HABITZ

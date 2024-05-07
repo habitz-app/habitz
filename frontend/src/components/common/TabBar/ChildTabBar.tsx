@@ -19,12 +19,13 @@ const ChildTabBar = ({ menu }: { menu: MenuType }) => {
   return (
     <nav
       className={css({
-        w: 'full',
+        w: '430px',
         h: '5rem',
-        position: 'fixed',
+        position: 'sticky',
         bottom: '0',
-        left: '0',
-        right: '0',
+        bg: 'background.normal.normal/80',
+        backdropFilter: 'auto',
+        backdropBlur: 'sm',
       })}
     >
       <ul

@@ -12,11 +12,11 @@ const KnowledgeItem = ({
   return (
     <article
       className={css({
-        my: '0.625rem',
         display: 'flex',
         alignItems: 'center',
         gap: '0.625rem',
         borderBottom: `1px solid rgba(115, 115, 115, 0.22)`,
+        py: '0.625rem',
       })}
     >
       <div
@@ -45,7 +45,6 @@ const KnowledgeItem = ({
               textStyle: 'caption1.medium',
               color: 'label.alternative',
               wordBreak: 'break-word',
-              mb: '0.625rem',
             })}
           >
             {contents}
