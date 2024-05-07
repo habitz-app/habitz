@@ -18,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 import space.habitz.api.domain.member.entity.Member;
 import space.habitz.api.domain.product.dto.ProductBanDto;
 import space.habitz.api.domain.product.dto.ProductInfoDto;
+import space.habitz.api.domain.product.dto.ProductPurchaseRequestDto;
 import space.habitz.api.domain.product.entity.BannedProduct;
 import space.habitz.api.domain.product.service.ProductService;
 import space.habitz.api.global.response.ResponseData;
@@ -74,4 +75,13 @@ public class ProductController {
 		productService.deleteBanProduct(member, productBanDto.getProductId(), productBanDto.getChildId());
 		return new ResponseData<>("success", "상품 제한 해제 성공", "상품 제한 해제 성공");
 	}
+
+	@ApiResponse(description = "상품 구매")
+	@PostMapping("/purchase")
+	public ResponseData<String> purchaseProduct(@AuthenticationPrincipal Member member,
+		@RequestBody ProductPurchaseRequestDto productPurchaseRequestDto) {
+		productService.purchaseProduct(member, productPurchaseRequestDto.getProductId());
+		return new ResponseData<>("success", "상품 구매 성공", "상품 구매 성공");
+	}
+
 }
