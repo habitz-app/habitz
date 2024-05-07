@@ -40,6 +40,7 @@ public class MemberController {
 		return ResponseCookie.from(key, value)
 			.httpOnly(true)
 			.secure(true)
+			.sameSite("None")
 			.maxAge(Duration.ofDays(days))
 			.build();
 	}
