@@ -14,12 +14,14 @@ import space.habitz.api.domain.member.entity.Family;
 import space.habitz.api.domain.member.entity.Member;
 import space.habitz.api.domain.member.entity.Role;
 import space.habitz.api.domain.member.repository.MemberRepository;
+import space.habitz.api.domain.mission.service.MissionService;
 import space.habitz.api.domain.schedule.dto.ScheduleDto;
 import space.habitz.api.domain.schedule.dto.ScheduleMissionDto;
 import space.habitz.api.domain.schedule.dto.ScheduleRequestDto;
 import space.habitz.api.domain.schedule.entity.Schedule;
 import space.habitz.api.domain.schedule.repository.ScheduleCustomRepositoryImpl;
 import space.habitz.api.domain.schedule.repository.ScheduleRepository;
+import space.habitz.api.domain.schedule.util.ScheduleDateUtil;
 import space.habitz.api.global.exception.CustomErrorException;
 import space.habitz.api.global.exception.ErrorCode;
 
@@ -30,6 +32,7 @@ public class ScheduleService {
 	private final MemberRepository memberRepository;
 	private final ScheduleRepository scheduleRepository;
 	private final ScheduleCustomRepositoryImpl scheduleCustomRepository;
+	private final MissionService missionService;
 
 	/**
 	 * 일정 생성
@@ -37,6 +40,7 @@ public class ScheduleService {
 	 * @param member             로그인한 사용자
 	 * @param scheduleRequestDto 일정 생성 요청 DTO
 	 */
+	@Transactional
 	public Map<String, Long> createSchedule(Member member, ScheduleRequestDto scheduleRequestDto) {
 
 		Member child = memberRepository.findByUuid(scheduleRequestDto.childUUID())
@@ -46,6 +50,14 @@ public class ScheduleService {
 
 		Schedule schedule = scheduleRequestDto.toEntity(member, child);
 		scheduleRepository.save(schedule);
+
+		// 오늘 날짜가 스케줄 시작일과 같은 경우, 즉시 미션 생성
+		LocalDate today = LocalDate.now();
+		if (today.isEqual(schedule.getStartDate()) && ScheduleDateUtil.isActiveDay(schedule, today)) {
+			Long missionId = missionService.createMission(schedule);        // 미션 생성
+			return Map.of("scheduleId", schedule.getId(), "missionId", missionId);
+		}
+
 		return Map.of("scheduleId", schedule.getId());
 	}
 
