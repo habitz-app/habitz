@@ -1,15 +1,17 @@
 package space.habitz.api.domain.member.repository;
 
-import com.querydsl.jpa.impl.JPAQueryFactory;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
-import space.habitz.api.domain.member.entity.Member;
+import static space.habitz.api.domain.member.entity.QMember.*;
+import static space.habitz.api.domain.member.entity.QMemberProfile.*;
+import static space.habitz.api.domain.member.entity.QSocialInform.*;
 
 import java.util.Optional;
 
-import static space.habitz.api.domain.member.entity.QMember.member;
-import static space.habitz.api.domain.member.entity.QMemberProfile.memberProfile;
-import static space.habitz.api.domain.member.entity.QSocialInform.socialInform;
+import org.springframework.stereotype.Repository;
+
+import com.querydsl.jpa.impl.JPAQueryFactory;
+
+import lombok.RequiredArgsConstructor;
+import space.habitz.api.domain.member.entity.Member;
 
 @RequiredArgsConstructor
 @Repository
@@ -36,7 +38,7 @@ public class MemberCustomRepositoryImpl implements MemberCustomRepository {
 			.where(member.id.eq(userId))
 			.where(member.memberProfile.deletedAt.isNull())
 			.fetchOne();
-		System.out.println();
+
 		return Optional.ofNullable(findMember);
 	}
 }
