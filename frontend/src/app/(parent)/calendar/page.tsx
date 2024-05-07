@@ -32,7 +32,7 @@ const Page = () => {
       title: string;
       content: string;
       emoji: string;
-      staus: string;
+      status: string;
       point: number;
       repeat: boolean;
       createdAt: string;
@@ -76,7 +76,7 @@ const Page = () => {
             title: '더미 미션 1',
             content: '미션 상세',
             emoji: ':)',
-            staus: 'PENDING',
+            status: 'PENDING',
             point: 100,
             repeat: false,
             createdAt: '2024-05-01 12:00:00',
@@ -87,7 +87,7 @@ const Page = () => {
             title: '성공 미션 (정기)',
             content: '미션 성공',
             emoji: ':)',
-            staus: 'ACCEPT',
+            status: 'ACCEPT',
             point: 500,
             repeat: true,
             createdAt: '2024-05-01 13:00:00',
@@ -106,7 +106,7 @@ const Page = () => {
             title: '진행 중 미션',
             content: '미션 상세',
             emoji: ':)',
-            staus: 'EMPTY',
+            status: 'EMPTY',
             point: 700,
             repeat: true,
             createdAt: '2024-05-01 12:00:00',
@@ -117,7 +117,7 @@ const Page = () => {
             title: '거절 미션',
             content: '미션 실패',
             emoji: ':(',
-            staus: 'DECLINE',
+            status: 'DECLINE',
             point: 500,
             repeat: true,
             createdAt: '2024-05-01 13:00:00',
@@ -136,7 +136,7 @@ const Page = () => {
             title: '진행 중 미션',
             content: '미션 상세',
             emoji: ':)',
-            staus: 'EMPTY',
+            status: 'EMPTY',
             point: 700,
             repeat: true,
             createdAt: '2024-05-01 12:00:00',
@@ -147,7 +147,7 @@ const Page = () => {
             title: '거절 미션',
             content: '미션 실패',
             emoji: ':(',
-            staus: 'DECLINE',
+            status: 'DECLINE',
             point: 500,
             repeat: true,
             createdAt: '2024-05-01 13:00:00',
@@ -158,7 +158,7 @@ const Page = () => {
             title: '거절 미션',
             content: '미션 실패',
             emoji: ':(',
-            staus: 'DECLINE',
+            status: 'DECLINE',
             point: 500,
             repeat: true,
             createdAt: '2024-05-01 13:00:00',
@@ -169,7 +169,7 @@ const Page = () => {
             title: '거절 미션',
             content: '미션 실패',
             emoji: ':(',
-            staus: 'DECLINE',
+            status: 'DECLINE',
             point: 500,
             repeat: true,
             createdAt: '2024-05-01 13:00:00',
@@ -190,7 +190,7 @@ const Page = () => {
             title: '더미 미션 2',
             content: '미션 상세',
             emoji: ':)',
-            staus: 'PENDING',
+            status: 'PENDING',
             point: 100,
             repeat: false,
             createdAt: '2024-05-01 12:00:00',
@@ -201,7 +201,7 @@ const Page = () => {
             title: '성공 미션 (정기)',
             content: '미션 성공',
             emoji: ':)',
-            staus: 'ACCEPT',
+            status: 'ACCEPT',
             point: 500,
             repeat: true,
             createdAt: '2024-05-01 13:00:00',
@@ -220,7 +220,7 @@ const Page = () => {
             title: '진행 중 미션',
             content: '미션 상세',
             emoji: ':)',
-            staus: 'EMPTY',
+            status: 'EMPTY',
             point: 700,
             repeat: true,
             createdAt: '2024-05-01 12:00:00',
@@ -231,7 +231,7 @@ const Page = () => {
             title: '거절 미션',
             content: '미션 실패',
             emoji: ':(',
-            staus: 'DECLINE',
+            status: 'DECLINE',
             point: 500,
             repeat: true,
             createdAt: '2024-05-01 13:00:00',
@@ -250,7 +250,7 @@ const Page = () => {
             title: '진행 중 미션',
             content: '미션 상세',
             emoji: ':)',
-            staus: 'EMPTY',
+            status: 'EMPTY',
             point: 700,
             repeat: true,
             createdAt: '2024-05-01 12:00:00',
@@ -261,7 +261,7 @@ const Page = () => {
             title: '거절 미션',
             content: '미션 실패',
             emoji: ':(',
-            staus: 'DECLINE',
+            status: 'DECLINE',
             point: 500,
             repeat: true,
             createdAt: '2024-05-01 13:00:00',
@@ -272,7 +272,7 @@ const Page = () => {
             title: '거절 미션',
             content: '미션 실패',
             emoji: ':(',
-            staus: 'DECLINE',
+            status: 'DECLINE',
             point: 500,
             repeat: true,
             createdAt: '2024-05-01 13:00:00',
@@ -283,7 +283,7 @@ const Page = () => {
             title: '거절 미션',
             content: '미션 실패',
             emoji: ':(',
-            staus: 'DECLINE',
+            status: 'DECLINE',
             point: 500,
             repeat: true,
             createdAt: '2024-05-01 13:00:00',
@@ -319,7 +319,7 @@ const Page = () => {
         {missions.map((mission, id) => (
           <li key={id} className={hstack({ justify: 'space-between' })}>
             <p>{mission.title}</p>
-            <p>{mission.staus}</p>
+            <p>{mission.status}</p>
           </li>
         ))}
       </ul>
