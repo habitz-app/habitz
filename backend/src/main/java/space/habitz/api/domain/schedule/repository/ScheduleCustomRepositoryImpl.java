@@ -41,6 +41,16 @@ public class ScheduleCustomRepositoryImpl implements ScheduleCustomRepository {
 	}
 
 	@Override
+	public List<Schedule> findCalendarByMonthWithChildId(Long memberId, LocalDate firstDayOfMonth,
+		LocalDate endDayOfMonth) {
+		return queryFactory.selectFrom(schedule)
+			.where(schedule.child.id.eq(memberId)
+				.and(schedule.startDate.loe(endDayOfMonth))
+				.and(schedule.endDate.goe(firstDayOfMonth)))
+			.fetch();
+	}
+
+	@Override
 	public BooleanExpression dateCondition(LocalDate date) {
 		// 주어진 date가 startDate와 endDate 사이에 있는지 검사하는 조건
 		return schedule.startDate.loe(date)
@@ -49,8 +59,6 @@ public class ScheduleCustomRepositoryImpl implements ScheduleCustomRepository {
 
 	@Override
 	public BooleanExpression dayOfWeekCondition(LocalDate date) {
-
-		int dayOfWeekIndex = date.getDayOfWeek().getValue() - 1;
 
 		return switch (date.getDayOfWeek()) {
 			case MONDAY -> schedule.monday.isTrue();
@@ -63,4 +71,5 @@ public class ScheduleCustomRepositoryImpl implements ScheduleCustomRepository {
 			default -> null;  // 이 경우가 발생하지 않도록 요일 정보는 항상 유효함
 		};
 	}
+
 }

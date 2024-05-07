@@ -11,4 +11,7 @@ import space.habitz.api.domain.mission.entity.Mission;
 @Repository
 public interface MissionRepository extends JpaRepository<Mission, Long> {
 	List<Mission> findByChildIdAndDate(Long childId, LocalDate date);
+
+	List<Mission> findByChildIdAndDateBetween(Long childId, LocalDate startDate, LocalDate endDate);
+
 }

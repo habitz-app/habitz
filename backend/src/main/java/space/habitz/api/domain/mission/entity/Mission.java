@@ -34,7 +34,7 @@ import space.habitz.api.global.type.StatusCode;
 @AllArgsConstructor
 @Builder
 @SQLDelete(sql = "UPDATE mission SET is_deleted = true WHERE id = ?")
-@SQLRestriction("is_deleted is false")
+@SQLRestriction("is_deleted = 0")
 @Table(name = "mission")
 public class Mission extends MutableTimeEntity {
 
