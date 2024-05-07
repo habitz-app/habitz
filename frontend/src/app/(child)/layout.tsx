@@ -7,7 +7,8 @@ import { css } from 'styled-system/css';
 import { usePathname } from 'next/navigation';
 import { MenuType } from '@/types/tabBar/childTabBar';
 const ChildLayout = ({ children }: { children: React.ReactNode }) => {
-  const path = usePathname()?.substring(1);
+  const path = usePathname();
+  const menu = path?.split('/')[1];
   return (
     <div
       className={css({
@@ -16,32 +17,8 @@ const ChildLayout = ({ children }: { children: React.ReactNode }) => {
         w: 'full',
       })}
     >
-      <header
-        className={css({
-          display: 'flex',
-          position: 'sticky',
-          height: '2.5rem',
-          top: 0,
-          bg: 'background.normal.normal/80',
-          backdropFilter: 'auto',
-          backdropBlur: 'sm',
-          px: '1rem',
-          justifyContent: 'flex-end',
-          alignItems: 'center',
-        })}
-      >
-        <Button color="label.alternative" variant="link">
-          <IonIcon
-            icon={heart}
-            className={css({
-              w: '24px',
-              h: '24px',
-            })}
-          />
-        </Button>
-      </header>
       <main className={css({ minH: '100vh' })}>{children}</main>
-      <ChildTabBar menu={path as MenuType} />
+      <ChildTabBar menu={menu as MenuType} />
     </div>
   );
 };

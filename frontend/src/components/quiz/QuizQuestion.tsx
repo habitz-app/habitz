@@ -1,8 +1,10 @@
+'use client';
 import * as Card from '@/components/ui/card';
 import QuizButton from '@/components/quiz/QuizButton';
 import { Player } from '@lottiefiles/react-lottie-player';
 import { css } from 'styled-system/css';
 import { Button } from '@/components/ui/button';
+import { useRouter } from 'next/navigation';
 const QuizQuestion = ({
   isSolved,
   content,
@@ -10,6 +12,10 @@ const QuizQuestion = ({
   isSolved: boolean;
   content: string;
 }) => {
+  const router = useRouter();
+  const handleClick = () => {
+    router.push('/quiz/result');
+  };
   return (
     <div>
       {isSolved ? (
@@ -63,6 +69,7 @@ const QuizQuestion = ({
               alignItems="center"
               alignSelf="center"
               textStyle="caption2.bold"
+              onClick={handleClick}
             >
               자세히
             </Button>

@@ -21,11 +21,21 @@ export const Default: Story = {
     content: '딸기는 과일이다',
     isSolved: false,
   },
+  parameters: {
+    nextjs: {
+      appDirectory: true,
+    },
+  },
 };
 
 export const Solved: Story = {
   args: {
     content: '딸기는 과일이다',
     isSolved: true,
+  },
+  parameters: {
+    nextjs: {
+      appDirectory: true,
+    },
   },
 };
