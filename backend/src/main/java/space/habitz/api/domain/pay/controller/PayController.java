@@ -16,7 +16,7 @@ import space.habitz.api.global.response.ResponseData;
 
 @Slf4j
 @RestController
-@RequestMapping("/pay")
+@RequestMapping("/api/v1/pay")
 @RequiredArgsConstructor
 public class PayController {
 
