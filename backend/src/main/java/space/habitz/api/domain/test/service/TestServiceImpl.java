@@ -3,7 +3,7 @@ package space.habitz.api.domain.test.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import space.habitz.api.domain.member.dto.JwtTokenDto;
-import space.habitz.api.domain.member.dto.MemberLoginResponseDto;
+import space.habitz.api.domain.member.dto.MemberLoginResultDto;
 import space.habitz.api.domain.member.entity.*;
 import space.habitz.api.domain.member.exeption.MemberNotFoundException;
 import space.habitz.api.domain.member.repository.*;
@@ -61,7 +61,7 @@ public class TestServiceImpl implements TestService {
 	}
 
 	@Override
-	public MemberLoginResponseDto getAccessToken(DummyMemberLoginRequestDto requestDto) {
+	public MemberLoginResultDto getAccessToken(DummyMemberLoginRequestDto requestDto) {
 		Long memberId = requestDto.getMemberId();
 
 		Member member = memberRepository.findByUserId(memberId)
@@ -71,7 +71,7 @@ public class TestServiceImpl implements TestService {
 		RefreshToken refreshToken = jwtTokenProvider.toRefreshToken(member, jwtToken);
 		refreshTokenRepository.save(refreshToken);
 
-		return new MemberLoginResponseDto(member, jwtToken);
+		return new MemberLoginResultDto(member, jwtToken);
 	}
 
 	@Override
