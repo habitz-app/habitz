@@ -74,7 +74,15 @@ public class MemberController {
 	@PostMapping("/join")
 	public ResponseEntity<?> join(@RequestBody MemberRegisterRequestDto requestDto) {
 		memberService.register(requestDto);
-		return ResponseEntity.status(HttpStatus.OK).body(ResponseData.success("회원 정보 로드 성공", null));
+		return ResponseEntity.status(HttpStatus.OK)
+			.header(HttpHeaders.SET_COOKIE, ResponseCookie.from("role", requestDto.getMemberRole())
+				.httpOnly(true)
+				.secure(true)
+				.sameSite("None")
+				.maxAge(Duration.ofDays(1))
+				.build()
+				.toString())
+			.body(ResponseData.success("회원 정보 로드 성공", null));
 	}
 
 	@GetMapping("/type")
