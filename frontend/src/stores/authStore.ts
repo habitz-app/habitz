@@ -27,4 +27,6 @@ const authStore = create<AuthStore>()(
   })),
 );
 
-export default createSelectors(authStore);
+const useAuthStore = createSelectors(authStore);
+
+export default useAuthStore;
