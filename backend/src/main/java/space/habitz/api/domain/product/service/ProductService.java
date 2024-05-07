@@ -17,4 +17,6 @@ public interface ProductService {
 	BannedProduct setBanProduct(Member parent, Long productId, Long childId);
 
 	void deleteBanProduct(Member parent, Long productId, Long childId);
+
+	void purchaseProduct(Member member, Long productId);
 }
