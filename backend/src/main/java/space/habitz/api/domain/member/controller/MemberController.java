@@ -41,6 +41,7 @@ public class MemberController {
 			.httpOnly(true)
 			.secure(true)
 			.sameSite("None")
+			.path("/")
 			.maxAge(Duration.ofDays(days))
 			.build();
 	}
