@@ -5,14 +5,18 @@ import { home, people, star, storefront, grid } from 'ionicons/icons';
 import { IonIcon } from '@ionic/react';
 import { useEffect, useState } from 'react';
 import type { MenuType } from '@/types/tabBar/parentTabBar';
+import { useRouter } from 'next/navigation';
+
 const ParentTabBar = ({ menu }: { menu: MenuType }) => {
   const [currentMenu, setCurrentMenu] = useState(menu);
+  const router = useRouter();
 
   useEffect(() => {
     setCurrentMenu(menu);
   }, [menu]);
 
   const handleClick = (menu: MenuType) => {
+    router.push(`/manage/${menu}`);
     setCurrentMenu(menu);
   };
 
@@ -21,10 +25,11 @@ const ParentTabBar = ({ menu }: { menu: MenuType }) => {
       className={css({
         w: 'full',
         h: '5rem',
-        position: 'fixed',
+        position: 'sticky',
         bottom: '0',
-        left: '0',
-        right: '0',
+        bg: 'background.normal.normal/80',
+        backdropFilter: 'auto',
+        backdropBlur: 'sm',
       })}
     >
       <ul
