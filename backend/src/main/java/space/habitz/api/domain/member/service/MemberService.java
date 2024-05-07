@@ -4,7 +4,7 @@ import space.habitz.api.domain.member.dto.*;
 import space.habitz.api.domain.member.entity.*;
 
 public interface MemberService {
-	MemberLoginResponseDto login(MemberLoginRequestDto requestDto) throws Exception;
+	MemberLoginResultDto login(MemberLoginRequestDto requestDto) throws Exception;
 
 	JwtTokenDto refreshToken(String refreshToken);
 

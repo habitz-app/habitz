@@ -1,5 +1,7 @@
 package space.habitz.api.domain.member.controller;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
@@ -9,6 +11,8 @@ import space.habitz.api.domain.member.service.MemberService;
 import space.habitz.api.global.response.ResponseData;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
+import java.time.Duration;
+
 @RestController
 @RequestMapping("/api/v1/member")
 @RequiredArgsConstructor
@@ -16,10 +20,20 @@ public class MemberController {
 	private final MemberService memberService;
 
 	@PostMapping("/login")
-	public ResponseEntity<?> login(@RequestBody MemberLoginRequestDto request) throws Exception {
-		MemberLoginResponseDto login = memberService.login(request);
-		return ResponseEntity.status(HttpStatus.OK).body(ResponseData.success("회원 정보 로드 성공", login));
+	public ResponseEntity<?> login(@RequestBody MemberLoginRequestDto request, HttpServletResponse httpServletResponse) throws Exception {
+		MemberLoginResultDto login = memberService.login(request);
 
+		ResponseCookie refreshToken = ResponseCookie.from("refreshToken", login.getJwtTokenDto().getRefreshToken())
+			.httpOnly(true)
+			.secure(true)
+			.maxAge(Duration.ofDays(7))
+			.build();
+
+		MemberLoginResponseDto result = new MemberLoginResponseDto(login);
+
+		return ResponseEntity.status(HttpStatus.OK)
+			.header(HttpHeaders.SET_COOKIE, refreshToken.toString())
+			.body(ResponseData.success("회원 정보 로드 성공", result));
 	}
 
 	@PostMapping("/refreshToken")
