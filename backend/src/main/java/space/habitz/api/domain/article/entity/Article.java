@@ -2,6 +2,7 @@ package space.habitz.api.domain.article.entity;
 
 import java.time.LocalDate;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -24,13 +25,15 @@ public class Article {
 	private Long id;
 
 	private String title;
+
+	@Column(name = "content")
 	private String content;
+
+	@Column(name = "date")
 	private LocalDate date;
 
 	@Enumerated(EnumType.STRING)
-	private ArticleCategory category;
-
-
-
+	@Column(name = "category", nullable = false)
+	private Category category;
 
 }

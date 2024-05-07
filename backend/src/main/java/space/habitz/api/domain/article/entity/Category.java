@@ -1,5 +1,5 @@
 package space.habitz.api.domain.article.entity;
 
-public enum ArticleCategory {
+public enum Category {
 	LIFE, FINANCE, DEFAULT
 }
