@@ -28,6 +28,13 @@ public class FamilyController {
 		List<FamilyListResponseDto> familyList = familyService.getFamilyList();
 		return ResponseEntity.status(HttpStatus.OK).body(familyList);
 	}
+
+	@PreAuthorize("hasAnyRole('PARENT')")
+	@GetMapping("/childList")
+	public ResponseEntity<?> childList(){
+		List<FamilyListResponseDto> familyList = familyService.getChildList();
+		return ResponseEntity.status(HttpStatus.OK).body(familyList);
+	}
 }
 
 

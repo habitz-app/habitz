@@ -10,4 +10,6 @@ public interface FamilyService {
 	MemberInviteCodeResponse getInviteCode();
 
 	List<FamilyListResponseDto> getFamilyList();
+
+	List<FamilyListResponseDto> getChildList();
 }
