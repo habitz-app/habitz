@@ -1,5 +1,10 @@
 'use client';
-import { CalendarIcon, ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
+import { IonIcon } from '@ionic/react';
+import {
+  chevronBackOutline,
+  chevronForwardOutline,
+  calendarClearOutline,
+} from 'ionicons/icons';
 import { Button } from '~/components/ui/button';
 import * as DP from '~/components/ui/date-picker';
 import { IconButton } from '~/components/ui/icon-button';
@@ -23,7 +28,7 @@ export const DatePicker = (props: DP.RootProps) => (
       </DP.Input>
       <DP.Trigger asChild>
         <IconButton variant="outline" aria-label="Open date picker">
-          <CalendarIcon />
+          <IonIcon icon={calendarClearOutline} />
         </IconButton>
       </DP.Trigger>
     </DP.Control>
@@ -35,7 +40,7 @@ export const DatePicker = (props: DP.RootProps) => (
               <DP.ViewControl>
                 <DP.PrevTrigger asChild>
                   <IconButton variant="ghost" size="sm">
-                    <ChevronLeftIcon />
+                    <IonIcon icon={chevronBackOutline} />
                   </IconButton>
                 </DP.PrevTrigger>
                 <DP.ViewTrigger asChild>
@@ -45,7 +50,7 @@ export const DatePicker = (props: DP.RootProps) => (
                 </DP.ViewTrigger>
                 <DP.NextTrigger asChild>
                   <IconButton variant="ghost" size="sm">
-                    <ChevronRightIcon />
+                    <IonIcon icon={chevronForwardOutline} />
                   </IconButton>
                 </DP.NextTrigger>
               </DP.ViewControl>
@@ -80,7 +85,7 @@ export const DatePicker = (props: DP.RootProps) => (
               <DP.ViewControl>
                 <DP.PrevTrigger asChild>
                   <IconButton variant="ghost" size="sm">
-                    <ChevronLeftIcon />
+                    <IonIcon icon={chevronBackOutline} />
                   </IconButton>
                 </DP.PrevTrigger>
                 <DP.ViewTrigger asChild>
@@ -90,7 +95,7 @@ export const DatePicker = (props: DP.RootProps) => (
                 </DP.ViewTrigger>
                 <DP.NextTrigger asChild>
                   <IconButton variant="ghost" size="sm">
-                    <ChevronRightIcon />
+                    <IonIcon icon={chevronForwardOutline} />
                   </IconButton>
                 </DP.NextTrigger>
               </DP.ViewControl>
@@ -120,7 +125,7 @@ export const DatePicker = (props: DP.RootProps) => (
               <DP.ViewControl>
                 <DP.PrevTrigger asChild>
                   <IconButton variant="ghost" size="sm">
-                    <ChevronLeftIcon />
+                    <IonIcon icon={chevronBackOutline} />
                   </IconButton>
                 </DP.PrevTrigger>
                 <DP.ViewTrigger asChild>
@@ -130,7 +135,7 @@ export const DatePicker = (props: DP.RootProps) => (
                 </DP.ViewTrigger>
                 <DP.NextTrigger asChild>
                   <IconButton variant="ghost" size="sm">
-                    <ChevronRightIcon />
+                    <IonIcon icon={chevronForwardOutline} />
                   </IconButton>
                 </DP.NextTrigger>
               </DP.ViewControl>
