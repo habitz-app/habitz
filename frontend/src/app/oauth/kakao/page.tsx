@@ -28,12 +28,12 @@ const KakaoLoginPage = () => {
 
       console.log(response);
 
-      const { jwtToken, ...user } = response.data.data;
+      const { jwtResponse, ...user } = response.data.data;
 
       setUser(user);
-      setAccessToken(jwtToken.accessToken);
+      setAccessToken(jwtResponse.accessToken);
 
-      window.Kakao.Auth.setAccessToken(jwtToken.accessToken);
+      window.Kakao.Auth.setAccessToken(jwtResponse.accessToken);
 
       setStatus('done');
     },

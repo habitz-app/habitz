@@ -9,11 +9,10 @@ export interface KakaoLoginResponse {
   name: string;
   nickName: string;
   profileImage: string;
-  jwtToken: {
+  role: string;
+  jwtResponse: {
     accessToken: string;
     accessTokenExpiredIn: string;
-    refreshToken: string;
-    refreshTokenExpiredIn: string;
     tokenType: string;
   };
 }
