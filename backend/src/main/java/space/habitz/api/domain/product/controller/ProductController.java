@@ -24,7 +24,7 @@ import space.habitz.api.global.response.ResponseData;
 
 @Slf4j
 @RestController
-@RequestMapping("/product")
+@RequestMapping("/api/v1/product")
 @RequiredArgsConstructor
 public class ProductController {
 	private final ProductService productService;
@@ -32,14 +32,20 @@ public class ProductController {
 	@ApiResponse(description = "상품 상세 조회")
 	@GetMapping("/{productId}")
 	public ResponseData<ProductInfoDto> getProductDetail(
+		@AuthenticationPrincipal Member member,
 		@Parameter(description = "상품 ID", required = true) @PathVariable("productId") long productId) {
-		return new ResponseData<>("success", "상품 상세 조회 성공", productService.getProductDetail(productId));
+		return new ResponseData<>("success", "상품 상세 조회 성공", productService.getProductDetail(member, productId));
 	}
 
 	@ApiResponse(description = "상품 리스트 조회")
-	@GetMapping("/list")
-	public ResponseData<Page<ProductInfoDto>> getProductList(Pageable pageable) {
-		return new ResponseData<>("success", "상품 리스트 조회 성공", productService.getProductList(pageable));
+	@GetMapping("/list/{category}/{brand}")
+	public ResponseData<Page<ProductInfoDto>> getProductList(
+		@AuthenticationPrincipal Member member,
+		@Parameter(description = "카테고리", required = true) @PathVariable("category") String category,
+		@Parameter(description = "브랜드", required = true) @PathVariable("brand") String brand,
+		Pageable pageable) {
+		return new ResponseData<>("success", "상품 리스트 조회 성공",
+			productService.getProductList(member, brand, category, pageable));
 	}
 
 	@ApiResponse(description = "제한한 상품 조회")
@@ -54,6 +60,9 @@ public class ProductController {
 	@PostMapping("/banned-product/restrict")
 	public ResponseData<BannedProduct> getBannedProductList(@AuthenticationPrincipal Member member,
 		@RequestBody ProductBanDto productBanDto) {
+		System.out.println("member ");
+		System.out.println(member.getId());
+
 		return new ResponseData<>("success", "상품 제한 성공",
 			productService.setBanProduct(member, productBanDto.getProductId(), productBanDto.getChildId()));
 	}
