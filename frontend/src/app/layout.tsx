@@ -1,9 +1,11 @@
 import type { Metadata } from 'next';
-import { Pretendard } from './fonts';
+import { Pretendard, Yeoljeong } from './fonts';
 import './globals.css';
 import { css } from 'styled-system/css';
 import Script from 'next/script';
 import Providers from './providers';
+import { styled } from 'styled-system/jsx';
+import clsx from 'clsx';
 
 export const metadata: Metadata = {
   title: 'habitz',
@@ -16,23 +18,57 @@ declare global {
   }
 }
 
+const MobileLayout = ({ children }: { children: React.ReactNode }) => {
+  return (
+    <styled.div
+      maxW="430px"
+      h="100dvh"
+      m="auto"
+      shadow="heavy"
+      bgColor="background.normal.normal"
+      borderRadius="xl"
+    >
+      {children}
+    </styled.div>
+  );
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ko" className={Pretendard.variable}>
-      <body className={css({ font: 'pretendard' })}>
-        <Providers>
-          {children}
-          <Script
-            src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.1/kakao.min.js"
-            integrity="sha384-kDljxUXHaJ9xAb2AzRd59KxjrFjzHa5TAoFQ6GbYTCAG0bjM55XohjjDT7tDDC01"
-            crossOrigin="anonymous"
-            strategy="beforeInteractive"
-          />
-        </Providers>
+    <html lang="ko" className={clsx(Pretendard.variable, Yeoljeong.variable)}>
+      <body
+        className={css({
+          font: 'pretendard',
+          bgColor: 'primary.normal',
+          position: 'relative',
+        })}
+      >
+        <div
+          className={css({
+            textStyle: 'hero1.bold',
+            color: 'secondary.normal',
+            position: 'absolute',
+            bottom: '5rem',
+            right: '7rem',
+          })}
+        >
+          HABITZ
+        </div>
+        <MobileLayout>
+          <Providers>
+            {children}
+            <Script
+              src="https://t1.kakaocdn.net/kakao_js_sdk/2.7.1/kakao.min.js"
+              integrity="sha384-kDljxUXHaJ9xAb2AzRd59KxjrFjzHa5TAoFQ6GbYTCAG0bjM55XohjjDT7tDDC01"
+              crossOrigin="anonymous"
+              strategy="beforeInteractive"
+            />
+          </Providers>
+        </MobileLayout>
       </body>
     </html>
   );
