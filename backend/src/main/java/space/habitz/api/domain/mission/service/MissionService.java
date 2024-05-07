@@ -21,6 +21,7 @@ import space.habitz.api.domain.mission.dto.MissionDto;
 import space.habitz.api.domain.mission.dto.UpdateMissionRequestDto;
 import space.habitz.api.domain.mission.entity.Mission;
 import space.habitz.api.domain.mission.repository.MissionRepository;
+import space.habitz.api.domain.mission.util.MissionConverter;
 import space.habitz.api.domain.schedule.entity.Schedule;
 import space.habitz.api.domain.schedule.repository.ScheduleCustomRepositoryImpl;
 import space.habitz.api.global.exception.CustomErrorException;
@@ -171,19 +172,7 @@ public class MissionService {
 
 		// From Schedule To Daily Mission
 		List<Mission> missionList = scheduleList.stream()
-			.map(schedule -> Mission.builder()
-				.schedule(schedule)
-				.child(schedule.getChild())
-				.parent(schedule.getParent())
-				.content(schedule.getContent())
-				.title(schedule.getTitle())
-				.emoji(schedule.getEmoji())
-				.point(schedule.getPoint())
-				.date(today)
-				.status(StatusCode.EMPTY)
-				.isDeleted(false)
-				.repeatable(schedule.getRepeatable())
-				.build())
+			.map(schedule -> MissionConverter.convertScheduleToMission(schedule, today))
 			.collect(Collectors.toList());
 
 		missionRepository.saveAll(missionList);
@@ -201,5 +190,4 @@ public class MissionService {
 			throw new CustomErrorException(ErrorCode.FAMILY_NOT_MATCH);
 		}
 	}
-
 }
