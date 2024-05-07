@@ -25,6 +25,15 @@ public interface ScheduleCustomRepository {
 	List<Schedule> findByDateWithChildId(LocalDate date, Long memberId);
 
 	/**
+	 * Month에 해당하는 결과 조회하기
+	 *
+	 * @param memberId 조회할 자식의 memberId
+	 * @param firstDayOfMonth 해당 월의 첫날
+	 * @param endDayOfMonth 해당 월의 마지막날
+	 * */
+	List<Schedule> findCalendarByMonthWithChildId(Long memberId, LocalDate firstDayOfMonth, LocalDate endDayOfMonth);
+
+	/**
 	 * 조회 날짜에 따른 일정 조건 만들기
 	 *
 	 * @param date 조회할 일자
