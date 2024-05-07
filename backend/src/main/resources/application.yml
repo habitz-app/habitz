@@ -64,3 +64,5 @@ jwt:
 # SPRINGDOC SETUP
 springdoc:
   show-actuator: true
+
+swaggerServerUrl: ${SWAGGER_SERVER_URL}
