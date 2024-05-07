@@ -14,6 +14,7 @@ public class FamilyListResponseDto {
 	private Long memberId;
 	private String name;
 	private String profileImage;
+	private String uuid;
 
 	public static FamilyListResponseDto convertToDto(Member member) {
 		return FamilyListResponseDto.builder()
@@ -21,6 +22,7 @@ public class FamilyListResponseDto {
 			.name(member.getName())
 			.profileImage(member.getImage())
 			.memberRole(member.getRole())
+			.uuid(member.getUuid())
 			.build();
 	}
 }
