@@ -8,9 +8,18 @@ import space.habitz.api.domain.member.entity.*;
 import space.habitz.api.domain.member.exeption.MemberNotFoundException;
 import space.habitz.api.domain.member.repository.*;
 import space.habitz.api.domain.member.service.JwtTokenProvider;
+import space.habitz.api.domain.test.dto.DummyFamilyMakeRequestDto;
 import space.habitz.api.domain.test.dto.DummyMemberLoginRequestDto;
 import space.habitz.api.domain.test.dto.DummyMemberRegisterRequestDto;
 import space.habitz.api.domain.test.dto.DummyMemberRegisterResponseDto;
+import space.habitz.api.global.exception.CustomErrorException;
+import space.habitz.api.global.util.RandomUtils;
+
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Random;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static space.habitz.api.global.util.RandomUtils.generateRandomCode;
 
@@ -24,6 +33,8 @@ public class TestServiceImpl implements TestService {
 	private final JwtTokenProvider jwtTokenProvider;
 	private final RefreshTokenRepository refreshTokenRepository;
 	private final FamilyRepository familyRepository;
+	private final ChildRepository childRepository;
+	private final ParentRepository parentRepository;
 
 	@Override
 	public DummyMemberRegisterResponseDto register(DummyMemberRegisterRequestDto requestDto) {
@@ -56,6 +67,32 @@ public class TestServiceImpl implements TestService {
 		member.setMemberInform(memberProfile, socialInform);
 
 		member = memberRepository.saveAndFlush(member);
+
+		String familyId = requestDto.getFamilyId();
+
+		Family family = familyRepository.findById(familyId)
+			.orElseGet(
+				() -> {
+					String randomCode = RandomUtils.generateRandomCode(6);
+					Family generatedFamily = new Family(randomCode, 0L);
+					return familyRepository.saveAndFlush(generatedFamily);
+				}
+			);
+
+		String memberRole = requestDto.getRole().toUpperCase();
+		Role role = Role.findEnum(memberRole);
+		
+		member.setRole(role);
+		member.setFamily(family);
+		member = memberRepository.save(member);
+
+		if (role.getRoleName().equals("PARENT")) {
+			Parent parent = new Parent(member, 0L);
+			parentRepository.save(parent);
+		} else if (role.getRoleName().equals("CHILD")) {
+			Child child = new Child(member, 0L);
+			childRepository.save(child);
+		}
 
 		return new DummyMemberRegisterResponseDto(member);
 	}
@@ -97,5 +134,32 @@ public class TestServiceImpl implements TestService {
 			target.setFamily(family);
 			memberRepository.save(target);
 		}
+	}
+
+	@Override
+	public List<MemberLoginResultDto> makeFamily(DummyFamilyMakeRequestDto requestDto) {
+		Member member = memberRepository.findByUserId(requestDto.getMemberId()).orElseThrow(() -> new MemberNotFoundException(requestDto.getMemberId()));
+
+		if(!member.getRole().equals(Role.PARENT)) throw new CustomErrorException("부모 코스프레는 허용하지 않습니다.");
+
+        return IntStream.range(0, Math.toIntExact(requestDto.getNumber()))
+            .mapToObj(i -> {
+                DummyMemberRegisterRequestDto dto = DummyMemberRegisterRequestDto.builder()
+                    .familyId(member.getFamily().getId())
+                    .nickName("나의 배포물" + i)
+                    .birthDate(LocalDate.now())
+                    .role(Role.CHILD.getRoleName().toUpperCase())
+                    .name("자식" + i)
+                    .image("")
+                    .gender(new Random().nextInt(2) > 0 ? "MALE" : "FEMALE")
+                    .email("deploy" + i + "@kakao.com")
+                    .build();
+				return this.register(dto);
+            }).map(
+                dummyMemberRegisterResponseDto -> {
+                    DummyMemberLoginRequestDto dummyMemberLoginRequestDto = new DummyMemberLoginRequestDto(dummyMemberRegisterResponseDto.getUserId());
+                    return this.getAccessToken(dummyMemberLoginRequestDto);
+                }
+            ).toList();
 	}
 }

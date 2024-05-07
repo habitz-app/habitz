@@ -5,11 +5,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import space.habitz.api.domain.member.dto.MemberLoginResultDto;
+import space.habitz.api.domain.test.dto.DummyFamilyMakeRequestDto;
 import space.habitz.api.domain.test.dto.DummyMemberLoginRequestDto;
 import space.habitz.api.domain.test.dto.DummyMemberRegisterRequestDto;
 import space.habitz.api.domain.test.dto.DummyMemberRegisterResponseDto;
 import space.habitz.api.domain.test.service.TestService;
 import space.habitz.api.global.response.ResponseData;
+
+import java.util.List;
 
 
 @RestController
@@ -34,6 +37,12 @@ public class TestController {
 	public ResponseEntity<?> makeFamily(@PathVariable("memberId") Long memberId, @PathVariable("targetId") Long targetId) {
 		testService.makeFamily(memberId, targetId);
 		return ResponseEntity.status(HttpStatus.OK).body(ResponseData.success("가족 등록 성공", null));
+	}
+
+	@PostMapping("/makeFamily/")
+	public ResponseEntity<?> makeFamily(@RequestBody DummyFamilyMakeRequestDto familyMakeRequestDto) {
+		List<MemberLoginResultDto> result = testService.makeFamily(familyMakeRequestDto);
+		return ResponseEntity.status(HttpStatus.OK).body(ResponseData.success("가족 등록 성공", result));
 	}
 
 }
