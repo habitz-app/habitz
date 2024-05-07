@@ -11,11 +11,15 @@ import space.habitz.api.domain.member.entity.Child;
 import space.habitz.api.domain.member.entity.Member;
 import space.habitz.api.domain.member.entity.Role;
 import space.habitz.api.domain.member.repository.ChildRepository;
+import space.habitz.api.domain.point.entity.ChildPointHistory;
+import space.habitz.api.domain.point.repository.ChildPointHistoryRepository;
 import space.habitz.api.domain.product.dto.ProductInfoDto;
 import space.habitz.api.domain.product.entity.BannedProduct;
 import space.habitz.api.domain.product.entity.BannedProductID;
+import space.habitz.api.domain.product.entity.ChildProductPaymentHistory;
 import space.habitz.api.domain.product.entity.Product;
 import space.habitz.api.domain.product.repository.BannedProductRepository;
+import space.habitz.api.domain.product.repository.ChildProductPaymentHistoryRepository;
 import space.habitz.api.domain.product.repository.ProductRepository;
 import space.habitz.api.global.exception.CustomNotFoundException;
 
@@ -26,6 +30,8 @@ public class ProductServiceImpl implements ProductService {
 	private final ProductRepository productRepository;
 	private final BannedProductRepository bannedProductRepository;
 	private final ChildRepository childRepository;
+	private final ChildProductPaymentHistoryRepository childProductPaymentHistoryRepository;
+	private final ChildPointHistoryRepository childPointHistoryRepository;
 
 	@Override
 	public ProductInfoDto getProductDetail(Member member, Long id) {
@@ -123,6 +129,38 @@ public class ProductServiceImpl implements ProductService {
 			.orElseThrow(() -> new CustomNotFoundException(childId));
 		bannedProductRepository.deleteByBannedProductID_ProductIdAndBannedProductID_ChildId(product.getId(),
 			child.getId());
+	}
+
+	public void purchaseProduct(Member member, Long productId) {
+		// 구매 로직
+		Child child = childRepository.findByMember_Id(member.getId());
+		ProductInfoDto productInfoDto = getProductDetail(member, productId);
+		if (child.getPoint() < productInfoDto.getPrice()) {
+			throw new CustomNotFoundException("Not Enough Point");
+		}
+
+		child.setPoint(child.getPoint() - productInfoDto.getPrice());
+		childRepository.save(child);
+
+		ChildProductPaymentHistory childProductPaymentHistory =
+			ChildProductPaymentHistory.builder()
+				.child(child)
+				.product(productRepository.findProductById(productId)
+					.orElseThrow(() -> new CustomNotFoundException(productId)))
+				.price(productInfoDto.getPrice())
+				.build();
+		childProductPaymentHistoryRepository.save(childProductPaymentHistory);
+
+		ChildPointHistory childPointHistory =
+			ChildPointHistory.builder()
+				.child(child)
+				.point(-productInfoDto.getPrice())
+				.childProductPaymentHistory(childProductPaymentHistory)
+				.totalPoint(child.getPoint())
+				.content(productInfoDto.getProductName() + " 구매")
+				.build();
+		childPointHistoryRepository.save(childPointHistory);
+
 	}
 
 }
