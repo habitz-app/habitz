@@ -17,18 +17,18 @@ import space.habitz.api.global.response.ResponseData;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/point")
+@RequestMapping("/api/v1/point")
 public class PointHistoryController {
 
 	private final ChildPointHistoryService childPointHistoryService;
 
 	@GetMapping("/history")
 	public ResponseData<List<PointHistory>> getPointHistory(@AuthenticationPrincipal Member member) {
-		if(member.getRole() == Role.PARENT) {
+		if (member.getRole() == Role.PARENT) {
 			// family 포인트 내역 조회 예정, 현재는 자녀 포인트 내역만 조회 가능
 			return null;
 		}
-		if(member.getRole() == Role.CHILD) {
+		if (member.getRole() == Role.CHILD) {
 			return new ResponseData<>("success", "포인트 내역 조회 성공", childPointHistoryService.getPointHistory(member));
 		}
 

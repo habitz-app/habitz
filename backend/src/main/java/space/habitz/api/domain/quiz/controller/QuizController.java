@@ -18,7 +18,7 @@ import space.habitz.api.domain.quiz.service.QuizService;
 import space.habitz.api.global.response.ResponseData;
 
 @Slf4j
-@RequestMapping("/quiz")
+@RequestMapping("/api/v1/quiz")
 @RequiredArgsConstructor
 @RestController
 public class QuizController {
