@@ -20,6 +20,7 @@ public class DummyMemberRegisterResponseDto {
 	private String gender;
 	private String provider;
 	private String socialId;
+	private String familyId;
 
 	public DummyMemberRegisterResponseDto(Member member) {
 		this.userId = member.getId();
@@ -31,5 +32,6 @@ public class DummyMemberRegisterResponseDto {
 		this.gender = member.getMemberProfile().getGender();
 		this.provider = member.getMemberProfile().getGender();
 		this.socialId = member.getSocialInform().getSocialId();
+		this.familyId = member.getFamily().getId();
 	}
 }
