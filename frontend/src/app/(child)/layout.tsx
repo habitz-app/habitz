@@ -14,7 +14,6 @@ const ChildLayout = ({ children }: { children: React.ReactNode }) => {
         display: 'flex',
         flexDir: 'column',
         w: 'full',
-        minH: 'calc(100vh - 5rem)',
       })}
     >
       <header
@@ -41,7 +40,7 @@ const ChildLayout = ({ children }: { children: React.ReactNode }) => {
           />
         </Button>
       </header>
-      {children}
+      <main className={css({ minH: '100vh' })}>{children}</main>
       <ChildTabBar menu={path as MenuType} />
     </div>
   );
