@@ -30,14 +30,14 @@ public class Child extends MutableTimeEntity {
 
 	@Column(name = "point")
 	@ColumnDefault("0")
-	private Long point;
+	private int point;
 
-	public Child(Member member, Long point) {
+	public Child(Member member, int point) {
 		this.member = member;
 		this.point = point;
 	}
 
-	public void setPoint(Long changePoint) {
+	public void setPoint(int changePoint) {
 		this.point += changePoint;
 	}
 }

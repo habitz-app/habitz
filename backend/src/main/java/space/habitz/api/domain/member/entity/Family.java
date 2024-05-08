@@ -27,17 +27,17 @@ public class Family extends MutableTimeEntity {
 	private String id;
 
 	@Column(name = "family_point")
-	private Long familyPoint;
+	private int familyPoint;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "family")
 	private List<Member> memberList;
 
-	public Family(String id, Long familyPoint) {
+	public Family(String id, int familyPoint) {
 		this.id = id;
 		this.familyPoint = familyPoint;
 	}
 
-	public void setFamilyPoint(Long changePoint) {
-		this.familyPoint += familyPoint;
+	public void addFamilyPoint(int point) {
+		this.familyPoint += point;
 	}
 }
