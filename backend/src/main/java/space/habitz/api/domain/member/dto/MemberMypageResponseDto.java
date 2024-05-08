@@ -16,6 +16,7 @@ public class MemberMypageResponseDto {
     private String email;
     private LocalDate birthDate;
 	private String role;
+	private String uuid;
 
     public MemberMypageResponseDto(Member member) {
         this.userId = member.getId();;
@@ -25,5 +26,6 @@ public class MemberMypageResponseDto {
         this.email = member.getMemberProfile().getEmail();
         this.birthDate = member.getMemberProfile().getBirthDate();
 		this.role = member.getRole().getRoleName();
+		this.uuid = member.getUuid();
     }
 }
