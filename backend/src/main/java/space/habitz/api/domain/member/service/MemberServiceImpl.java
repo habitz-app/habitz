@@ -1,22 +1,46 @@
 package space.habitz.api.domain.member.service;
 
-import io.micrometer.common.util.StringUtils;
-import lombok.RequiredArgsConstructor;
+import static space.habitz.api.domain.member.service.JwtTokenProvider.*;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.stereotype.Service;
-import space.habitz.api.domain.member.dto.*;
-import space.habitz.api.domain.member.entity.*;
-import space.habitz.api.domain.member.exeption.*;
-import space.habitz.api.domain.member.repository.*;
 
-import java.time.LocalDateTime;
-import java.util.Optional;
-import java.util.List;
+import io.micrometer.common.util.StringUtils;
+import lombok.RequiredArgsConstructor;
+import space.habitz.api.domain.member.dto.JwtTokenDto;
+import space.habitz.api.domain.member.dto.MemberFindResponseDto;
+import space.habitz.api.domain.member.dto.MemberLoginRequestDto;
+import space.habitz.api.domain.member.dto.MemberLoginResultDto;
+import space.habitz.api.domain.member.dto.MemberMypageResponseDto;
+import space.habitz.api.domain.member.dto.MemberRegisterRequestDto;
+import space.habitz.api.domain.member.dto.MemberUpdateRequestDto;
+import space.habitz.api.domain.member.dto.OAuthTokenResponse;
+import space.habitz.api.domain.member.dto.OAuthUserInfoResponse;
+import space.habitz.api.domain.member.entity.Child;
+import space.habitz.api.domain.member.entity.Family;
+import space.habitz.api.domain.member.entity.Member;
+import space.habitz.api.domain.member.entity.MemberProfile;
+import space.habitz.api.domain.member.entity.Parent;
+import space.habitz.api.domain.member.entity.RefreshToken;
+import space.habitz.api.domain.member.entity.Role;
+import space.habitz.api.domain.member.entity.SocialInform;
+import space.habitz.api.domain.member.exeption.MemberAlreadyRegistedException;
+import space.habitz.api.domain.member.exeption.MemberNotFoundException;
+import space.habitz.api.domain.member.exeption.MemberUnAuthorizedException;
+import space.habitz.api.domain.member.repository.ChildRepository;
+import space.habitz.api.domain.member.repository.FamilyRepository;
+import space.habitz.api.domain.member.repository.MemberProfileRepository;
+import space.habitz.api.domain.member.repository.MemberRepository;
+import space.habitz.api.domain.member.repository.ParentRepository;
+import space.habitz.api.domain.member.repository.RefreshTokenRepository;
+import space.habitz.api.domain.member.repository.SocialInformRepository;
 import space.habitz.api.domain.member.utils.AuthUtils;
 import space.habitz.api.global.util.RandomUtils;
-
-import static space.habitz.api.domain.member.service.JwtTokenProvider.TOKEN_TYPE;
 
 @Service
 @RequiredArgsConstructor
@@ -87,7 +111,7 @@ public class MemberServiceImpl implements MemberService {
 
 		Long userId = jwtTokenProvider.extractUserId(refreshToken);
 		Member member = memberRepository.findByUserId(userId)
-			.orElseThrow(() ->new MemberNotFoundException(userId));
+			.orElseThrow(() -> new MemberNotFoundException(userId));
 
 		return jwtTokenProvider.generateToken(member);
 	}
@@ -108,7 +132,7 @@ public class MemberServiceImpl implements MemberService {
 			.orElseGet(
 				() -> {
 					String randomCode = RandomUtils.generateRandomCode(6);
-					Family generatedFamily = new Family(randomCode, 0L);
+					Family generatedFamily = new Family(randomCode, 0);
 					return familyRepository.saveAndFlush(generatedFamily);
 				}
 			);
@@ -119,7 +143,7 @@ public class MemberServiceImpl implements MemberService {
 		if (!member.getRole().equals(Role.GUEST))
 			throw new MemberAlreadyRegistedException("이미 등록된 회원입니다.");
 
-		if(!StringUtils.isBlank(nickname))
+		if (!StringUtils.isBlank(nickname))
 			member.setNickname(nickname);
 
 		member.setRole(role);
@@ -127,10 +151,10 @@ public class MemberServiceImpl implements MemberService {
 		member = memberRepository.save(member);
 
 		if (role.getRoleName().equals("PARENT")) {
-			Parent parent = new Parent(member, 0L);
+			Parent parent = new Parent(member, 0);
 			parentRepository.save(parent);
 		} else if (role.getRoleName().equals("CHILD")) {
-			Child child = new Child(member, 0L);
+			Child child = new Child(member, 0);
 			childRepository.save(child);
 		}
 	}
