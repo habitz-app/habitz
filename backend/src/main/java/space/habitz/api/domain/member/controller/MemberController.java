@@ -7,11 +7,25 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import space.habitz.api.domain.member.dto.*;
+import space.habitz.api.domain.member.dto.JwtResponseDto;
+import space.habitz.api.domain.member.dto.JwtTokenDto;
+import space.habitz.api.domain.member.dto.MemberFindResponseDto;
+import space.habitz.api.domain.member.dto.MemberLoginRequestDto;
+import space.habitz.api.domain.member.dto.MemberLoginResponseDto;
+import space.habitz.api.domain.member.dto.MemberLoginResultDto;
+import space.habitz.api.domain.member.dto.MemberMypageResponseDto;
+import space.habitz.api.domain.member.dto.MemberRegisterRequestDto;
+import space.habitz.api.domain.member.dto.MemberUpdateRequestDto;
 import space.habitz.api.domain.member.entity.Member;
 import space.habitz.api.domain.member.service.MemberService;
 import space.habitz.api.global.response.ResponseData;
@@ -72,20 +86,15 @@ public class MemberController {
 	}
 
 	@PostMapping("/join")
-	public ResponseEntity<?> join(@RequestBody MemberRegisterRequestDto requestDto, @AuthenticationPrincipal Member member) {
+	public ResponseEntity<?> join(@RequestBody MemberRegisterRequestDto requestDto,
+		@AuthenticationPrincipal Member member) {
 		memberService.register(requestDto);
 		MemberFindResponseDto result = memberService.memberType(member);
 
 		ResponseCookie role = getCookie("role", result.getMemberType(), 1);
 
 		return ResponseEntity.status(HttpStatus.OK)
-			.header(HttpHeaders.SET_COOKIE, ResponseCookie.from("role", role.toString())
-				.httpOnly(true)
-				.secure(true)
-				.sameSite("None")
-				.maxAge(Duration.ofDays(1))
-				.build()
-				.toString())
+			.header(HttpHeaders.SET_COOKIE, role.toString())
 			.body(ResponseData.success("회원 정보 로드 성공", null));
 	}
 
