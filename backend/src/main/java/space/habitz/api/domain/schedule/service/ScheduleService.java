@@ -151,15 +151,26 @@ public class ScheduleService {
 
 	/**
 	 * 일정 삭제
+	 * - 일정을 삭제하면, soft delete 로 is_delete를 활성화한다.
+	 * - 오늘의 미션이 존재한다면, 삭제한다.
 	 *
 	 * @param member     로그인한 사용자 정보
 	 * @param scheduleId 일정 ID
 	 */
+	@Transactional
 	public String deleteSchedule(Member member, Long scheduleId) {
 
-		// schedule을 기준으로 today ~ endDate 까지의 일정을 모두 삭제
+		Schedule schedule = scheduleRepository.findById(scheduleId)
+			.orElseThrow(() -> new CustomErrorException(ErrorCode.SCHEDULE_NOT_FOUND));
 
-		scheduleRepository.deleteById(scheduleId);
+		validateFamily(member.getFamily().getId(), schedule.getChild().getFamily().getId());    // 가족 관계 확인
+
+		// 만약 일정을 삭제했을 때 "오늘" 부여된 미션이 존재한다면, 삭제
+		Optional<Mission> optionalMission = missionRepository.findByScheduleIdAndDate(scheduleId, LocalDate.now());
+		optionalMission.ifPresent(missionRepository::delete);
+
+		scheduleRepository.delete(schedule);
+
 		return scheduleId + " 일정이 삭제 되었습니다.";
 	}
 
