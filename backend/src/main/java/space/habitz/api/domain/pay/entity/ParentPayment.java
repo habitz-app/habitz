@@ -37,8 +37,8 @@ public class ParentPayment {
 	@Column(name = "order_id")
 	private String orderId;
 
-	@Column(name = "payment_id")
-	private String paymentId;
+	@Column(name = "payment_key")
+	private String paymentKey;
 
 	@Column(name = "purchased_at")
 	private Timestamp purchasedAt;
@@ -47,8 +47,9 @@ public class ParentPayment {
 	@Enumerated(EnumType.STRING)
 	private PayStatus result;
 
-	public void updatePayStatus(PayStatus payStatus, Timestamp purchasedAt) {
+	public void updatePayStatus(PayStatus payStatus, String paymentKey, Timestamp purchasedAt) {
 		this.result = payStatus;
+		this.paymentKey = paymentKey;
 		this.purchasedAt = purchasedAt;
 	}
 
