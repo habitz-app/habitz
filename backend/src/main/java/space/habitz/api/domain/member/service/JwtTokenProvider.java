@@ -1,20 +1,5 @@
 package space.habitz.api.domain.member.service;
 
-import io.jsonwebtoken.*;
-import io.jsonwebtoken.io.Decoders;
-import io.jsonwebtoken.security.Keys;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.stereotype.Component;
-import space.habitz.api.domain.member.dto.JwtTokenDto;
-import space.habitz.api.domain.member.entity.Member;
-import space.habitz.api.domain.member.entity.RefreshToken;
-import space.habitz.api.domain.member.exeption.MemberUnAuthorizedException;
-import space.habitz.api.domain.utils.AuthUtils;
-
 import java.security.Key;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -24,6 +9,26 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.stereotype.Component;
+
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.UnsupportedJwtException;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
+import lombok.extern.slf4j.Slf4j;
+import space.habitz.api.domain.member.dto.JwtTokenDto;
+import space.habitz.api.domain.member.entity.Member;
+import space.habitz.api.domain.member.entity.RefreshToken;
+import space.habitz.api.domain.member.exeption.MemberUnAuthorizedException;
+import space.habitz.api.domain.utils.AuthUtils;
 
 @Component
 @Slf4j
@@ -81,7 +86,7 @@ public class JwtTokenProvider {
 		if (!validateTokenType(tokenType, TYPE_REFRESH))
 			throw new MemberUnAuthorizedException("RefreshToken 값이 아닙니다.");
 
-		return isSameUser(token) && validateToken(token);
+		return validateToken(token);
 	}
 
 	private static boolean validateTokenType(String token, String type) {
