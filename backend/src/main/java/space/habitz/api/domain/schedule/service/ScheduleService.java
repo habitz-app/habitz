@@ -4,11 +4,13 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import space.habitz.api.domain.member.dto.MemberProfileDto;
 import space.habitz.api.domain.member.entity.Family;
 import space.habitz.api.domain.member.entity.Member;
@@ -20,21 +22,24 @@ import space.habitz.api.domain.mission.util.MissionConverter;
 import space.habitz.api.domain.schedule.dto.ScheduleDto;
 import space.habitz.api.domain.schedule.dto.ScheduleMissionDto;
 import space.habitz.api.domain.schedule.dto.ScheduleRequestDto;
+import space.habitz.api.domain.schedule.dto.UpdateScheduleRequestDto;
 import space.habitz.api.domain.schedule.entity.Schedule;
 import space.habitz.api.domain.schedule.repository.ScheduleCustomRepositoryImpl;
 import space.habitz.api.domain.schedule.repository.ScheduleRepository;
 import space.habitz.api.domain.schedule.util.ScheduleDateUtil;
 import space.habitz.api.global.exception.CustomErrorException;
 import space.habitz.api.global.exception.ErrorCode;
+import space.habitz.api.global.type.StatusCode;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ScheduleService {
 
 	private final MemberRepository memberRepository;
 	private final ScheduleRepository scheduleRepository;
+	private final MissionRepository missionRepository;
 	private final ScheduleCustomRepositoryImpl scheduleCustomRepository;
-	private final MissionService missionService;
 
 	/**
 	 * 일정 생성
@@ -56,8 +61,7 @@ public class ScheduleService {
 		// 오늘 날짜가 스케줄 시작일과 같은 경우, 즉시 미션 생성
 		LocalDate today = LocalDate.now();
 		if (today.isEqual(schedule.getStartDate()) && ScheduleDateUtil.isActiveDay(schedule, today)) {
-			Long missionId = missionService.createMission(schedule);        // 미션 생성
-			return Map.of("scheduleId", schedule.getId(), "missionId", missionId);
+			createMissionBySchedule(schedule);        // 미션 생성
 		}
 
 		return Map.of("scheduleId", schedule.getId());
@@ -158,6 +162,86 @@ public class ScheduleService {
 		scheduleRepository.deleteById(scheduleId);
 		return scheduleId + " 일정이 삭제 되었습니다.";
 	}
+
+	// ======================== 일정 수정 관련 메서드 ============================
+
+	/**
+	 * 일정 수정
+	 * - 일정을 수정한다.
+	 * - 일정 수정 할 때 "오늘" 부여된 미션의 수정/삭제 여부를 검증한다.
+	 * - 일정 수정 할 때 startDate의 변경으로 오늘 미션이 생성되야 하는 경우를 확인하고, 생성한다.
+	 *
+	 * @param member 로그인한 사용자
+	 * @param scheduleId 수정할 일정
+	 * @param requestDto 업데이트 하는 Dto
+	 * */
+	@Transactional
+	public ScheduleDto updateSchedule(Member member, Long scheduleId, UpdateScheduleRequestDto requestDto) {
+
+		Schedule schedule = scheduleRepository.findById(scheduleId)
+			.orElseThrow(() -> new CustomErrorException(ErrorCode.SCHEDULE_NOT_FOUND));
+
+		validateFamily(member.getFamily().getId(), schedule.getChild().getFamily().getId());    // 가족 관계 확인
+
+		// "오늘" 날짜가 포함된 기존 미션이 있다면, 수정 및 삭제 한다.
+		Optional<Mission> optionalMission = missionRepository.findByScheduleIdAndDate(scheduleId, LocalDate.now());
+		optionalMission.ifPresent(mission -> {
+			updateTodayMissionHandler(mission, requestDto);
+		});
+
+		// 수정에 따라 "오늘" 날짜에 미션이 생성되어야 한다면, 미션을 생성한다.
+		checkTodayMissionCreation(schedule, requestDto.startDate());
+
+		// schedule update
+		schedule.updateSchedule(requestDto);
+		return ScheduleDto.of(schedule);
+	}
+
+	/**
+	 * 일정 변경사항으로 인해 "오늘"의 미션의 변동사항이 있는 경우
+	 *
+	 * 1. 원래 일정은 오늘을 포함한 기간이였으나, startDate가 오늘 이후이면, 미션은 [삭제] 되어야 한다.
+	 * 2. 원래 일정은 오늘을 포함한 기간이였으나, 오늘에 기간이 침범되지 않는다면, 미션은 [수정] 된다.
+	 *
+	 * @param mission 미션
+	 * @param requestDto 일정에 대해 업데이트 되는 요청 Dto
+	 * */
+	private void updateTodayMissionHandler(Mission mission, UpdateScheduleRequestDto requestDto) {
+		LocalDate today = LocalDate.now();
+		log.info("Checking the existing mission for today.");
+		if (requestDto.startDate().isAfter(today)) {
+			// 수정한 스케줄의 시작일이 미션의 날짜 보다 뒤에 있을 경우 삭제
+			if (mission.getStatus().equals(StatusCode.ACCEPT)) {
+				throw new CustomErrorException(ErrorCode.MISSION_ACCEPTED_CAN_NOT_DELETE);
+			}
+			missionRepository.delete(mission);
+			log.info("Deleting today's assigned mission as the updated schedule's start date is after today.");
+		} else {
+			// 수정한 스케줄에 대한 미션 수정
+			mission.updateSchedule(requestDto);
+			log.info("Updating today's assigned mission as the updated schedule's start date includes today.");
+		}
+	}
+
+	/**
+	 * 일정의 변경으로, 미션을 생성해야 하는 경우
+	 * - 일정 수정 할 때 startDate의 변경으로 오늘 미션이 생성되야 하는 경우를 확인하고, 생성한다.
+	 *
+	 * @param originalSchedule 수정 전 일정
+	 * @param updateStartDate 변경한 일정의 startDate
+	 * */
+	private void checkTodayMissionCreation(Schedule originalSchedule, LocalDate updateStartDate) {
+		LocalDate today = LocalDate.now();
+		// 일정이 변경되면서 "오늘 날짜" 포함
+		if (originalSchedule.getStartDate().isAfter(today) && !updateStartDate.isAfter(today)) {
+			// 수정한 스케줄의 시작일이 오늘을 포함하도록 변경된 경우 미션 생성
+			createMissionBySchedule(originalSchedule);
+			log.info(
+				"Creating a mission for today as the updated schedule's start date now includes today after the update.");
+		}
+	}
+
+	// ======================== 일정 수정 관련 메서드 End ============================
 
 	/**
 	 * 같은 가족인지 확인하는 validation
