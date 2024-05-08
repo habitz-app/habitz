@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,6 +22,7 @@ import space.habitz.api.domain.member.entity.Member;
 import space.habitz.api.domain.schedule.dto.ScheduleDto;
 import space.habitz.api.domain.schedule.dto.ScheduleMissionDto;
 import space.habitz.api.domain.schedule.dto.ScheduleRequestDto;
+import space.habitz.api.domain.schedule.dto.UpdateScheduleRequestDto;
 import space.habitz.api.domain.schedule.service.ScheduleService;
 import space.habitz.api.global.response.ResponseData;
 
@@ -88,6 +90,22 @@ public class ScheduleController {
 	@DeleteMapping("/{scheduleId}")
 	public ResponseData<String> deleteSchedule(@AuthenticationPrincipal Member member, @PathVariable Long scheduleId) {
 		return ResponseData.success(scheduleService.deleteSchedule(member, scheduleId));
+	}
+
+	@Operation(
+		summary = "일정 수정",
+		description = "일정을 수정합니다."
+	)
+	@PutMapping("/{scheduleId}")
+	public ResponseData<ScheduleDto> updateSchedule(@AuthenticationPrincipal Member member,
+		@PathVariable("scheduleId") Long scheduleId,
+		@RequestBody UpdateScheduleRequestDto requestDto) {
+
+		// 미션 수정 실패 로직
+		if (requestDto.endDate().isBefore(LocalDate.now())) {
+			return ResponseData.failure("생성되지 않는 미션 일정입니다.");
+		}
+		return ResponseData.success(scheduleService.updateSchedule(member, scheduleId, requestDto));
 	}
 
 }
