@@ -30,8 +30,8 @@ importers:
         specifier: ^8.0.9
         version: 8.0.9
       '@tanstack/react-query':
-        specifier: ^5.32.1
-        version: 5.32.1(react@18.2.0)
+        specifier: ^5.35.1
+        version: 5.35.1(react@18.2.0)
       '@tosspayments/payment-sdk':
         specifier: ^1.7.1
         version: 1.7.1
@@ -102,6 +102,9 @@ importers:
       '@tanstack/eslint-plugin-query':
         specifier: ^5.32.1
         version: 5.32.1(eslint@8.57.0)(typescript@5.4.5)
+      '@tanstack/react-query-devtools':
+        specifier: ^5.35.1
+        version: 5.35.1(@tanstack/react-query@5.35.1(react@18.2.0))(react@18.2.0)
       '@types/node':
         specifier: ^20
         version: 20.12.7
@@ -1536,11 +1539,20 @@ packages:
     peerDependencies:
       eslint: ^8.0.0
 
-  '@tanstack/query-core@5.32.1':
-    resolution: {integrity: sha512-mCWa1wdGb1jiny4+qYegbSeadcFj+Nq65KFSs4A1DRveoIq7SrTwUhqu7hrB6d54cQH5x59DfJvxusn3w1Cj/g==}
+  '@tanstack/query-core@5.35.1':
+    resolution: {integrity: sha512-0Dnpybqb8+ps6WgqBnqFEC+1F/xLvUosRAq+wiGisTgolOZzqZfkE2995dEXmhuzINiTM7/a6xSGznU0NIvBkw==}
 
-  '@tanstack/react-query@5.32.1':
-    resolution: {integrity: sha512-+nXLMB0JK0XwTJ+lQt49DPNLrbSppni9N5W5yMR085yW3YaRKRUFhfVTER3TvQd1UycHpoGPFnt1gHiijXERAg==}
+  '@tanstack/query-devtools@5.32.1':
+    resolution: {integrity: sha512-7Xq57Ctopiy/4atpb0uNY5VRuCqRS/1fi/WBCKKX6jHMa6cCgDuV/AQuiwRXcKARbq2OkVAOrW2v4xK9nTbcCA==}
+
+  '@tanstack/react-query-devtools@5.35.1':
+    resolution: {integrity: sha512-G2TP8ekCo+C9IPdEswKB9mqG5pxV+DWq86lmNw/VbUpdyNwNFvKi7GdcqW1pLDi5al+zifSjGSO7QZ7zDMJcQg==}
+    peerDependencies:
+      '@tanstack/react-query': ^5.35.1
+      react: ^18.0.0
+
+  '@tanstack/react-query@5.35.1':
+    resolution: {integrity: sha512-i2T7m2ffQdNqlX3pO+uMsnQ0H4a59Ens2GxtlMsRiOvdSB4SfYmHb27MnvFV8rGmtWRaa4gPli0/rpDoSS5LbQ==}
     peerDependencies:
       react: ^18.0.0
 
@@ -8055,11 +8067,19 @@ snapshots:
       - supports-color
       - typescript
 
-  '@tanstack/query-core@5.32.1': {}
+  '@tanstack/query-core@5.35.1': {}
 
-  '@tanstack/react-query@5.32.1(react@18.2.0)':
+  '@tanstack/query-devtools@5.32.1': {}
+
+  '@tanstack/react-query-devtools@5.35.1(@tanstack/react-query@5.35.1(react@18.2.0))(react@18.2.0)':
     dependencies:
-      '@tanstack/query-core': 5.32.1
+      '@tanstack/query-devtools': 5.32.1
+      '@tanstack/react-query': 5.35.1(react@18.2.0)
+      react: 18.2.0
+
+  '@tanstack/react-query@5.35.1(react@18.2.0)':
+    dependencies:
+      '@tanstack/query-core': 5.35.1
       react: 18.2.0
 
   '@testing-library/dom@9.3.4':
