@@ -30,6 +30,7 @@ import space.habitz.api.domain.member.entity.RefreshToken;
 import space.habitz.api.domain.member.entity.Role;
 import space.habitz.api.domain.member.entity.SocialInform;
 import space.habitz.api.domain.member.exeption.MemberAlreadyRegistedException;
+import space.habitz.api.domain.member.exeption.MemberBadRequestException;
 import space.habitz.api.domain.member.exeption.MemberNotFoundException;
 import space.habitz.api.domain.member.exeption.MemberUnAuthorizedException;
 import space.habitz.api.domain.member.repository.ChildRepository;
@@ -127,21 +128,26 @@ public class MemberServiceImpl implements MemberService {
 		String familyId = requestDto.getFamilyId();
 		Member member = AuthUtils.getAuthenticatedMember();
 		String nickname = requestDto.getNickname();
+		String memberRole = requestDto.getMemberRole().toUpperCase();
+		Role role = Role.findEnum(memberRole);
+
+		familyId = StringUtils.isBlank(familyId) ? "" : familyId;
+
+		if (!member.getRole().equals(Role.GUEST))
+			throw new MemberAlreadyRegistedException("이미 등록된 회원입니다.");
 
 		Family family = familyRepository.findById(familyId)
 			.orElseGet(
 				() -> {
+					if (role.equals(Role.CHILD))
+						throw new MemberBadRequestException("아이는 가족을 생성할 수 없습니다.");
+
 					String randomCode = RandomUtils.generateRandomCode(6);
 					Family generatedFamily = new Family(randomCode, 0);
 					return familyRepository.saveAndFlush(generatedFamily);
 				}
 			);
 
-		String memberRole = requestDto.getMemberRole().toUpperCase();
-		Role role = Role.findEnum(memberRole);
-
-		if (!member.getRole().equals(Role.GUEST))
-			throw new MemberAlreadyRegistedException("이미 등록된 회원입니다.");
 
 		if (!StringUtils.isBlank(nickname))
 			member.setNickname(nickname);
