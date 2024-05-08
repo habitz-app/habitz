@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import space.habitz.api.domain.member.entity.Child;
 import space.habitz.api.domain.member.entity.Member;
 import space.habitz.api.domain.member.repository.ChildRepository;
+import space.habitz.api.domain.point.entity.ChildPointHistory;
+import space.habitz.api.domain.point.repository.ChildPointHistoryRepository;
 import space.habitz.api.domain.quiz.dto.QuizHistoryDto;
 import space.habitz.api.domain.quiz.dto.QuizHistoryInfoDto;
 import space.habitz.api.domain.quiz.dto.QuizInfoDto;
@@ -23,6 +25,7 @@ public class QuizServiceImpl implements QuizService {
 	private final QuizRepository quizRepository;
 	private final QuizHistoryRepository quizHistoryRepository;
 	private final ChildRepository childRepository;
+	private final ChildPointHistoryRepository childPointHistoryRepository;
 
 	@Override
 	public QuizHistoryDto getTodayQuiz(Member member) {
@@ -92,7 +95,20 @@ public class QuizServiceImpl implements QuizService {
 			.build();
 
 		quizHistoryRepository.save(quizHistory);
+		if (quizHistory.isCorrect()) {
+			child.setPoint(child.getPoint() + 10);
+			childRepository.save(child);
 
+			ChildPointHistory childPointHistory = ChildPointHistory.builder()
+				.child(child)
+				.content(LocalDate.now() + " 퀴즈 정답 맞춤")
+				.totalPoint(child.getPoint())
+				.point(10)
+				.createdAt(new java.sql.Timestamp(System.currentTimeMillis()))
+				.build();
+			childPointHistoryRepository.save(childPointHistory);
+
+		}
 		return QuizHistoryDto
 			.builder()
 			.isSolved(true)
