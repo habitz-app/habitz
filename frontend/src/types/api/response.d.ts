@@ -16,3 +16,8 @@ export interface KakaoLoginResponse {
     tokenType: string;
   };
 }
+
+export interface ScheduleResponse {
+  scheduleId: number;
+  missionId?: number;
+}

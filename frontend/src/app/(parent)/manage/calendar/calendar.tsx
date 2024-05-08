@@ -41,7 +41,7 @@ export default function Calendar({
   };
 
   // 캘린더에 날짜별로 아이의 일정을 표시하는 컴포넌트입니다
-  const ChildDot: React.FC<{ color: string }> = ({ color }) => (
+  const ChildDot = ({ color }: { color: string }) => (
     <div
       className={css({
         bg: color,
@@ -52,8 +52,10 @@ export default function Calendar({
       style={{ background: color }}
     ></div>
   );
-  const ChildrenDots: React.FC<{ childrenBoolean: boolean[] }> = ({
+  const ChildrenDots = ({
     childrenBoolean,
+  }: {
+    childrenBoolean: boolean[];
   }) => {
     if (childrenBoolean) {
       return (
