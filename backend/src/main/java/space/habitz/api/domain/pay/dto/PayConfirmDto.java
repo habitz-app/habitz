@@ -6,7 +6,7 @@ import space.habitz.api.domain.pay.entity.PayStatus;
 @Getter
 public class PayConfirmDto {
 	String orderId;
-	String paymentId;
+	String paymentKey;
 	int amount;
 	PayStatus status;
 }
