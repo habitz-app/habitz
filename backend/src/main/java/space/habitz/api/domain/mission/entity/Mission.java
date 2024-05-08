@@ -23,6 +23,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import space.habitz.api.domain.member.entity.Member;
 import space.habitz.api.domain.mission.dto.UpdateMissionRequestDto;
+import space.habitz.api.domain.schedule.dto.UpdateScheduleRequestDto;
 import space.habitz.api.domain.schedule.entity.Schedule;
 import space.habitz.api.global.entity.MutableTimeEntity;
 import space.habitz.api.global.type.StatusCode;
@@ -91,5 +92,12 @@ public class Mission extends MutableTimeEntity {
 		this.emoji = request.emoji();
 		this.point = request.point();
 		this.date = request.date();
+	}
+
+	public void updateSchedule(UpdateScheduleRequestDto request) {
+		this.title = request.title();
+		this.content = request.content();
+		this.emoji = request.emoji();
+		this.point = request.point();
 	}
 }
