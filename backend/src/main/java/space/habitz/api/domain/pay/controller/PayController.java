@@ -29,9 +29,9 @@ public class PayController {
 		return new ResponseData<>("success", "주문 ID 조회 성공", payService.getOrderId(member, amount.getAmount()));
 	}
 
-	@PostMapping("/pay")
+	@PostMapping("/confirm")
 	public ResponseData<String> pay(@AuthenticationPrincipal Member member, @RequestBody PayConfirmDto payConfirmDto) {
-		return new ResponseData<>("success", "결제 성공", payService.confirmPay(payConfirmDto));
+		return new ResponseData<>("success", "결제 로직 완료", payService.confirmPay(payConfirmDto));
 	}
 
 }
