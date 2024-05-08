@@ -58,7 +58,9 @@ public class PayServiceImpl implements PayService {
 		ParentPayment parentPayment = parentPaymentRepository.findByOrderId(payConfirmDto.getOrderId())
 			.orElseThrow(() -> new IllegalArgumentException("주문 ID가 존재하지 않습니다."));
 
-		parentPayment.updatePayStatus(payConfirmDto.getStatus(), Timestamp.valueOf(LocalDateTime.now()));
+		parentPayment.updatePayStatus(payConfirmDto.getStatus(), payConfirmDto.getPaymentKey(),
+			Timestamp.valueOf(LocalDateTime.now()));
+
 		if (!parentPayment.getResult().equals(PayStatus.DONE)) {
 			parentPaymentRepository.save(parentPayment);
 			return "결제가 실패하였습니다.";
