@@ -11,6 +11,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class QuizHistoryDto {
 	Boolean isSolved;
-	QuizInfoDto quizInfoDto;
-	QuizHistoryInfoDto quizHistoryInfoDto;
+	QuizInfoDto quizInfo;
+	QuizHistoryInfoDto quizHistoryInfo;
 }
