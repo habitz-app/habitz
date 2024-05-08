@@ -7,6 +7,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import space.habitz.api.domain.member.dto.*;
 import space.habitz.api.domain.member.service.FamilyService;
+import space.habitz.api.global.response.ApiResponseData;
 
 import java.util.List;
 
@@ -19,21 +20,21 @@ public class FamilyController {
 	@GetMapping("/inviteCode")
 	public ResponseEntity<?> inviteCode(){
 		MemberInviteCodeResponse inviteCode = familyService.getInviteCode();
-		return ResponseEntity.status(HttpStatus.OK).body(inviteCode);
+		return ApiResponseData.success(inviteCode);
 	}
 
 	@PreAuthorize("hasAnyRole('PARENT')")
 	@GetMapping("/memberList")
 	public ResponseEntity<?> memberList(){
 		List<FamilyListResponseDto> familyList = familyService.getFamilyList();
-		return ResponseEntity.status(HttpStatus.OK).body(familyList);
+		return ApiResponseData.success(familyList);
 	}
 
 	@PreAuthorize("hasAnyRole('PARENT')")
 	@GetMapping("/childList")
 	public ResponseEntity<?> childList(){
 		List<FamilyListResponseDto> familyList = familyService.getChildList();
-		return ResponseEntity.status(HttpStatus.OK).body(familyList);
+		return ApiResponseData.success(familyList);
 	}
 }
 
