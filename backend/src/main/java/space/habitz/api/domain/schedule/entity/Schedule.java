@@ -5,6 +5,9 @@ import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -31,6 +34,8 @@ import space.habitz.api.global.entity.MutableTimeEntity;
 @AllArgsConstructor
 @Builder
 @Entity
+@SQLDelete(sql = "UPDATE schedule SET is_deleted = true WHERE id = ?")
+@SQLRestriction("is_deleted = 0")
 @Table(name = "schedule")
 public class Schedule extends MutableTimeEntity {
 
@@ -77,8 +82,9 @@ public class Schedule extends MutableTimeEntity {
 	@Column(name = "repeat_yn")
 	Boolean repeatable;
 
+	@Builder.Default
 	@Column(name = "is_deleted")
-	Boolean isDeleted;
+	Boolean isDeleted = Boolean.FALSE;
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "schedule")
 	private List<Mission> missionList;
