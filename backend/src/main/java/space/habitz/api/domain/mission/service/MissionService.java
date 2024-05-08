@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.springframework.scheduling.annotation.Scheduled;
@@ -13,15 +14,22 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import space.habitz.api.domain.member.dto.MemberProfileDto;
+import space.habitz.api.domain.member.entity.Child;
 import space.habitz.api.domain.member.entity.Family;
 import space.habitz.api.domain.member.entity.Member;
 import space.habitz.api.domain.member.entity.Role;
+import space.habitz.api.domain.member.repository.ChildRepository;
+import space.habitz.api.domain.member.repository.FamilyRepository;
 import space.habitz.api.domain.member.repository.MemberRepository;
 import space.habitz.api.domain.mission.dto.MissionDto;
 import space.habitz.api.domain.mission.dto.UpdateMissionRequestDto;
 import space.habitz.api.domain.mission.entity.Mission;
 import space.habitz.api.domain.mission.repository.MissionRepository;
 import space.habitz.api.domain.mission.util.MissionConverter;
+import space.habitz.api.domain.point.entity.ChildPointHistory;
+import space.habitz.api.domain.point.entity.FamilyPointHistory;
+import space.habitz.api.domain.point.repository.ChildPointHistoryRepository;
+import space.habitz.api.domain.point.repository.FamilyPointHistoryRepository;
 import space.habitz.api.domain.schedule.entity.Schedule;
 import space.habitz.api.domain.schedule.repository.ScheduleCustomRepositoryImpl;
 import space.habitz.api.global.exception.CustomErrorException;
@@ -35,7 +43,11 @@ public class MissionService {
 
 	private final MissionRepository missionRepository;
 	private final MemberRepository memberRepository;
+	private final FamilyRepository familyRepository;
+	private final ChildRepository childRepository;
+	private final FamilyPointHistoryRepository familyPointHistoryRepository;
 	private final ScheduleCustomRepositoryImpl scheduleCustomRepository;
+	private final ChildPointHistoryRepository childPointHistoryRepository;
 
 	/**
 	 * 미션 상세 조회
@@ -203,4 +215,72 @@ public class MissionService {
 			throw new CustomErrorException(ErrorCode.FAMILY_NOT_MATCH);
 		}
 	}
+
+	/**
+	 * 미션 상태 변경
+	 * - 미션의 상태를 변경한다.
+	 *
+	 * @param missionId 미션 ID
+	 * @param statusCode 변경할 상태 코드
+	 */
+	public String changeMissionStatus(Member parent, Long missionId, StatusCode statusCode) {
+
+		Mission mission = missionRepository.findById(missionId)
+			.orElseThrow(() -> new CustomErrorException(ErrorCode.MISSION_NOT_FOUND));
+		Member mem_child = memberRepository.findById(mission.getChild().getId())
+			.orElseThrow(() -> new CustomErrorException(ErrorCode.MEMBER_NOT_FOUND));
+
+		// 부모와 미션의 가족이 일치하는지 확인
+		if (!Objects.equals(mem_child.getFamily().getId(), parent.getFamily().getId())) {
+			throw new CustomErrorException(ErrorCode.FAMILY_NOT_MATCH);
+		}
+
+		if (statusCode == StatusCode.ACCEPT && mission.getStatus() != StatusCode.ACCEPT) {
+			// 미션 상태 변경 (ACCEPT)
+			Family family = familyRepository.findFamilyById(parent.getFamily().getId());
+			if (family.getFamilyPoint() < mission.getPoint()) {
+				throw new IllegalArgumentException("가족 포인트가 부족합니다.");
+				// 수정 예정
+			}
+
+			family.addFamilyPoint(-mission.getPoint());
+
+			familyRepository.save(family);
+
+			// 추후 타입 수정하고 저장
+			FamilyPointHistory familyPointHistory = FamilyPointHistory.builder()
+				.remainPoint(family.getFamilyPoint())
+				.payPoint(-mission.getPoint())
+				.mission(mission)
+				.build();
+			familyPointHistoryRepository.save(familyPointHistory);
+
+			Child child = childRepository.findByMember_Id(mission.getChild().getId());
+			child.setPoint(mission.getPoint());
+			childRepository.save(child);
+
+			ChildPointHistory childPointHistory = ChildPointHistory.builder()
+				.mission(mission)
+				.content(mission.getTitle())
+				.totalPoint(child.getPoint())
+				.point(mission.getPoint())
+				.child(child)
+				.build();
+
+			childPointHistoryRepository.save(childPointHistory);
+
+			mission.setStatus(statusCode);
+			mission.setApproveParent(parent);
+
+			missionRepository.save(mission);
+			return "미션 성공, 포인트 지급 완료";
+		}
+		if (mission.getStatus() == StatusCode.ACCEPT) {
+			throw new IllegalArgumentException("이미 수락된 미션입니다.");
+		}
+		mission.setStatus(statusCode);
+		missionRepository.save(mission);
+		return "미션 실패";
+	}
+
 }
