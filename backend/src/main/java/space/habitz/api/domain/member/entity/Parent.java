@@ -1,6 +1,11 @@
 package space.habitz.api.domain.member.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,9 +23,9 @@ public class Parent extends MutableTimeEntity {
 	@OneToOne(fetch = FetchType.LAZY)
 	Member member;
 
-	private Long point;
+	private int point;
 
-	public Parent(Member member, Long point) {
+	public Parent(Member member, int point) {
 		this.member = member;
 		this.point = point;
 	}
