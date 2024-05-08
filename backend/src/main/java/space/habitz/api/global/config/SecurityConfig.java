@@ -26,6 +26,7 @@ public class SecurityConfig {
 
 	AntPathRequestMatcher[] whiteList = new AntPathRequestMatcher[] {
 		new AntPathRequestMatcher("/api/v1/member/login"),
+		new AntPathRequestMatcher("/api/v1/member/reissue"),
 		new AntPathRequestMatcher("/login/oauth2/code/**"),
 		new AntPathRequestMatcher("/swagger-ui/**"),
 		new AntPathRequestMatcher("/v3/api-docs/**"),
