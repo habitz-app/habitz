@@ -78,10 +78,14 @@ public class MemberController {
 	}
 
 	@PostMapping("/join")
-	public ResponseEntity<?> join(@RequestBody MemberRegisterRequestDto requestDto) {
+	public ResponseEntity<?> join(@RequestBody MemberRegisterRequestDto requestDto, @AuthenticationPrincipal Member member) {
 		memberService.register(requestDto);
+		MemberFindResponseDto result = memberService.memberType(member);
+
+		ResponseCookie role = getCookie("role", result.getMemberType(), 1);
+
 		return ResponseEntity.status(HttpStatus.OK)
-			.header(HttpHeaders.SET_COOKIE, ResponseCookie.from("role", requestDto.getMemberRole())
+			.header(HttpHeaders.SET_COOKIE, ResponseCookie.from("role", role.toString())
 				.httpOnly(true)
 				.secure(true)
 				.sameSite("None")
@@ -94,7 +98,11 @@ public class MemberController {
 	@GetMapping("/type")
 	public ResponseEntity<?> memberType(@AuthenticationPrincipal Member member) {
 		MemberFindResponseDto result = memberService.memberType(member);
-		return ResponseEntity.status(HttpStatus.OK).body(ResponseData.success("회원 여부 조회 성공", result));
+		ResponseCookie role = getCookie("role", result.getMemberType(), 1);
+
+		return ResponseEntity.status(HttpStatus.OK)
+			.header(HttpHeaders.SET_COOKIE, role.toString())
+			.body(ResponseData.success("회원 여부 조회 성공", result));
 	}
 
 	@GetMapping("")
