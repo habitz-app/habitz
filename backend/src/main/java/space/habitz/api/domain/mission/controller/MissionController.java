@@ -105,7 +105,8 @@ public class MissionController {
 		@AuthenticationPrincipal Member member,
 		@RequestBody MissionApproveRequestDto requestDto
 	) {
-		return ResponseData.success(null);
+		return ResponseData.success(
+			missionService.changeMissionStatus(member, requestDto.missionId(), requestDto.status()));
 	}
 
 }

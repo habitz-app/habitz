@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.springframework.scheduling.annotation.Scheduled;
@@ -226,33 +227,36 @@ public class MissionService {
 
 		Mission mission = missionRepository.findById(missionId)
 			.orElseThrow(() -> new CustomErrorException(ErrorCode.MISSION_NOT_FOUND));
+		Member mem_child = memberRepository.findById(mission.getChild().getId())
+			.orElseThrow(() -> new CustomErrorException(ErrorCode.MEMBER_NOT_FOUND));
 
 		// 부모와 미션의 가족이 일치하는지 확인
-		if (mission.getChild().getFamily() != parent.getFamily()) {
+		if (!Objects.equals(mem_child.getFamily().getId(), parent.getFamily().getId())) {
 			throw new CustomErrorException(ErrorCode.FAMILY_NOT_MATCH);
 		}
 
 		if (statusCode == StatusCode.ACCEPT && mission.getStatus() != StatusCode.ACCEPT) {
 			// 미션 상태 변경 (ACCEPT)
-			if (parent.getFamily().getFamilyPoint() < mission.getPoint()) {
+			Family family = familyRepository.findFamilyById(parent.getFamily().getId());
+			if (family.getFamilyPoint() < mission.getPoint()) {
 				throw new IllegalArgumentException("가족 포인트가 부족합니다.");
 				// 수정 예정
 			}
-			Family family = familyRepository.findFamilyById(parent.getFamily().getId());
-			family.setFamilyPoint((long)-mission.getPoint());
+
+			family.addFamilyPoint(-mission.getPoint());
 
 			familyRepository.save(family);
 
 			// 추후 타입 수정하고 저장
 			FamilyPointHistory familyPointHistory = FamilyPointHistory.builder()
-				.remainPoint(family.getFamilyPoint().intValue())
+				.remainPoint(family.getFamilyPoint())
 				.payPoint(-mission.getPoint())
 				.mission(mission)
 				.build();
 			familyPointHistoryRepository.save(familyPointHistory);
 
 			Child child = childRepository.findByMember_Id(mission.getChild().getId());
-			child.setPoint((long)mission.getPoint());
+			child.setPoint(mission.getPoint());
 			childRepository.save(child);
 
 			ChildPointHistory childPointHistory = ChildPointHistory.builder()
@@ -264,10 +268,19 @@ public class MissionService {
 				.build();
 
 			childPointHistoryRepository.save(childPointHistory);
-			return "미션 성공, 포인트 차감";
+
+			mission.setStatus(statusCode);
+			mission.setApproveParent(parent);
+
+			missionRepository.save(mission);
+			return "미션 성공, 포인트 지급 완료";
+		}
+		if (mission.getStatus() == StatusCode.ACCEPT) {
+			throw new IllegalArgumentException("이미 수락된 미션입니다.");
 		}
 		mission.setStatus(statusCode);
-		return "미션 상태 변경, 실패";
+		missionRepository.save(mission);
+		return "미션 실패";
 	}
 
 }

@@ -81,6 +81,10 @@ public class Mission extends MutableTimeEntity {
 	@Column(name = "repeat_yn")
 	private boolean repeatable;
 
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "approve_parent")
+	private Member approveParent;
+
 	public void updateMission(UpdateMissionRequestDto request) {
 		this.title = request.title();
 		this.content = request.content();
