@@ -45,7 +45,7 @@ public class ChildPointHistory {
 	private int point;
 
 	@Column(name = "total_point")
-	private Long totalPoint;
+	private int totalPoint;
 
 	@CreationTimestamp
 	@Column(name = "created_at")
