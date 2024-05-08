@@ -15,7 +15,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import space.habitz.api.domain.member.entity.Parent;
+import space.habitz.api.domain.member.entity.Member;
 
 @Builder
 @AllArgsConstructor
@@ -26,13 +26,19 @@ public class ParentPayment {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+
 	@ManyToOne
-	@JoinColumn(name = "parent_id")
-	private Parent parent;
+	@JoinColumn(name = "member_id")
+	private Member member;
+
 	@Column(name = "amount")
 	private int amount;
+
 	@Column(name = "order_id")
 	private String orderId;
+
+	@Column(name = "payment_id")
+	private String paymentId;
 
 	@Column(name = "purchased_at")
 	private Timestamp purchasedAt;
@@ -40,5 +46,10 @@ public class ParentPayment {
 	@Column(name = "result")
 	@Enumerated(EnumType.STRING)
 	private PayStatus result;
+
+	public void updatePayStatus(PayStatus payStatus, Timestamp purchasedAt) {
+		this.result = payStatus;
+		this.purchasedAt = purchasedAt;
+	}
 
 }
