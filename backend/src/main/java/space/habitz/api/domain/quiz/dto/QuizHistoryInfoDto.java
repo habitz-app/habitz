@@ -10,10 +10,8 @@ import lombok.Setter;
 @Setter
 @Getter
 public class QuizHistoryInfoDto {
-
+	private Long articleId;
 	private String chosenAnswer;
-
 	private boolean isCorrect;
-
 	private Timestamp createdAt;
 }

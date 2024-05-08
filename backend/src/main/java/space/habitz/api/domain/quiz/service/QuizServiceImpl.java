@@ -41,8 +41,8 @@ public class QuizServiceImpl implements QuizService {
 			return QuizHistoryDto
 				.builder()
 				.isSolved(false)
-				.quizHistoryInfoDto(null)
-				.quizInfoDto(
+				.quizHistoryInfo(null)
+				.quizInfo(
 					QuizInfoDto
 						.builder()
 						.id(quiz.getId())
@@ -55,15 +55,16 @@ public class QuizServiceImpl implements QuizService {
 		return QuizHistoryDto
 			.builder()
 			.isSolved(true)
-			.quizHistoryInfoDto(
+			.quizHistoryInfo(
 				QuizHistoryInfoDto
 					.builder()
+					.articleId(quiz.getArticle().getId())
 					.isCorrect(quizHistory.isCorrect())
 					.chosenAnswer(quizHistory.getChosenAnswer())
 					.createdAt(quizHistory.getCreatedAt())
 					.build()
 			)
-			.quizInfoDto(
+			.quizInfo(
 				QuizInfoDto
 					.builder()
 					.id(quiz.getId())
@@ -112,15 +113,16 @@ public class QuizServiceImpl implements QuizService {
 		return QuizHistoryDto
 			.builder()
 			.isSolved(true)
-			.quizHistoryInfoDto(
+			.quizHistoryInfo(
 				QuizHistoryInfoDto
 					.builder()
+					.articleId(quiz.getArticle().getId())
 					.isCorrect(quizHistory.isCorrect())
 					.chosenAnswer(quizHistory.getChosenAnswer())
 					.createdAt(quizHistory.getCreatedAt())
 					.build()
 			)
-			.quizInfoDto(
+			.quizInfo(
 				QuizInfoDto
 					.builder()
 					.id(quiz.getId())
