@@ -49,4 +49,11 @@ public class ArticleServiceImpl implements ArticleService {
 			)
 			.build();
 	}
+
+	public ArticleInfoDto getArticle(Long articleId) {
+		return ArticleInfoDto.builder()
+			.title(articleRepository.findArticleById(articleId).getTitle())
+			.content(articleRepository.findArticleById(articleId).getContent())
+			.build();
+	}
 }
