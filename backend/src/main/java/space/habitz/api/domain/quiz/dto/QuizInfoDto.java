@@ -13,8 +13,6 @@ import lombok.NoArgsConstructor;
 @Getter
 public class QuizInfoDto {
 	Long id;
-
 	String content;
-
 	LocalDate createdAt;
 }
