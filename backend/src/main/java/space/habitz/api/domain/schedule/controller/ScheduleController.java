@@ -29,7 +29,7 @@ import space.habitz.api.global.response.ResponseData;
 @Tag(name = "Schedule", description = "일정 관련 API")
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/schedule")
+@RequestMapping("/api/v1/schedule")
 public class ScheduleController {
 
 	private final ScheduleService scheduleService;

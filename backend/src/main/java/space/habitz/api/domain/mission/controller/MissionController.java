@@ -28,7 +28,7 @@ import space.habitz.api.global.response.ResponseData;
 @Tag(name = "Mission", description = "미션 관련 API")
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/mission")
+@RequestMapping("/api/v1/mission")
 public class MissionController {
 
 	private final MissionService missionService;

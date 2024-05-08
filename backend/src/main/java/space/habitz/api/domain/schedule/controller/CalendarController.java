@@ -17,7 +17,7 @@ import space.habitz.api.global.response.ResponseData;
 @Tag(name = "Calendar", description = "캘린더 관련 API")
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/calendar")
+@RequestMapping("/api/v1/calendar")
 public class CalendarController {
 
 	private final CalendarService calendarService;
