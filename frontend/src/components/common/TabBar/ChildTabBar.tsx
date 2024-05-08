@@ -5,21 +5,23 @@ import { home, bulb, star, storefront, grid } from 'ionicons/icons';
 import { IonIcon } from '@ionic/react';
 import { useEffect, useState } from 'react';
 import type { MenuType } from '@/types/tabBar/childTabBar';
+import { useRouter } from 'next/navigation';
 const ChildTabBar = ({ menu }: { menu: MenuType }) => {
   const [currentMenu, setCurrentMenu] = useState(menu);
-
+  const router = useRouter();
   useEffect(() => {
     setCurrentMenu(menu);
   }, [menu]);
 
   const handleClick = (menu: MenuType) => {
+    router.push(`/${menu}`);
     setCurrentMenu(menu);
   };
 
   return (
     <nav
       className={css({
-        w: '430px',
+        w: 'full',
         h: '5rem',
         position: 'sticky',
         bottom: '0',
