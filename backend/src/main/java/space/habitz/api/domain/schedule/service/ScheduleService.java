@@ -14,7 +14,9 @@ import space.habitz.api.domain.member.entity.Family;
 import space.habitz.api.domain.member.entity.Member;
 import space.habitz.api.domain.member.entity.Role;
 import space.habitz.api.domain.member.repository.MemberRepository;
-import space.habitz.api.domain.mission.service.MissionService;
+import space.habitz.api.domain.mission.entity.Mission;
+import space.habitz.api.domain.mission.repository.MissionRepository;
+import space.habitz.api.domain.mission.util.MissionConverter;
 import space.habitz.api.domain.schedule.dto.ScheduleDto;
 import space.habitz.api.domain.schedule.dto.ScheduleMissionDto;
 import space.habitz.api.domain.schedule.dto.ScheduleRequestDto;
@@ -167,6 +169,17 @@ public class ScheduleService {
 		if (!memberFamilyId.equals(childFamilyId)) {
 			throw new CustomErrorException(ErrorCode.FAMILY_NOT_MATCH);
 		}
+	}
+
+	/**
+	 * 스케줄 -> 미션 생성 메서드
+	 * - 스케줄을 미션으로 변환하여, 미션에 저장한다.
+	 *
+	 * @param schedule 입력된 일정
+	 * */
+	public void createMissionBySchedule(Schedule schedule) {
+		Mission mission = MissionConverter.convertScheduleToMission(schedule, LocalDate.now()); // 오늘 날짜의 미션 생성
+		missionRepository.save(mission);
 	}
 
 }
