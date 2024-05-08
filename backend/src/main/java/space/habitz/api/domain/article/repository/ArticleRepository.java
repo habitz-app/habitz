@@ -12,4 +12,6 @@ import space.habitz.api.domain.article.entity.Category;
 @Repository
 public interface ArticleRepository extends JpaRepository<Article, Long> {
 	@NonNull List<Article> findByCategory(@NonNull Category category);
+
+	Article findArticleById(Long id);
 }
