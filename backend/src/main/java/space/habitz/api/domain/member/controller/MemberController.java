@@ -7,13 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -56,12 +50,12 @@ public class MemberController {
 			.build();
 	}
 
-	@PostMapping("/refreshToken")
-	public ResponseEntity<?> refresh(@RequestBody RefreshTokenRequestDto requestDto) throws Exception {
-		JwtTokenDto refreshedToken = memberService.refreshToken(requestDto.getRefreshToken());
+	@PostMapping("/reissue")
+	public ResponseEntity<?> refresh(@CookieValue(value = "refreshToken") String refreshToken) throws Exception {
+		JwtTokenDto refreshedToken = memberService.refreshToken(refreshToken);
 
-		ResponseCookie accessToken = getCookie("accessToken", refreshedToken.getAccessToken(), 1);
-		ResponseCookie refreshToken = getCookie("refreshToken", refreshedToken.getRefreshToken(), 7);
+		ResponseCookie regeneratedAccessToken = getCookie("accessToken", refreshedToken.getAccessToken(), 1);
+		ResponseCookie regeneratedRefreshToken = getCookie("refreshToken", refreshedToken.getRefreshToken(), 7);
 		ResponseCookie tokenType = getCookie("tokenType", refreshedToken.getTokenType(), 1);
 
 		JwtResponseDto response = JwtResponseDto.builder()
@@ -71,10 +65,10 @@ public class MemberController {
 			.build();
 
 		return ResponseEntity.status(HttpStatus.OK)
-			.header(HttpHeaders.SET_COOKIE, refreshToken.toString())
-			.header(HttpHeaders.SET_COOKIE, accessToken.toString())
+			.header(HttpHeaders.SET_COOKIE, regeneratedRefreshToken.toString())
+			.header(HttpHeaders.SET_COOKIE, regeneratedAccessToken.toString())
 			.header(HttpHeaders.SET_COOKIE, tokenType.toString())
-			.body(ResponseData.success("리프레시 토큰 발급 완료", response));
+			.body(ResponseData.success("토큰 재발급 완료", response));
 	}
 
 	@PostMapping("/join")

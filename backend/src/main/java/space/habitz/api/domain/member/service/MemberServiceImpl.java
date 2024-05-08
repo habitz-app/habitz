@@ -103,16 +103,11 @@ public class MemberServiceImpl implements MemberService {
 
 	@Override
 	public JwtTokenDto refreshToken(String refreshToken) {
-		if (refreshToken == null || !refreshToken.startsWith(TOKEN_TYPE))
-			throw new MemberUnAuthorizedException("유효하지 않은 검증 타입 입니다.");
-
-		refreshToken = refreshToken.replace(TOKEN_TYPE + " ", "");
-
 		jwtTokenProvider.validateRefreshToken(refreshToken);
 
 		Long userId = jwtTokenProvider.extractUserId(refreshToken);
 		Member member = memberRepository.findByUserId(userId)
-			.orElseThrow(() -> new MemberNotFoundException(userId));
+			.orElseThrow(() ->new MemberNotFoundException(userId));
 
 		return jwtTokenProvider.generateToken(member);
 	}
