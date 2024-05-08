@@ -17,15 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import space.habitz.api.domain.member.dto.JwtTokenDto;
-import space.habitz.api.domain.member.dto.MemberFindResponseDto;
-import space.habitz.api.domain.member.dto.MemberLoginRequestDto;
-import space.habitz.api.domain.member.dto.MemberLoginResponseDto;
-import space.habitz.api.domain.member.dto.MemberLoginResultDto;
-import space.habitz.api.domain.member.dto.MemberMypageResponseDto;
-import space.habitz.api.domain.member.dto.MemberRegisterRequestDto;
-import space.habitz.api.domain.member.dto.MemberUpdateRequestDto;
-import space.habitz.api.domain.member.dto.RefreshTokenRequestDto;
+import space.habitz.api.domain.member.dto.*;
 import space.habitz.api.domain.member.entity.Member;
 import space.habitz.api.domain.member.service.MemberService;
 import space.habitz.api.global.response.ResponseData;
@@ -37,12 +29,11 @@ public class MemberController {
 	private final MemberService memberService;
 
 	@PostMapping("/login")
-	public ResponseEntity<?> login(@RequestBody MemberLoginRequestDto request,
-		HttpServletResponse httpServletResponse) throws Exception {
+	public ResponseEntity<?> login(@RequestBody MemberLoginRequestDto request) throws Exception {
 		MemberLoginResultDto login = memberService.login(request);
 
 		ResponseCookie accessToken = getCookie("accessToken", login.getJwtTokenDto().getAccessToken(), 1);
-		ResponseCookie refreshToken = getCookie("refreshToken", login.getJwtTokenDto().getRefreshToken(), 30);
+		ResponseCookie refreshToken = getCookie("refreshToken", login.getJwtTokenDto().getRefreshToken(), 7);
 		ResponseCookie tokenType = getCookie("tokenType", login.getJwtTokenDto().getTokenType(), 1);
 		ResponseCookie role = getCookie("role", login.getRole().toString(), 1);
 		MemberLoginResponseDto result = new MemberLoginResponseDto(login);
@@ -66,9 +57,24 @@ public class MemberController {
 	}
 
 	@PostMapping("/refreshToken")
-	public ResponseEntity<?> login(@RequestBody RefreshTokenRequestDto requestDto) throws Exception {
-		JwtTokenDto login = memberService.refreshToken(requestDto.getRefreshToken());
-		return ResponseEntity.status(HttpStatus.OK).body(ResponseData.success("리프레시 토큰 발급 완료", login));
+	public ResponseEntity<?> refresh(@RequestBody RefreshTokenRequestDto requestDto) throws Exception {
+		JwtTokenDto refreshedToken = memberService.refreshToken(requestDto.getRefreshToken());
+
+		ResponseCookie accessToken = getCookie("accessToken", refreshedToken.getAccessToken(), 1);
+		ResponseCookie refreshToken = getCookie("refreshToken", refreshedToken.getRefreshToken(), 7);
+		ResponseCookie tokenType = getCookie("tokenType", refreshedToken.getTokenType(), 1);
+
+		JwtResponseDto response = JwtResponseDto.builder()
+			.accessToken(refreshedToken.getAccessToken())
+			.tokenType(refreshedToken.getTokenType())
+			.accessTokenExpiredIn(refreshedToken.getRefreshTokenExpiredIn())
+			.build();
+
+		return ResponseEntity.status(HttpStatus.OK)
+			.header(HttpHeaders.SET_COOKIE, refreshToken.toString())
+			.header(HttpHeaders.SET_COOKIE, accessToken.toString())
+			.header(HttpHeaders.SET_COOKIE, tokenType.toString())
+			.body(ResponseData.success("리프레시 토큰 발급 완료", response));
 	}
 
 	@PostMapping("/join")
