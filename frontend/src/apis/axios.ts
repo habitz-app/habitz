@@ -1,8 +1,25 @@
 import { CommonResponse } from './../types/api/response.d';
 import useAuthStore from '@/stores/authStore';
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
+import { redirect } from 'next/navigation';
 
 const API_BASE_URL = '/api/v1';
+
+export const reissue = async () => {
+  console.log('reissuing');
+  const accessToken = await axios
+    .post(`${API_BASE_URL}/member/reissue`)
+    .then((res) => {
+      console.log('reissue > res', res.data.data.accessToken);
+      return res.data.data.accessToken;
+    })
+    .catch((error) => {
+      console.error('reissue > error', error);
+      redirect('/login');
+    });
+  useAuthStore.setState({ accessToken });
+  return accessToken;
+};
 
 const setInterceptors = (instance: AxiosInstance) => {
   // 서버 요청 전에 동작할 인터셉터 설정
@@ -24,8 +41,21 @@ const setInterceptors = (instance: AxiosInstance) => {
   // 서버 응답 후에 동작할 인터셉터 설정
   instance.interceptors.response.use(
     (response) => response,
-    (error) => {
+    async (error) => {
       console.error('interceptor > error', error);
+      // 401 에러일 경우 토큰 갱신 로직 추가
+      if (error.response?.status === 401) {
+        // axios로 토큰 갱신
+        const newAccessToken = await reissue();
+
+        console.log(newAccessToken);
+        if (newAccessToken) {
+          error.config.headers.Authorization = `Bearer ${newAccessToken}`;
+        }
+
+        return instance(error.config);
+      }
+
       return Promise.reject(error);
     },
   );
