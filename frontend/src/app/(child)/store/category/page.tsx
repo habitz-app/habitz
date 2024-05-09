@@ -6,15 +6,15 @@ import GoodsItem from '@/components/store/GoodsItem';
 import { css } from 'styled-system/css';
 import { button } from 'styled-system/recipes';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
+import { useSearchParams } from 'next/navigation';
 interface brand {
   url: string;
   brand: string;
 }
 const Store = () => {
-  const router = useRouter();
+  const searchParams = useSearchParams();
   const [category, setCategory] = useState<string>(
-    router.query.category as string,
+    searchParams.get('category') || '???',
   );
   const [brands, setBrands] = useState<brand[]>([
     {
@@ -36,7 +36,7 @@ const Store = () => {
   ]);
   return (
     <Stack padding={10}>
-      <h1>편의점</h1>
+      <h1>{category}</h1>
       <HStack>
         {brands.map((brand, id) => (
           <button
