@@ -4,6 +4,8 @@ import Image from 'next/image';
 import { Circle, HStack } from 'styled-system/jsx';
 import { circle, hstack, stack } from 'styled-system/patterns';
 import { css } from 'styled-system/css';
+import { IonIcon } from '@ionic/react';
+import { chevronForwardOutline } from 'ionicons/icons';
 
 const testCss = {
   bg: 'red.400',
@@ -131,7 +133,7 @@ const Page: React.FC = () => {
       <div>
         <HStack justify="space-between">
           <span>활동 내역</span>
-          <div>{'>'}</div>
+          <IonIcon icon={chevronForwardOutline} />
         </HStack>
         <ul>
           {selectedChild.histories?.map((history) => {

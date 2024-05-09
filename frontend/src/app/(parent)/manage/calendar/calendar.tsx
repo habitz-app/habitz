@@ -7,19 +7,16 @@ import { Button } from '~/components/ui/button';
 import * as DatePicker from '~/components/ui/date-picker';
 import { IconButton } from '~/components/ui/icon-button';
 import { colors } from './colors';
-
-// 달력 조회 시 아이의 일정 조회 API Response
-interface calendarChildInfo {
-  month: string;
-  childInfo: string[];
-  days: {
-    [key: string]: boolean[];
-  };
+import { CalendarResponse } from '@/types/api/response';
+// 달력 조회 시 아이의 일정 조회 API Response 데이터 구조
+interface childInfo {
+  name: string;
+  memberUUID: string;
 }
 
 // Props 데이터 구조
 interface CalendarProps extends DatePicker.RootProps {
-  data: calendarChildInfo;
+  data: CalendarResponse;
   selectDate: (date: string) => void;
 }
 
@@ -28,6 +25,29 @@ export default function Calendar({
   selectDate,
   ...props
 }: CalendarProps) {
+  const createChildrenInfoByDate = (data: CalendarResponse) => {
+    const childrenInfoByDate: {
+      [key: string]: childInfo[];
+    } = {};
+    const childrenPersonalColors: {
+      [key: string]: string;
+    } = {};
+
+    data.calendar.forEach((item, index) => {
+      childrenPersonalColors[item.child.memberUUID] = colors[index];
+      item.days.forEach((day) => {
+        childrenInfoByDate[day] = childrenInfoByDate[day] || [];
+        childrenInfoByDate[day].push(item.child);
+      });
+    });
+    return {
+      childrenInfoByDate: childrenInfoByDate,
+      childrenPersonalColors: childrenPersonalColors,
+    };
+  };
+  const { childrenInfoByDate, childrenPersonalColors } =
+    createChildrenInfoByDate(data);
+
   const dateToKey = ({
     year,
     month,
@@ -53,11 +73,11 @@ export default function Calendar({
     ></div>
   );
   const ChildrenDots = ({
-    childrenBoolean,
+    childrenInfoByDate,
   }: {
-    childrenBoolean: boolean[];
+    childrenInfoByDate: childInfo[];
   }) => {
-    if (childrenBoolean) {
+    if (childrenInfoByDate) {
       return (
         <div
           className={hstack({
@@ -65,9 +85,14 @@ export default function Calendar({
             position: 'relative',
           })}
         >
-          {childrenBoolean.map((child, id) => {
+          {childrenInfoByDate.map((child, id) => {
             if (child) {
-              return <ChildDot key={id} color={colors[id]} />;
+              return (
+                <ChildDot
+                  key={id}
+                  color={childrenPersonalColors[child.memberUUID]}
+                />
+              );
             } else {
               return null;
             }
@@ -171,8 +196,8 @@ export default function Calendar({
                                   })}
                                 >
                                   <ChildrenDots
-                                    childrenBoolean={
-                                      data.days[
+                                    childrenInfoByDate={
+                                      childrenInfoByDate[
                                         dateToKey({
                                           year: day.year,
                                           month: day.month,

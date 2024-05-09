@@ -1,13 +1,17 @@
 'use client';
 import InputLabeled from '@/components/mission/inputLabeled';
 import DatePicker from '@/components/mission/datePicker';
-import { useState, Dispatch } from 'react';
+import { useState, Dispatch, useEffect } from 'react';
 import { stack } from 'styled-system/patterns';
 import { css } from 'styled-system/css';
 import { Button } from '@/components/ui/button';
 import DayPicker from '@/components/mission/dayPicker';
 import axios from '@/apis/axios';
-import { ScheduleResponse } from '@/types/api/response';
+import {
+  ChildListResponse,
+  ScheduleResponse,
+  TestCreateChildResponse,
+} from '@/types/api/response';
 import { useRouter } from 'next/navigation';
 
 interface createSchedule {
@@ -28,8 +32,7 @@ const Page = () => {
       title: title,
       content: content,
       emoji: emoji,
-      // childUUID 는 로그인 기능 추가 후 수정해야 함
-      childUUID: 'cijdfkjdk-dfjksjkd',
+      childUUID: targetChildUUID,
       startDate: date[0],
       endDate: date[1],
       weekDays: weekDays,
@@ -42,10 +45,10 @@ const Page = () => {
     );
     if (response?.status === 200) {
       console.log('success');
-      router.push('/calendar');
+      router.push('/manage/calendar');
     } else {
       console.log('fail');
-      router.push('/calendar');
+      // router.push('/calendar');
     }
   };
   const [title, setTitle] = useState<string>('');
@@ -65,6 +68,15 @@ const Page = () => {
     false,
     false,
   ]);
+  const [targetChildUUID, setTargetChildUUID] = useState<string>('');
+
+  useEffect(() => {
+    axios.get<ChildListResponse[]>('/family/childList').then((response) => {
+      console.log(response.data.data);
+      setTargetChildUUID(response.data.data[0].uuid);
+      // console.log('childUUID');
+    });
+  }, []);
   return (
     <div
       className={stack({
@@ -110,6 +122,7 @@ const Page = () => {
       <Button width="full" onClick={handleCraeteSchedule}>
         생성하기
       </Button>
+      {targetChildUUID}
       <div className={css({ h: '1000px' })}></div>
     </div>
   );
