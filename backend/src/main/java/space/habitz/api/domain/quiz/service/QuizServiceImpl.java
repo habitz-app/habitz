@@ -4,6 +4,7 @@ import java.time.LocalDate;
 
 import org.springframework.stereotype.Service;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import space.habitz.api.domain.member.entity.Child;
 import space.habitz.api.domain.member.entity.Member;
@@ -33,6 +34,7 @@ public class QuizServiceImpl implements QuizService {
 		if (member.getRole() != Role.CHILD) {
 			throw new CustomNotFoundException("아이만 퀴즈를 풀 수 있습니다.");
 		}
+
 		Child child = childRepository.findByMember_Id(member.getId());
 		LocalDate today = LocalDate.now();
 
@@ -81,6 +83,7 @@ public class QuizServiceImpl implements QuizService {
 	}
 
 	@Override
+	@Transactional
 	public QuizHistoryDto solveQuiz(Member member, String answer) {
 		if (member.getRole() != Role.CHILD) {
 			throw new CustomNotFoundException("아이만 퀴즈를 풀 수 있습니다.");
@@ -104,7 +107,7 @@ public class QuizServiceImpl implements QuizService {
 
 		quizHistoryRepository.save(quizHistory);
 		if (quizHistory.isCorrect()) {
-			child.setPoint(child.getPoint() + 10);
+			child.setQuizPoint(child.getPoint() + 10);
 			childRepository.save(child);
 
 			ChildPointHistory childPointHistory = ChildPointHistory.builder()
