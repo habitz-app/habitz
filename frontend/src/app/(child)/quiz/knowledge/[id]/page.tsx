@@ -5,8 +5,11 @@ import { css } from 'styled-system/css';
 import Image from 'next/image';
 import axios from '@/apis/axios';
 import { ArticleInfo } from '@/types/api/response';
-import { useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { Button } from '@/components/ui/button';
+import { IonIcon } from '@ionic/react';
+import { chevronBackOutline, heartOutline } from 'ionicons/icons';
+import { useRouter } from 'next/navigation';
 
 const Result = ({ params }: { params: { id: string } }) => {
   const article = useQuery<ArticleInfo>({
@@ -16,9 +19,49 @@ const Result = ({ params }: { params: { id: string } }) => {
       return res.data.data ?? {};
     },
   });
+  const router = useRouter();
 
   return (
     <>
+      <header
+        className={css({
+          display: 'flex',
+          position: 'sticky',
+          height: '2.5rem',
+          top: 0,
+          bg: 'transparent',
+          backdropFilter: 'auto',
+          backdropBlur: 'sm',
+          px: '1rem',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        })}
+      >
+        <Button
+          color="label.alternative"
+          variant="link"
+          onClick={() => {
+            router.back();
+          }}
+        >
+          <IonIcon
+            icon={chevronBackOutline}
+            className={css({
+              w: '24px',
+              h: '24px',
+            })}
+          />
+        </Button>
+        <Button color="label.alternative" variant="link">
+          <IonIcon
+            icon={heartOutline}
+            className={css({
+              w: '24px',
+              h: '24px',
+            })}
+          />
+        </Button>
+      </header>
       <div
         className={css({
           bg: 'accent.pink',
