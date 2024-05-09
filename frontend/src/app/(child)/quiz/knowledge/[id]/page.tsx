@@ -1,14 +1,22 @@
+'use client';
 import Article from '@/components/quiz/Article';
 import QuizResult from '@/components/quiz/QuizResult';
 import { css } from 'styled-system/css';
 import Image from 'next/image';
+import axios from '@/apis/axios';
+import { ArticleInfo } from '@/types/api/response';
+import { useEffect } from 'react';
+import { useQuery } from '@tanstack/react-query';
 
-const article = {
-  title: '새콤달콤한 딸기가 채소라고? 과일과 채소의 기준이 뭘까?',
-  date: new Date().toLocaleDateString(),
-  contents: '',
-};
-const Result = () => {
+const Result = ({ params }: { params: { id: string } }) => {
+  const article = useQuery<ArticleInfo>({
+    queryKey: [params.id],
+    queryFn: async () => {
+      const res = await axios.get<ArticleInfo>(`/article/${params.id}`);
+      return res.data.data ?? {};
+    },
+  });
+
   return (
     <>
       <div
@@ -33,9 +41,9 @@ const Result = () => {
       >
         <QuizResult isCorrect={true} />
         <Article
-          title={article.title}
+          title={article.data?.title || ''}
           date={new Date().toLocaleDateString()}
-          contents={''}
+          contents={article.data?.content || ''}
         />
       </div>
     </>

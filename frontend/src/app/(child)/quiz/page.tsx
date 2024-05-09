@@ -8,8 +8,11 @@ import axios from '@/apis/axios';
 import { heart } from 'ionicons/icons';
 import { css } from 'styled-system/css';
 import { useQuery } from '@tanstack/react-query';
+import { useRouter } from 'next/navigation';
 
 const Quiz = () => {
+  const router = useRouter();
+
   const todayQuiz = useQuery<QuizResponse>({
     queryKey: ['quiz'],
     queryFn: async () => {
@@ -70,7 +73,11 @@ const Quiz = () => {
           correct={todayQuiz.data?.quizHistoryInfo?.correct || false}
           isSolved={todayQuiz.data?.isSolved || false}
           content={todayQuiz.data?.quizInfo.content || ''}
-          articleId={todayQuiz.data?.quizHistoryInfo?.articleId || 0}
+          handleClick={() => {
+            router.push(
+              `/quiz/knowledge/${todayQuiz.data?.quizHistoryInfo?.articleId || 0}`,
+            );
+          }}
         />
         <KnowledgeTab
           options={[

@@ -4,6 +4,20 @@ export interface CommonResponse<T> {
   status: string;
 }
 
+export interface QuizResponse {
+  isSolved: boolean;
+  quizInfoDto: {
+    id: number;
+    content: string;
+    createdAt: string;
+  };
+  quizHistoryInfoDto: {
+    chosenAnswer: string;
+    createdAt: string;
+    correct: boolean;
+  };
+}
+
 export interface KakaoLoginResponse {
   userId: number;
   name: string;

@@ -4,24 +4,19 @@ import QuizButton from '@/components/quiz/QuizButton';
 import { Player } from '@lottiefiles/react-lottie-player';
 import { css } from 'styled-system/css';
 import { Button } from '@/components/ui/button';
-import { useRouter } from 'next/navigation';
+import { MouseEventHandler } from 'react';
 
 const QuizQuestion = ({
   correct,
-  articleId,
   isSolved,
   content,
+  handleClick,
 }: {
   correct: boolean;
-  articleId: number;
   isSolved: boolean;
   content: string;
+  handleClick: MouseEventHandler;
 }) => {
-  const router = useRouter();
-  const handleClick = () => {
-    // router.push(`/quiz/knowledge/${articleId}`);
-  };
-
   return (
     <div>
       {isSolved ? (
@@ -75,7 +70,7 @@ const QuizQuestion = ({
               alignItems="center"
               alignSelf="center"
               textStyle="caption2.bold"
-              onClick={() => handleClick()}
+              onClick={handleClick}
             >
               자세히
             </Button>
