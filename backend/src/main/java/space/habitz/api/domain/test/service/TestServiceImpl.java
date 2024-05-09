@@ -8,6 +8,7 @@ import java.util.Random;
 import java.util.stream.IntStream;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import space.habitz.api.domain.member.dto.JwtTokenDto;
@@ -33,6 +34,8 @@ import space.habitz.api.domain.test.dto.DummyFamilyMakeRequestDto;
 import space.habitz.api.domain.test.dto.DummyMemberLoginRequestDto;
 import space.habitz.api.domain.test.dto.DummyMemberRegisterRequestDto;
 import space.habitz.api.domain.test.dto.DummyMemberRegisterResponseDto;
+import space.habitz.api.domain.test.dto.DummyMemberRoleChangeRequestDto;
+import space.habitz.api.domain.test.dto.DummyMemberRoleChangeResponseDto;
 import space.habitz.api.global.exception.CustomErrorException;
 import space.habitz.api.global.util.RandomUtils;
 
@@ -176,6 +179,71 @@ public class TestServiceImpl implements TestService {
 					return this.getAccessToken(dummyMemberLoginRequestDto);
 				}
 			).toList();
+	}
+
+	@Override
+	@Transactional
+	public DummyMemberRoleChangeResponseDto changeRole(DummyMemberRoleChangeRequestDto requestDto) {
+		Member member = memberRepository.findByUserId(requestDto.getMemberId())
+			.orElseThrow(() -> new MemberNotFoundException(requestDto.getMemberId()));
+
+		Role role = Role.findEnum(requestDto.getRole().toUpperCase());
+		member.setRole(role);
+
+		switch (member.getRole()) {
+			case PARENT:
+				parentRepository.findByMember(member).ifPresentOrElse(
+					parent -> {
+						parent.setDeleted();
+						parentRepository.saveAndFlush(parent);
+					},
+					() -> {
+					}
+				);
+
+				childRepository.findByMember(member).ifPresentOrElse(
+					child -> {
+						child.setUndeleted();
+						childRepository.saveAndFlush(child);
+					},
+					() -> {
+						Child child = new Child(member, 0);
+						childRepository.saveAndFlush(child);
+					}
+				);
+				break;
+
+			case CHILD:
+				childRepository.findByMember(member).ifPresentOrElse(
+					child -> {
+						child.setDeleted();
+						childRepository.saveAndFlush(child);
+					},
+					() -> {
+					}
+				);
+
+				parentRepository.findByMember(member).ifPresentOrElse(
+					parent -> {
+						parent.setUndeleted();
+						parentRepository.saveAndFlush(parent);
+					},
+					() -> {
+						Parent parent = new Parent(member, 0);
+						parentRepository.saveAndFlush(parent);
+					}
+				);
+				break;
+
+			default:
+				break;
+		}
+
+		memberRepository.saveAndFlush(member);
+
+		return DummyMemberRoleChangeResponseDto.builder()
+			.role(role.getRoleName())
+			.build();
 	}
 }
 
