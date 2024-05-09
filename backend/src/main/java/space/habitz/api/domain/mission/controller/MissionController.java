@@ -1,9 +1,11 @@
 package space.habitz.api.domain.mission.controller;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,7 +15,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -109,4 +113,16 @@ public class MissionController {
 			missionService.changeMissionStatus(member, requestDto.missionId(), requestDto.status()));
 	}
 
+	@Operation(
+		summary = "미션 수행 인증",
+		description = "미션 수행을 인증합니다."
+	)
+	@PostMapping(value = "/{missionId}/perform", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseData<?> performMission(@AuthenticationPrincipal Member member,
+		@PathVariable("missionId") Long missionId,
+		@RequestPart("content") String content,
+		@RequestPart("image") MultipartFile image) throws IOException {
+
+		return ResponseData.success(missionService.performMission(member, missionId, content, image));
+	}
 }
