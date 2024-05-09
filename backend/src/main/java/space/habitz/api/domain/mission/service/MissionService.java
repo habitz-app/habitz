@@ -304,6 +304,7 @@ public class MissionService {
 	 * @param content   인증 내용
 	 * @param image     인증 이미지
 	 * */
+	@Transactional
 	public Map<String, Long> performMission(Member member, Long missionId, String content, MultipartFile image) throws
 		IOException {
 
@@ -320,6 +321,10 @@ public class MissionService {
 			.image(imageUrl)
 			.build();
 		missionRecognitionRepository.save(missionRecognition); // 저장
+
+		// 미션 상태 업데이트
+		mission.setStatus(StatusCode.PENDING);
+		// TODO :: 인증 시, 부모에게 알림 전송
 		return Map.of("missionRecognitionId", missionRecognition.getId());
 	}
 
