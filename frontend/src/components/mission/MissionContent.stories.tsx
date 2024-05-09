@@ -17,17 +17,22 @@ export default {
     missionId: {
       type: 'number',
     },
+    status: {
+      control: { type: 'radio' },
+      options: ['ACCEPT', 'DECLINE', 'EMPTY', 'PENDING'],
+    },
   },
 } as Meta;
 
 type Story = StoryObj<typeof MissionContent>;
 
-export const Default: Story = {
+export const EMPTY: Story = {
   args: {
     title: '책상 정리하기',
     emoji: '🧹',
     point: 100,
     missionId: 1,
+    status: 'EMPTY',
   },
   parameters: {
     nextjs: {
@@ -42,6 +47,22 @@ export const Diarys: Story = {
     emoji: '📒',
     point: 80,
     missionId: 2,
+    status: 'EMPTY',
+  },
+  parameters: {
+    nextjs: {
+      appDirectory: true,
+    },
+  },
+};
+
+export const ACCEPT: Story = {
+  args: {
+    title: '일어나서 이불 개기',
+    emoji: '⏰',
+    point: 200,
+    missionId: 3,
+    status: 'ACCEPT',
   },
   parameters: {
     nextjs: {
