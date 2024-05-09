@@ -60,3 +60,28 @@ export interface OrderResponse {
   memberUuid: string;
   amount: number;
 }
+
+export interface ArticleInfo {
+  title: string;
+  content: string;
+}
+export interface ArticleResponse {
+  lifeCategory: ArticleInfo[];
+  financeCategory: ArticleInfo[];
+  defaultCategory: ArticleInfo[];
+}
+
+export interface QuizResponse {
+  isSolved: boolean;
+  quizInfo: {
+    id: number;
+    content: string;
+    createdAt: string;
+  };
+  quizHistoryInfo: {
+    articleId: number;
+    chosenAnswer: string;
+    createdAt: string;
+    correct: true;
+  };
+}
