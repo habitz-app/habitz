@@ -12,18 +12,28 @@ export const Default: Story = {
   args: {
     data: {
       month: '2024-05',
-      childInfo: [
-        'udkdd-adkjf-dfsfs',
-        'dudfodis-dkfjsk-dkjfs',
-        'dfjshkfk-dkjfksj-sjlfkdj',
+      calendar: [
+        {
+          child: {
+            name: '용희원',
+            memberUUID: 'Tgq0FM',
+          },
+          days: [
+            '2024-05-02',
+            '2024-05-07',
+            '2024-05-08',
+            '2024-05-09',
+            '2024-05-10',
+          ],
+        },
+        {
+          child: {
+            name: '정필모',
+            memberUUID: 'zAsuGH',
+          },
+          days: ['2024-05-08'],
+        },
       ],
-      days: {
-        '2024-05-01': [true, false, false],
-        '2024-05-02': [true, true, true],
-        '2024-05-03': [true, false, true],
-        '2024-05-28': [true, true, true],
-      },
     },
-    selectDate: (date: string) => {},
   },
 };
