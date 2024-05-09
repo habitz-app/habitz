@@ -29,6 +29,7 @@ const KnowledgeItem = ({
         <div
           className={css({
             flexGrow: 1,
+            maxWidth: 'calc(100% - 3.125rem)',
           })}
         >
           <span
@@ -45,6 +46,7 @@ const KnowledgeItem = ({
               textStyle: 'caption1.medium',
               color: 'label.alternative',
               wordBreak: 'break-word',
+              lineClamp: 2,
             })}
           >
             {contents}
@@ -62,8 +64,8 @@ const KnowledgeItem = ({
           <IonIcon
             icon={heartOutline}
             className={css({
-              w: '2.5rem',
-              h: '2.5rem',
+              w: '1.5rem',
+              h: '1.5rem',
             })}
           />
         </Button>
