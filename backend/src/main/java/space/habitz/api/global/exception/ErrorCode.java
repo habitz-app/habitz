@@ -12,6 +12,13 @@ import lombok.RequiredArgsConstructor;
 public enum ErrorCode {
 
 	/**
+	 * Common
+	 * */
+	AWS_S3_UPLOAD_FAIL(BAD_REQUEST, "S3 업로드에 실패하였습니다."),
+	AWS_S3_FILE_SIZE_EXCEEDED(BAD_REQUEST, "파일 크기가 초과되었습니다."),
+	AWS_S3_FILE_NOT_IMAGE(BAD_REQUEST, "이미지 파일이 아닙니다."),
+	
+	/**
 	 * Member
 	 */
 	MEMBER_NOT_FOUND(NOT_FOUND, "찾을 수 없는 회원입니다."),

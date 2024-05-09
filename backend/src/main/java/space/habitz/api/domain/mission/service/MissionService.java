@@ -1,5 +1,6 @@
 package space.habitz.api.domain.mission.service;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,6 +10,7 @@ import java.util.stream.Collectors;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +25,8 @@ import space.habitz.api.domain.member.repository.MemberRepository;
 import space.habitz.api.domain.mission.dto.MissionDto;
 import space.habitz.api.domain.mission.dto.UpdateMissionRequestDto;
 import space.habitz.api.domain.mission.entity.Mission;
+import space.habitz.api.domain.mission.entity.MissionRecognition;
+import space.habitz.api.domain.mission.repository.MissionRecognitionRepository;
 import space.habitz.api.domain.mission.repository.MissionRepository;
 import space.habitz.api.domain.mission.util.MissionConverter;
 import space.habitz.api.domain.point.entity.ChildPointHistory;
@@ -35,19 +39,27 @@ import space.habitz.api.global.exception.CustomErrorException;
 import space.habitz.api.global.exception.CustomValidationException;
 import space.habitz.api.global.exception.ErrorCode;
 import space.habitz.api.global.type.StatusCode;
+import space.habitz.api.global.util.fileupload.dto.UploadedFileResponseDto;
+import space.habitz.api.global.util.fileupload.service.S3FileUploadService;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class MissionService {
 
+	// Mission & Schedule
 	private final MissionRepository missionRepository;
+	private final MissionRecognitionRepository missionRecognitionRepository;
+	private final ScheduleCustomRepositoryImpl scheduleCustomRepository;
+	// Member (Member, Child, Family)
 	private final MemberRepository memberRepository;
 	private final FamilyRepository familyRepository;
 	private final ChildRepository childRepository;
-	private final FamilyPointHistoryRepository familyPointHistoryRepository;
-	private final ScheduleCustomRepositoryImpl scheduleCustomRepository;
+	// Point
 	private final ChildPointHistoryRepository childPointHistoryRepository;
+	private final FamilyPointHistoryRepository familyPointHistoryRepository;
+	// Common
+	private final S3FileUploadService fileUploadService;
 
 	/**
 	 * 미션 상세 조회
@@ -260,6 +272,46 @@ public class MissionService {
 			.build();
 		childPointHistoryRepository.save(childPointHistory);
 		mission.updateStatus(statusCode, parent);
+	}
+
+	/**
+	 * 인증 파일 업로드
+	 *
+	 * @param member    로그인한 사용자
+	 * @param missionId 미션 ID
+	 * @param content   인증 내용
+	 * @param image     인증 이미지
+	 * */
+	public Map<String, Long> performMission(Member member, Long missionId, String content, MultipartFile image) throws
+		IOException {
+
+		// 미션 조회
+		Mission mission = missionRepository.findById(missionId)
+			.orElseThrow(() -> new CustomErrorException(ErrorCode.MISSION_NOT_FOUND));
+
+		String imageUrl = getImageStoreURL(image); // S3에 저장한 이미지 경로 반환
+
+		// missionRecognition 생성
+		MissionRecognition missionRecognition = MissionRecognition.builder()
+			.content(content)
+			.mission(mission)
+			.image(imageUrl)
+			.build();
+		missionRecognitionRepository.save(missionRecognition); // 저장
+		return Map.of("missionRecognitionId", missionRecognition.getId());
+	}
+
+	/**
+	 * 이미지 S3에 저장 후 URL 반환
+	 * @param image 이미지 파일
+	 * */
+	private String getImageStoreURL(MultipartFile image) throws IOException {
+		if (!image.isEmpty() && image != null) {
+			// S3 버킷에 이미지 업로드
+			UploadedFileResponseDto imageDto = fileUploadService.uploadFile(image);
+			return imageDto.getSaveFile(); // S3 저장 경로 반환
+		}
+		return null;
 	}
 
 }

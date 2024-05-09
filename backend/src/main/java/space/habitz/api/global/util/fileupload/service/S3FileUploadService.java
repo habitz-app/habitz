@@ -1,19 +1,25 @@
-package space.habitz.api.domain.fileupload.service;
+package space.habitz.api.global.util.fileupload.service;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.GetUrlRequest;
 import software.amazon.awssdk.services.s3.model.ObjectCannedACL;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
-import space.habitz.api.domain.fileupload.dto.UploadedFileResponseDto;
-
-import java.io.IOException;
-import java.util.UUID;
+import space.habitz.api.global.exception.CustomErrorException;
+import space.habitz.api.global.exception.ErrorCode;
+import space.habitz.api.global.util.fileupload.dto.UploadedFileResponseDto;
 
 @Component
 @Slf4j
@@ -26,10 +32,11 @@ public class S3FileUploadService implements FileUploadService {
 
 	@Override
 	public UploadedFileResponseDto uploadFile(MultipartFile file) throws IOException {
-		if (file.isEmpty()) {
+		if (file.isEmpty() || Objects.isNull(file.getOriginalFilename())) {
 			log.info("file is null");
-			throw new RuntimeException("파일이 없습니다.");
+			throw new CustomErrorException(ErrorCode.AWS_S3_UPLOAD_FAIL);
 		}
+		validationImageFileExtentions(file.getOriginalFilename()); // 이미지 검증
 
 		String originalFile = getFileName(file);
 		String uploadedFile = uploadToS3(file);
@@ -67,4 +74,20 @@ public class S3FileUploadService implements FileUploadService {
 		return multipartFile.getOriginalFilename();
 	}
 
+	/**
+	 * 이미지 파일 여부 검증
+	 * @param filename 파일명
+	 */
+	private void validationImageFileExtentions(String filename) {
+		int lastDotIndex = filename.lastIndexOf("."); // 확장자 . 기준
+		if (lastDotIndex == -1) {
+			throw new CustomErrorException("파일명에 확장자가 없습니다.");
+		}
+
+		String fileExtention = filename.substring(lastDotIndex + 1).toLowerCase(); // 검증을 위한 로직
+		List<String> imageExtentionList = Arrays.asList("jpg", "jpeg", "png", "gif");
+		if (!imageExtentionList.contains(fileExtention)) {
+			throw new CustomErrorException(ErrorCode.AWS_S3_FILE_NOT_IMAGE);
+		}
+	}
 }
