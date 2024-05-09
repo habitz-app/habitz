@@ -6,7 +6,11 @@ import { heart } from 'ionicons/icons';
 import { css } from 'styled-system/css';
 import { usePathname } from 'next/navigation';
 import { MenuType } from '@/types/tabBar/childTabBar';
+import { useAuthWithRole } from '@/hooks/useAuth';
+
 const ChildLayout = ({ children }: { children: React.ReactNode }) => {
+  useAuthWithRole('CHILD');
+
   const path = usePathname();
   const menu = path?.split('/')[1];
   return (
