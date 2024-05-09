@@ -2,6 +2,7 @@ package space.habitz.api.domain.point.controller;
 
 import java.util.List;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,6 +19,7 @@ import space.habitz.api.global.response.ResponseData;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/point")
+@PreAuthorize("hasAnyRole('PARENT', 'ADMIN')")
 public class PointHistoryController {
 
 	private final ChildPointHistoryService childPointHistoryService;
