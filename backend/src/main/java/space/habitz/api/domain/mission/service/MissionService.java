@@ -4,7 +4,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.springframework.scheduling.annotation.Scheduled;
@@ -33,6 +32,7 @@ import space.habitz.api.domain.point.repository.FamilyPointHistoryRepository;
 import space.habitz.api.domain.schedule.entity.Schedule;
 import space.habitz.api.domain.schedule.repository.ScheduleCustomRepositoryImpl;
 import space.habitz.api.global.exception.CustomErrorException;
+import space.habitz.api.global.exception.CustomValidationException;
 import space.habitz.api.global.exception.ErrorCode;
 import space.habitz.api.global.type.StatusCode;
 
@@ -219,59 +219,47 @@ public class MissionService {
 			.orElseThrow(() -> new CustomErrorException(ErrorCode.MEMBER_NOT_FOUND));
 
 		// 부모와 미션의 가족이 일치하는지 확인
-		if (!Objects.equals(memChild.getFamily().getId(), parent.getFamily().getId())) {
-			throw new CustomErrorException(ErrorCode.FAMILY_NOT_MATCH);
-		}
+		validateFamily(parent.getFamily().getId(), memChild.getFamily().getId());
 
 		if (statusCode == StatusCode.ACCEPT && mission.getStatus() != StatusCode.ACCEPT) {
 			// 미션 상태 변경 (ACCEPT)
-			Family family = familyRepository.findFamilyById(parent.getFamily().getId());
-			if (family.getFamilyPoint() < mission.getPoint()) {
-				throw new IllegalArgumentException("가족 포인트가 부족합니다.");
-				// 수정 예정
-			}
-
-			family.addFamilyPoint(-mission.getPoint());
-
-			familyRepository.save(family);
-
-			// 추후 타입 수정하고 저장
-			FamilyPointHistory familyPointHistory = FamilyPointHistory.builder()
-				.content(mission.getTitle())
-				.member(memChild)
-				.family(family)
-				.totalPoint(family.getFamilyPoint())
-				.payPoint(-mission.getPoint())
-				.mission(mission)
-				.build();
-			familyPointHistoryRepository.save(familyPointHistory);
-
-			Child child = childRepository.findByMember_Id(mission.getChild().getId());
-			child.setPoint(child.getPoint() + mission.getPoint());
-			childRepository.save(child);
-
-			ChildPointHistory childPointHistory = ChildPointHistory.builder()
-				.mission(mission)
-				.content(mission.getTitle())
-				.totalPoint(child.getPoint())
-				.point(mission.getPoint())
-				.child(child)
-				.build();
-
-			childPointHistoryRepository.save(childPointHistory);
-
-			mission.setStatus(statusCode);
-			mission.setApproveParent(parent);
-
-			missionRepository.save(mission);
+			missionSuccess(parent, mission, memChild, statusCode);
 			return "미션 성공, 포인트 지급 완료";
 		}
-		if (mission.getStatus() == StatusCode.ACCEPT) {
-			throw new IllegalArgumentException("이미 수락된 미션입니다.");
-		}
+		// 미션 decline 구현 필요
 		mission.setStatus(statusCode);
-		missionRepository.save(mission);
 		return "미션 실패";
+	}
+
+	void missionSuccess(Member parent, Mission mission, Member memChild, StatusCode statusCode) {
+		Family family = familyRepository.findFamilyById(parent.getFamily().getId());
+		if (family.getFamilyPoint() < mission.getPoint()) {
+			throw new CustomValidationException("가족 포인트가 부족합니다.");
+		}
+		family.addFamilyPoint(-mission.getPoint());
+		FamilyPointHistory familyPointHistory = FamilyPointHistory.builder()
+			.content(mission.getTitle())
+			.member(memChild)
+			.family(family)
+			.totalPoint(family.getFamilyPoint())
+			.payPoint(-mission.getPoint())
+			.mission(mission)
+			.build();
+		familyPointHistoryRepository.save(familyPointHistory);
+
+		Child child = childRepository.findByMember_Id(mission.getChild().getId());
+		child.setPoint(child.getPoint() + mission.getPoint());
+		childRepository.save(child);
+
+		ChildPointHistory childPointHistory = ChildPointHistory.builder()
+			.mission(mission)
+			.content(mission.getTitle())
+			.totalPoint(child.getPoint())
+			.point(mission.getPoint())
+			.child(child)
+			.build();
+		childPointHistoryRepository.save(childPointHistory);
+		mission.updateStatus(statusCode, parent);
 	}
 
 }
