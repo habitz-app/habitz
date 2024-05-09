@@ -1,6 +1,10 @@
 package space.habitz.api.domain.product.dto;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @Setter
@@ -9,5 +13,5 @@ import lombok.*;
 @AllArgsConstructor
 public class ProductBanDto {
 	private Long productId;
-	private Long childId;
+	private String childId;
 }

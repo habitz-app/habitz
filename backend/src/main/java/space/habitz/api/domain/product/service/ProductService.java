@@ -12,11 +12,11 @@ public interface ProductService {
 
 	Page<ProductInfoDto> getProductList(Member member, String category, String brand, Pageable pageable);
 
-	Page<ProductInfoDto> getBannedProductInfo(Long childId, Pageable pageable);
+	Page<ProductInfoDto> getBannedProductInfo(Member parent, String childId, Pageable pageable);
 
-	BannedProduct setBanProduct(Member parent, Long productId, Long childId);
+	BannedProduct setBanProduct(Member parent, Long productId, String childId);
 
-	void deleteBanProduct(Member parent, Long productId, Long childId);
+	void deleteBanProduct(Member parent, Long productId, String childId);
 
 	void purchaseProduct(Member member, Long productId);
 }
