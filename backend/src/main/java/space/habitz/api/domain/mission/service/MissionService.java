@@ -328,7 +328,7 @@ public class MissionService {
 	 * @param image 이미지 파일
 	 * */
 	private String getImageStoreURL(MultipartFile image) throws IOException {
-		if (!image.isEmpty() && image != null) {
+		if (image != null && !image.isEmpty()) {
 			// S3 버킷에 이미지 업로드
 			UploadedFileResponseDto imageDto = fileUploadService.uploadFile(image);
 			return imageDto.getSaveFile(); // S3 저장 경로 반환
