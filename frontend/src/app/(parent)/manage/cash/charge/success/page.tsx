@@ -13,9 +13,9 @@ const ChargeSuccess = () => {
       paymentKey: string,
     ) => await confirm(amount, orderId, paymentKey);
 
-    const orderId = searchParams?.get('orderId');
-    const amount = searchParams?.get('amount');
-    const paymentKey = searchParams?.get('paymentKey');
+    const orderId = searchParams.get('orderId');
+    const amount = searchParams.get('amount');
+    const paymentKey = searchParams.get('paymentKey');
     if (orderId && amount && paymentKey) {
       const tossResponse = doConfirm(amount, orderId, paymentKey);
 
