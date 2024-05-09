@@ -126,4 +126,15 @@ public class MissionController {
 
 		return ResponseData.success(missionService.performMission(member, missionId, content, image));
 	}
+
+	@Operation(
+		summary = "미션 수행 내용 수정",
+		description = "미션 수행 내용을 수정합니다."
+	)
+	@PutMapping(value = "/{missionId}/perform", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseData<?> updatePerformMission(@AuthenticationPrincipal Member member,
+		@PathVariable("missionId") Long missionId, @RequestPart("content") String content,
+		@RequestPart(name = "image", required = false) MultipartFile image) throws IOException {
+		return ResponseData.success(missionService.updatePerfomMission(member, missionId, content, image));
+	}
 }
