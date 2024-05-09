@@ -66,3 +66,8 @@ springdoc:
   show-actuator: true
 
 swaggerServerUrl: ${SWAGGER_SERVER_URL}
+
+
+# multipart 설정
+spring.servlet.multipart.max-file-size: 10MB
+spring.servlet.multipart.max-request-size: 10MB

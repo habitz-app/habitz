@@ -1,4 +1,4 @@
-package space.habitz.api.domain.fileupload.controller;
+package space.habitz.api.global.util.fileupload.controller;
 
 import java.io.IOException;
 
@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import lombok.RequiredArgsConstructor;
-import space.habitz.api.domain.fileupload.dto.UploadedFileResponseDto;
-import space.habitz.api.domain.fileupload.service.FileUploadService;
 import space.habitz.api.global.response.ApiResponseData;
+import space.habitz.api.global.util.fileupload.dto.UploadedFileResponseDto;
+import space.habitz.api.global.util.fileupload.service.FileUploadService;
 
 @RestController
 @RequestMapping("/api/v1/upload")
