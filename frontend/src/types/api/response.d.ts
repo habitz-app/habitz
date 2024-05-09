@@ -17,6 +17,17 @@ export interface KakaoLoginResponse {
   };
 }
 
+export interface MemberResponse {
+  userId: number;
+  profileImage: string;
+  name: string;
+  nickName: string;
+  email: string;
+  birthDate: string;
+  uuid: string;
+  role: string;
+}
+
 export interface ScheduleResponse {
   scheduleId: number;
   missionId?: number;
