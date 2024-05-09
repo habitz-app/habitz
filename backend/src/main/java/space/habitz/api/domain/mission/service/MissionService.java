@@ -210,15 +210,16 @@ public class MissionService {
 	 * @param missionId 미션 ID
 	 * @param statusCode 변경할 상태 코드
 	 */
+	@Transactional
 	public String changeMissionStatus(Member parent, Long missionId, StatusCode statusCode) {
 
 		Mission mission = missionRepository.findById(missionId)
 			.orElseThrow(() -> new CustomErrorException(ErrorCode.MISSION_NOT_FOUND));
-		Member mem_child = memberRepository.findById(mission.getChild().getId())
+		Member memChild = memberRepository.findById(mission.getChild().getId())
 			.orElseThrow(() -> new CustomErrorException(ErrorCode.MEMBER_NOT_FOUND));
 
 		// 부모와 미션의 가족이 일치하는지 확인
-		if (!Objects.equals(mem_child.getFamily().getId(), parent.getFamily().getId())) {
+		if (!Objects.equals(memChild.getFamily().getId(), parent.getFamily().getId())) {
 			throw new CustomErrorException(ErrorCode.FAMILY_NOT_MATCH);
 		}
 
@@ -236,14 +237,17 @@ public class MissionService {
 
 			// 추후 타입 수정하고 저장
 			FamilyPointHistory familyPointHistory = FamilyPointHistory.builder()
-				.remainPoint(family.getFamilyPoint())
+				.content(mission.getTitle())
+				.member(memChild)
+				.family(family)
+				.totalPoint(family.getFamilyPoint())
 				.payPoint(-mission.getPoint())
 				.mission(mission)
 				.build();
 			familyPointHistoryRepository.save(familyPointHistory);
 
 			Child child = childRepository.findByMember_Id(mission.getChild().getId());
-			child.setPoint(mission.getPoint());
+			child.setPoint(child.getPoint() + mission.getPoint());
 			childRepository.save(child);
 
 			ChildPointHistory childPointHistory = ChildPointHistory.builder()
