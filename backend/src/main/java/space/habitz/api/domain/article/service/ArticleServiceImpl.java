@@ -57,6 +57,7 @@ public class ArticleServiceImpl implements ArticleService {
 	public ArticleInfoDto getArticle(Long articleId) {
 		Article article = articleRepository.findArticleById(articleId);
 		return ArticleInfoDto.builder()
+			.id(article.getId())
 			.title(article.getTitle())
 			.content(article.getContent())
 			.build();
