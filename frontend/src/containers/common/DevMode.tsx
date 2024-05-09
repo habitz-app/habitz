@@ -55,7 +55,9 @@ const DevMode = () => {
     [setAccessToken, queryClient, router],
   );
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    await axios.get('/member/logout');
+
     setAccessToken('');
     router.refresh();
   };
@@ -74,9 +76,10 @@ const DevMode = () => {
             display: 'flex',
             flexDir: 'column',
             gap: '2',
+            textAlign: 'center',
           })}
         >
-          DEVELOPMENT MODE
+          DEV MODE
           <Button onClick={() => handleLogin(11)}>PARENT LOGIN</Button>
           <Button onClick={() => handleLogin(12)}>CHILD LOGIN</Button>
           <Button onClick={handleLogout}>LOGOUT</Button>
