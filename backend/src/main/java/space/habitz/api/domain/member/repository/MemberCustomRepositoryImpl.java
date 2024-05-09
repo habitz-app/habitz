@@ -41,4 +41,16 @@ public class MemberCustomRepositoryImpl implements MemberCustomRepository {
 
 		return Optional.ofNullable(findMember);
 	}
+
+	@Override
+	public Optional<Member> findByUserUUID(String uuid) {
+		Member findMember = jpaQueryFactory.selectFrom(member)
+			.innerJoin(member.memberProfile, memberProfile).fetchJoin()
+			.innerJoin(member.socialInform, socialInform).fetchJoin()
+			.where(member.uuid.eq(uuid))
+			.where(member.memberProfile.deletedAt.isNull())
+			.fetchOne();
+
+		return Optional.ofNullable(findMember);
+	}
 }
