@@ -1,5 +1,4 @@
-package space.habitz.api.domain.fileupload.dto;
-
+package space.habitz.api.global.util.fileupload.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
