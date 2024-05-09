@@ -2,6 +2,7 @@ package space.habitz.api.global.util.fileupload.controller;
 
 import java.io.IOException;
 
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
