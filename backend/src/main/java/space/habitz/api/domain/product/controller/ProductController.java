@@ -25,7 +25,7 @@ import space.habitz.api.global.response.ResponseData;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/v1/product")
+@RequestMapping("/api/v1/store")
 @RequiredArgsConstructor
 public class ProductController {
 	private final ProductService productService;
@@ -46,22 +46,24 @@ public class ProductController {
 		@Parameter(description = "브랜드", required = true) @PathVariable("brand") String brand,
 		Pageable pageable) {
 		return new ResponseData<>("success", "상품 리스트 조회 성공",
-			productService.getProductList(member, brand, category, pageable));
+			productService.getProductList(member, category, brand, pageable));
 	}
 
 	@ApiResponse(description = "제한한 상품 조회")
 	@GetMapping("/banned-product/list/{childId}")
 	public ResponseData<Page<ProductInfoDto>> getBannedProductList(
-		Pageable pageable,
-		@Parameter(description = "Child ID", required = true) @PathVariable("childId") long childId) {
-		return new ResponseData<>("success", "제한한 상품 조회 성공", productService.getBannedProductInfo(childId, pageable));
+		@AuthenticationPrincipal Member member,
+		@Parameter(description = "Child ID", required = true) @PathVariable("childId") String childId,
+		Pageable pageable
+	) {
+		return new ResponseData<>("success", "제한한 상품 조회 성공",
+			productService.getBannedProductInfo(member, childId, pageable));
 	}
 
 	@ApiResponse(description = "상품 제한하기")
 	@PostMapping("/banned-product/restrict")
 	public ResponseData<BannedProduct> getBannedProductList(@AuthenticationPrincipal Member member,
 		@RequestBody ProductBanDto productBanDto) {
-
 		return new ResponseData<>("success", "상품 제한 성공",
 			productService.setBanProduct(member, productBanDto.getProductId(), productBanDto.getChildId()));
 	}
