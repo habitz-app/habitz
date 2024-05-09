@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.springframework.scheduling.annotation.Scheduled;
@@ -304,6 +305,7 @@ public class MissionService {
 	 * @param content   인증 내용
 	 * @param image     인증 이미지
 	 * */
+	@Transactional
 	public Map<String, Long> performMission(Member member, Long missionId, String content, MultipartFile image) throws
 		IOException {
 
@@ -320,6 +322,10 @@ public class MissionService {
 			.image(imageUrl)
 			.build();
 		missionRecognitionRepository.save(missionRecognition); // 저장
+
+		// 미션 상태 업데이트
+		mission.setStatus(StatusCode.PENDING);
+		// TODO :: 인증 시, 부모에게 알림 전송
 		return Map.of("missionRecognitionId", missionRecognition.getId());
 	}
 
@@ -336,4 +342,31 @@ public class MissionService {
 		return null;
 	}
 
+	/**
+	 * 인증 내용 수정
+	 * - 인증에 대해 수정한다. (재요청이라는 가정)
+	 *
+	 * @param member 로그인한 사용자
+	 * @param missionId 미션 ID
+	 * @param content 인증 내용
+	 * */
+	public Map<String, Long> updatePerfomMission(Member member, Long missionId, String content,
+		MultipartFile image) throws
+		IOException {
+
+		Mission mission = missionRepository.findById(missionId)
+			.orElseThrow(() -> new CustomErrorException(ErrorCode.MISSION_NOT_FOUND));
+		MissionRecognition missionRecognition = mission.getMissionRecognition(); // 미션에 해당하는 인증 내용 조회
+
+		// 승인된 미션은 수정 불가능
+		if (mission.getStatus().equals(StatusCode.ACCEPT)) {
+			throw new CustomErrorException(ErrorCode.MISSION_ACCEPTED_CAN_NOT_UPDATE);
+		}
+
+		String imageUrl = getImageStoreURL(image);
+		missionRecognition.updateRecognition(imageUrl, content);
+
+		// TODO :: 인증 시, 부모에게 알림 전송
+		return null;
+	}
 }
