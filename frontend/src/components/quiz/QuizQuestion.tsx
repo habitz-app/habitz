@@ -5,17 +5,23 @@ import { Player } from '@lottiefiles/react-lottie-player';
 import { css } from 'styled-system/css';
 import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
+
 const QuizQuestion = ({
+  correct,
+  articleId,
   isSolved,
   content,
 }: {
+  correct: boolean;
+  articleId: number;
   isSolved: boolean;
   content: string;
 }) => {
   const router = useRouter();
   const handleClick = () => {
-    router.push('/quiz/result');
+    // router.push(`/quiz/knowledge/${articleId}`);
   };
+
   return (
     <div>
       {isSolved ? (
@@ -56,7 +62,7 @@ const QuizQuestion = ({
                 textStyle={'body1.normal.bold'}
                 color={'label.strong'}
               >
-                정답을 맞췄어요!
+                {correct ? '정답을 맞혔어요!' : '정답을 못 맞혔어요'}
               </Card.Title>
             </div>
             <Button
@@ -69,7 +75,7 @@ const QuizQuestion = ({
               alignItems="center"
               alignSelf="center"
               textStyle="caption2.bold"
-              onClick={handleClick}
+              onClick={() => handleClick()}
             >
               자세히
             </Button>
@@ -112,8 +118,8 @@ const QuizQuestion = ({
             alignItems={'center'}
             gap={'0.5rem'}
           >
-            <QuizButton option={true} />
-            <QuizButton option={false} />
+            <QuizButton option={'O'} />
+            <QuizButton option={'X'} />
           </Card.Footer>
         </Card.Root>
       )}

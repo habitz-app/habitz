@@ -2,11 +2,30 @@
 import KnowledgeTab from '@/components/quiz/KnowledgeTab';
 import QuizQuestion from '@/components/quiz/QuizQuestion';
 import { Button } from '@/components/ui/button';
+import { ArticleResponse, QuizResponse } from '@/types/api/response';
 import { IonIcon } from '@ionic/react';
+import axios from '@/apis/axios';
 import { heart } from 'ionicons/icons';
 import { css } from 'styled-system/css';
+import { useQuery } from '@tanstack/react-query';
 
 const Quiz = () => {
+  const todayQuiz = useQuery<QuizResponse>({
+    queryKey: ['quiz'],
+    queryFn: async () => {
+      const res = await axios.get<QuizResponse>('/quiz/today-quiz');
+      return res.data.data ?? {};
+    },
+  });
+
+  const article = useQuery<ArticleResponse>({
+    queryKey: ['article'],
+    queryFn: async () => {
+      const res = await axios.get<ArticleResponse>('/article/list');
+      return res.data.data ?? {};
+    },
+  });
+
   return (
     <>
       <header
@@ -47,8 +66,31 @@ const Quiz = () => {
         >
           오늘의 생활 지식
         </span>
-        <QuizQuestion isSolved={true} content={'딸기는 과일이다?'} />
-        <KnowledgeTab />
+        <QuizQuestion
+          correct={todayQuiz.data?.quizHistoryInfo?.correct || false}
+          isSolved={todayQuiz.data?.isSolved || false}
+          content={todayQuiz.data?.quizInfo.content || ''}
+          articleId={todayQuiz.data?.quizHistoryInfo?.articleId || 0}
+        />
+        <KnowledgeTab
+          options={[
+            {
+              id: 'lifeCategory',
+              label: '생활/습관',
+              items: article.data?.lifeCategory || [],
+            },
+            {
+              id: 'financeCategory',
+              label: '금융/재테크',
+              items: article.data?.financeCategory || [],
+            },
+            {
+              id: 'defaultCategory',
+              label: '기타',
+              items: article.data?.defaultCategory || [],
+            },
+          ]}
+        />
       </div>
     </>
   );
