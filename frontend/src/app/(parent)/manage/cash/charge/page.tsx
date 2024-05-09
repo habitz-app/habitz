@@ -2,6 +2,8 @@
 import { useState } from 'react';
 import { HStack } from 'styled-system/jsx';
 import { loadTossPayments } from '@tosspayments/payment-sdk';
+import axios from '@/apis/axios';
+import { OrderResponse } from '@/types/api/response';
 
 const Charge = () => {
   const dummyHabitz: number = 7400;
@@ -18,16 +20,23 @@ const Charge = () => {
     if (charge !== null) {
       // Charge Logic
       if (charge >= 1000) {
-        const tossPayments = await loadTossPayments(
-          process.env.NEXT_PUBLIC_TOSS_CLIENT_KEY ?? '',
-        );
-        await tossPayments.requestPayment('카드', {
-          amount: charge,
-          orderId: Math.random().toString(36).slice(2),
-          orderName: '(주)해비츠',
-          successUrl: 'http://localhost:3000/cash/charge/success',
-          failUrl: 'http://localhost:3000/cash/charge/fail',
-        });
+        await axios
+          .post<OrderResponse>('/pay/get-order-id', {
+            amount: charge,
+          })
+          .then(async (res) => {
+            const orderId = res.data.data.orderId;
+            const tossPayments = await loadTossPayments(
+              process.env.NEXT_PUBLIC_TOSS_CLIENT_KEY ?? '',
+            );
+            await tossPayments.requestPayment('카드', {
+              amount: charge,
+              orderId: orderId,
+              orderName: '(주)해비츠',
+              successUrl: 'http://localhost:3000/manage/cash/charge/success',
+              failUrl: 'http://localhost:3000/manage/cash/charge/fail',
+            });
+          });
       } else {
         alert('1000원 이상의 금액을 입력해주세요.');
       }

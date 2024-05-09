@@ -54,3 +54,9 @@ export interface TestCreateChildResponse {
 }
 
 export interface FamilyMemberListResponse {}
+
+export interface OrderResponse {
+  orderId: string;
+  memberUuid: string;
+  amount: number;
+}
