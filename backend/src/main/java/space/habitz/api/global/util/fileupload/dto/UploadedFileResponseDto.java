@@ -8,6 +8,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UploadedFileResponseDto {
-    private String originalFile;
-    private String saveFile;
+	private String originalFile;
+	private String saveFile;
 }
