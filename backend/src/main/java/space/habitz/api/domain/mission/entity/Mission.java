@@ -15,6 +15,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -85,6 +86,16 @@ public class Mission extends MutableTimeEntity {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "approve_parent")
 	private Member approveParent;
+
+	@OneToOne(fetch = FetchType.LAZY, mappedBy = "mission", optional = true)
+	private MissionRecognition missionRecognition;
+
+	@Column(name = "comment", nullable = true)
+	private String comment; // 미션 인증 시 부모님의 코멘트
+
+	public void updateStatus(StatusCode status) {
+		this.status = status;
+	}
 
 	public void updateMission(UpdateMissionRequestDto request) {
 		this.title = request.title();
