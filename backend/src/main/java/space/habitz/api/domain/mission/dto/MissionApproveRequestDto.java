@@ -4,9 +4,10 @@ import lombok.Builder;
 import space.habitz.api.global.type.StatusCode;
 
 @Builder
-public record MissionApproveRequestDto(Long missionId,
-									   StatusCode status,
-									   String comment
+public record MissionApproveRequestDto(
+	Long missionId,
+	StatusCode status,
+	String comment
 ) {
 
 }
