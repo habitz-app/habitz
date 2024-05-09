@@ -14,7 +14,9 @@ import space.habitz.api.domain.product.entity.Product;
 public interface ProductRepository extends JpaRepository<Product, Long> {
 	Optional<Product> findProductById(Long id);
 
-	Page<Product> findByBrandAndCategoryAndIdIsNotIn(String brand, String category, List<Long> productIds,
+	Page<Product> findProductsByBrandAndCategoryAndIdIsNotIn(String brand, String category, List<Long> productIds,
 		Pageable pageable);
+
+	Page<Product> findProductsByBrandAndCategory(String brand, String category, Pageable pageable);
 }
 
