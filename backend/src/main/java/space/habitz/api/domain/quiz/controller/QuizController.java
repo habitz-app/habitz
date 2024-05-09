@@ -1,5 +1,6 @@
 package space.habitz.api.domain.quiz.controller;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,6 +22,7 @@ import space.habitz.api.global.response.ResponseData;
 @RequestMapping("/api/v1/quiz")
 @RequiredArgsConstructor
 @RestController
+@PreAuthorize("hasAnyRole('CHILD', 'ADMIN')")
 public class QuizController {
 
 	private final QuizService quizService;

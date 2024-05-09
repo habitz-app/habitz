@@ -1,5 +1,6 @@
 package space.habitz.api.domain.pay.controller;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,6 +20,7 @@ import space.habitz.api.global.response.ResponseData;
 @RestController
 @RequestMapping("/api/v1/pay")
 @RequiredArgsConstructor
+@PreAuthorize("hasAnyRole('PARENT', 'ADMIN')")
 public class PayController {
 
 	private final PayService payService;

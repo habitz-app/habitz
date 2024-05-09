@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,6 +31,7 @@ import space.habitz.api.global.response.ResponseData;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/schedule")
+@PreAuthorize("hasAnyRole('PARENT', 'ADMIN')")
 public class ScheduleController {
 
 	private final ScheduleService scheduleService;
@@ -60,6 +62,7 @@ public class ScheduleController {
 		description = "아이는 날짜를 기준으로 일정 목록을 조회합니다."
 	)
 	@GetMapping("/list")
+	@PreAuthorize("hasAnyRole('CHILD', 'ADMIN')")
 	public ResponseData<List<ScheduleMissionDto>> getScheduleList(
 		@AuthenticationPrincipal Member member,
 		@RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
