@@ -35,5 +35,6 @@ export const Default: Story = {
         },
       ],
     },
+    selectDate: () => {},
   },
 };
