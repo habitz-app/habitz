@@ -52,16 +52,18 @@ public class ProductController {
 	@ApiResponse(description = "제한한 상품 조회")
 	@GetMapping("/banned-product/list/{childId}")
 	public ResponseData<Page<ProductInfoDto>> getBannedProductList(
-		Pageable pageable,
-		@Parameter(description = "Child ID", required = true) @PathVariable("childId") String childId) {
-		return new ResponseData<>("success", "제한한 상품 조회 성공", productService.getBannedProductInfo(childId, pageable));
+		@AuthenticationPrincipal Member member,
+		@Parameter(description = "Child ID", required = true) @PathVariable("childId") String childId,
+		Pageable pageable
+	) {
+		return new ResponseData<>("success", "제한한 상품 조회 성공",
+			productService.getBannedProductInfo(member, childId, pageable));
 	}
 
 	@ApiResponse(description = "상품 제한하기")
 	@PostMapping("/banned-product/restrict")
 	public ResponseData<BannedProduct> getBannedProductList(@AuthenticationPrincipal Member member,
 		@RequestBody ProductBanDto productBanDto) {
-
 		return new ResponseData<>("success", "상품 제한 성공",
 			productService.setBanProduct(member, productBanDto.getProductId(), productBanDto.getChildId()));
 	}

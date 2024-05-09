@@ -12,7 +12,7 @@ public interface ProductService {
 
 	Page<ProductInfoDto> getProductList(Member member, String category, String brand, Pageable pageable);
 
-	Page<ProductInfoDto> getBannedProductInfo(String childId, Pageable pageable);
+	Page<ProductInfoDto> getBannedProductInfo(Member parent, String childId, Pageable pageable);
 
 	BannedProduct setBanProduct(Member parent, Long productId, String childId);
 

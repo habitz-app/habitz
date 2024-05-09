@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import space.habitz.api.domain.member.entity.Child;
 import space.habitz.api.domain.member.entity.Member;
@@ -22,6 +23,8 @@ import space.habitz.api.domain.product.entity.Product;
 import space.habitz.api.domain.product.repository.BannedProductRepository;
 import space.habitz.api.domain.product.repository.ChildProductPaymentHistoryRepository;
 import space.habitz.api.domain.product.repository.ProductRepository;
+import space.habitz.api.global.exception.CustomAccessDeniedException;
+import space.habitz.api.global.exception.CustomErrorException;
 import space.habitz.api.global.exception.CustomNotFoundException;
 
 @RequiredArgsConstructor
@@ -41,7 +44,7 @@ public class ProductServiceImpl implements ProductService {
 			Long childId = childRepository.findByMember_Id(member.getId()).getId();
 			if (bannedProductRepository.findByBannedProductID_ProductIdAndBannedProductID_ChildId(id, childId)
 				!= null) {
-				throw new CustomNotFoundException("Banned Product");
+				throw new CustomNotFoundException("제한된 상품입니다.");
 
 			}
 		}
@@ -64,8 +67,8 @@ public class ProductServiceImpl implements ProductService {
 
 		// 아이를 제외하고는 밴 한 상품 없음.
 		if (member.getRole() != Role.CHILD) {
-			return productRepository.findByBrandAndCategoryAndIdIsNotIn(
-					brand, category, List.of(), pageable)
+			return productRepository.findProductsByBrandAndCategory(
+					brand, category, pageable)
 				.map(product -> ProductInfoDto.builder()
 					.productId(product.getId())
 					.productName(product.getName())
@@ -82,7 +85,7 @@ public class ProductServiceImpl implements ProductService {
 				bannedProduct -> bannedProduct.getBannedProductID().getProduct().getId())
 			.toList();
 		// System.out.println("productIdList = " + productIdList);
-		return productRepository.findByBrandAndCategoryAndIdIsNotIn(brand, category, productIdList, pageable)
+		return productRepository.findProductsByBrandAndCategoryAndIdIsNotIn(brand, category, productIdList, pageable)
 			.map(product -> ProductInfoDto.builder()
 				.productId(product.getId())
 				.productName(product.getName())
@@ -94,13 +97,14 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public Page<ProductInfoDto> getBannedProductInfo(String childId, Pageable pageable) {
-		Member member = memberRepository.findByUuid(childId)
+	public Page<ProductInfoDto> getBannedProductInfo(Member parent, String childId, Pageable pageable) {
+
+		Member childMem = memberRepository.findByUuid(childId)
 			.orElseThrow(() -> new CustomNotFoundException(childId));
-		if (member.getRole() == Role.CHILD) {
+		if (parent.getRole() == Role.CHILD || !childMem.getFamily().getId().equals(parent.getFamily().getId())) {
 			throw new CustomNotFoundException("권한이 없습니다.");
 		}
-		Child child = childRepository.findByMember_Id(member.getId());
+		Child child = childRepository.findByMember_Id(childMem.getId());
 
 		return bannedProductRepository.findProductsByChildId(child.getId(), pageable)
 			.map(product -> ProductInfoDto.builder()
@@ -114,13 +118,15 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
+	@Transactional
 	public BannedProduct setBanProduct(Member parent, Long productId, String childId) {
-		Member member = memberRepository.findByUuid(childId)
+		Member childMem = memberRepository.findByUuid(childId)
 			.orElseThrow(() -> new CustomNotFoundException(childId));
-		if (parent.getRole() != Role.PARENT) {
-			throw new CustomNotFoundException("Not Parent");
+		// System.out.println("childMem = " + childMem);
+		if (parent.getRole() != Role.PARENT || !parent.getFamily().getId().equals(childMem.getFamily().getId())) {
+			throw new CustomAccessDeniedException("허용되지 않은 사용자입니다.");
 		}
-		Long childIdLong = childRepository.findByMember_Id(member.getId()).getId();
+		Long childIdLong = childRepository.findByMember_Id(childMem.getId()).getId();
 		Product product = productRepository.findProductById(productId)
 			.orElseThrow(() -> new CustomNotFoundException(productId));
 		Child child = childRepository.findById_AndMember_Family_Id(childIdLong, parent.getFamily().getId())
@@ -148,16 +154,21 @@ public class ProductServiceImpl implements ProductService {
 			child.getId());
 	}
 
+	@Override
+	@Transactional
 	public void purchaseProduct(Member member, Long productId) {
+		if (member.getRole() != Role.CHILD) {
+			throw new CustomAccessDeniedException("상품은 아이만 구매 가능합니다.");
+		}
+
 		// 구매 로직
 		Child child = childRepository.findByMember_Id(member.getId());
 		ProductInfoDto productInfoDto = getProductDetail(member, productId);
 		if (child.getPoint() < productInfoDto.getPrice()) {
-			throw new CustomNotFoundException("Not Enough Point");
+			throw new CustomErrorException("포인트가 부족합니다.");
 		}
 
 		child.setPoint(child.getPoint() - productInfoDto.getPrice());
-		childRepository.save(child);
 
 		ChildProductPaymentHistory childProductPaymentHistory =
 			ChildProductPaymentHistory.builder()
