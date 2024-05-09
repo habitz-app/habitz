@@ -26,14 +26,14 @@ public class FamilyController {
 		return ApiResponseData.success(inviteCode);
 	}
 
-	@PreAuthorize("hasAnyRole('PARENT')")
+	@PreAuthorize("hasAnyRole('PARENT', 'ADMIN')")
 	@GetMapping("/memberList")
 	public ResponseEntity<?> memberList() {
 		List<FamilyListResponseDto> familyList = familyService.getFamilyList();
 		return ApiResponseData.success(familyList);
 	}
 
-	@PreAuthorize("hasAnyRole('PARENT')")
+	@PreAuthorize("hasAnyRole('PARENT', 'ADMIN')")
 	@GetMapping("/childList")
 	public ResponseEntity<?> childList() {
 		List<FamilyListResponseDto> familyList = familyService.getChildList();
