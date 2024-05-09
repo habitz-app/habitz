@@ -5,7 +5,9 @@ export default {
   title: 'QuizButton',
   component: QuizButton,
   argTypes: {
-    option: { control: 'boolean' },
+    option: {
+      type: 'string',
+    },
   },
 } as Meta;
 
@@ -13,12 +15,12 @@ type Story = StoryObj<typeof QuizButton>;
 
 export const O: Story = {
   args: {
-    option: true,
+    option: 'O',
   },
 };
 
 export const X: Story = {
   args: {
-    option: false,
+    option: 'X',
   },
 };
