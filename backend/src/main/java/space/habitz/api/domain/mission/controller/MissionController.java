@@ -122,7 +122,7 @@ public class MissionController {
 	public ResponseData<?> performMission(@AuthenticationPrincipal Member member,
 		@PathVariable("missionId") Long missionId,
 		@RequestPart("content") String content,
-		@RequestPart("image") MultipartFile image) throws IOException {
+		@RequestPart(name = "image", required = false) MultipartFile image) throws IOException {
 
 		return ResponseData.success(missionService.performMission(member, missionId, content, image));
 	}
