@@ -23,7 +23,7 @@ const MissionContent = ({
         className={css({
           display: 'flex',
           flexDir: 'column',
-          w: '9.375rem',
+          minW: '9.375rem',
           h: '11.25rem',
           borderRadius: '1.25rem',
           justifyContent: 'center',
@@ -51,6 +51,7 @@ const MissionContent = ({
               textStyle: 'headline1.bold',
               color: 'label.normal',
               lineClamp: '2',
+              w: 'full',
             })}
           >
             {title}
