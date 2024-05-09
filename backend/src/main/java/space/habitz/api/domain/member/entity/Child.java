@@ -1,6 +1,7 @@
 package space.habitz.api.domain.member.entity;
 
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.SQLRestriction;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -20,6 +21,7 @@ import space.habitz.api.global.entity.MutableTimeEntity;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@SQLRestriction("is_deleted = 0")
 public class Child extends MutableTimeEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,9 +34,20 @@ public class Child extends MutableTimeEntity {
 	@ColumnDefault("0")
 	private int point;
 
+	@Column(name = "is_deleted")
+	private boolean isDeleted = Boolean.FALSE;
+
 	public Child(Member member, int point) {
 		this.member = member;
 		this.point = point;
+	}
+
+	public void setDeleted() {
+		isDeleted = true;
+	}
+
+	public void setUndeleted() {
+		isDeleted = false;
 	}
 
 	public void setPoint(int changePoint) {

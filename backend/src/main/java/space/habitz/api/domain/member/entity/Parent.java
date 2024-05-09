@@ -1,5 +1,8 @@
 package space.habitz.api.domain.member.entity;
 
+import org.hibernate.annotations.SQLRestriction;
+
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -15,6 +18,7 @@ import space.habitz.api.global.entity.MutableTimeEntity;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@SQLRestriction("is_deleted = 0")
 public class Parent extends MutableTimeEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,6 +28,17 @@ public class Parent extends MutableTimeEntity {
 	Member member;
 
 	private int point;
+
+	@Column(name = "is_deleted")
+	private boolean isDeleted = Boolean.FALSE;
+
+	public void setDeleted() {
+		isDeleted = true;
+	}
+
+	public void setUndeleted() {
+		isDeleted = false;
+	}
 
 	public Parent(Member member, int point) {
 		this.member = member;
