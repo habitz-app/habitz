@@ -1,53 +1,9 @@
 import * as Tabs from '@/components/ui/tabs';
 import { css } from 'styled-system/css';
 import KnowledgeItem from './KnowledgeItem';
+import type { options } from '@/types/article/index';
 
-const options = [
-  {
-    id: '1',
-    label: '생활/습관',
-    items: [
-      {
-        title: '소화기는 어떻게 사용할까요?',
-        contents:
-          '건조한 봄 날씨에는 불이 나기 쉬워요. 화재가 발생하고 5분이 지나면 불길이 번지는 속도가 급격하게 빨라져요.',
-      },
-      {
-        title: '소화기는 어떻게 사용할까요?',
-        contents:
-          '건조한 봄 날씨에는 불이 나기 쉬워요. 화재가 발생하고 5분이 지나면 불길이 번지는 속도가 급격하게 빨라져요.',
-      },
-    ],
-  },
-  {
-    id: '2',
-    label: '금융/재테크',
-    items: [
-      {
-        title: '소화기는 어떻게 사용할까요?',
-        contents:
-          '건조한 봄 날씨에는 불이 나기 쉬워요. 화재가 발생하고 5분이 지나면 불길이 번지는 속도가 급격하게 빨라져요.',
-      },
-    ],
-  },
-  {
-    id: '3',
-    label: '기초상식',
-    items: [
-      {
-        title: '소화기는 어떻게 사용할까요?',
-        contents:
-          '건조한 봄 날씨에는 불이 나기 쉬워요. 화재가 발생하고 5분이 지나면 불길이 번지는 속도가 급격하게 빨라져요.',
-      },
-      {
-        title: '소화기는 어떻게 사용할까요?',
-        contents:
-          '건조한 봄 날씨에는 불이 나기 쉬워요. 화재가 발생하고 5분이 지나면 불길이 번지는 속도가 급격하게 빨라져요.',
-      },
-    ],
-  },
-];
-const KnowledgeTab = () => {
+const KnowledgeTab = ({ options }: { options: options }) => {
   return (
     <section
       className={css({
@@ -72,9 +28,14 @@ const KnowledgeTab = () => {
           읽으면 똑똑해지는 어린이 지식
         </p>
       </span>
-      <Tabs.Root defaultValue="1" variant="enclosed" w="full" display="flex">
+      <Tabs.Root
+        defaultValue="lifeCategory"
+        variant="enclosed"
+        w="full"
+        display="flex"
+      >
         <Tabs.List display="flex" w="full" h="2.5rem">
-          {options.map((option) => (
+          {options?.map((option) => (
             <Tabs.Trigger
               key={option.id}
               value={option.id}
@@ -86,30 +47,45 @@ const KnowledgeTab = () => {
           ))}
           <Tabs.Indicator />
         </Tabs.List>
-        <Tabs.Content value="1" px={0} display={'flex'} flexDir={'column'}>
-          {options[0].items?.map((item, index) => (
+        <Tabs.Content
+          value="lifeCategory"
+          px={0}
+          display={'flex'}
+          flexDir={'column'}
+        >
+          {options[0]?.items?.map((item, index) => (
             <KnowledgeItem
               key={index}
               title={item.title}
-              contents={item.contents}
+              contents={item.content}
             />
           ))}
         </Tabs.Content>
-        <Tabs.Content value="2" px={0} display={'flex'} flexDir={'column'}>
-          {options[1].items?.map((item, index) => (
+        <Tabs.Content
+          value="financeCategory"
+          px={0}
+          display={'flex'}
+          flexDir={'column'}
+        >
+          {options[1]?.items?.map((item, index) => (
             <KnowledgeItem
               key={index}
               title={item.title}
-              contents={item.contents}
+              contents={item.content}
             />
           ))}
         </Tabs.Content>
-        <Tabs.Content value="3" px={0} display={'flex'} flexDir={'column'}>
-          {options[2].items?.map((item, index) => (
+        <Tabs.Content
+          value="defaultCategory"
+          px={0}
+          display={'flex'}
+          flexDir={'column'}
+        >
+          {options[2]?.items?.map((item, index) => (
             <KnowledgeItem
               key={index}
               title={item.title}
-              contents={item.contents}
+              contents={item.content}
             />
           ))}
         </Tabs.Content>
