@@ -9,6 +9,7 @@ import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,6 +20,8 @@ import space.habitz.api.domain.test.dto.DummyFamilyMakeRequestDto;
 import space.habitz.api.domain.test.dto.DummyMemberLoginRequestDto;
 import space.habitz.api.domain.test.dto.DummyMemberRegisterRequestDto;
 import space.habitz.api.domain.test.dto.DummyMemberRegisterResponseDto;
+import space.habitz.api.domain.test.dto.DummyMemberRoleChangeRequestDto;
+import space.habitz.api.domain.test.dto.DummyMemberRoleChangeResponseDto;
 import space.habitz.api.domain.test.service.TestService;
 import space.habitz.api.global.response.ResponseData;
 
@@ -73,4 +76,9 @@ public class TestController {
 		return ResponseEntity.status(HttpStatus.OK).body(ResponseData.success("가족 등록 성공", null));
 	}
 
+	@PutMapping("/changeRole")
+	public ResponseEntity<?> changeRole(@RequestBody DummyMemberRoleChangeRequestDto requestDto) {
+		DummyMemberRoleChangeResponseDto result = testService.changeRole(requestDto);
+		return ResponseEntity.status(HttpStatus.OK).body(ResponseData.success("역활 변경", result));
+	}
 }
