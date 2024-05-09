@@ -11,6 +11,12 @@ export default {
     isSolved: {
       type: 'boolean',
     },
+    correct: {
+      type: 'boolean',
+    },
+    articleId: {
+      type: 'number',
+    },
   },
 } as Meta;
 
@@ -20,6 +26,8 @@ export const Default: Story = {
   args: {
     content: '딸기는 과일이다',
     isSolved: false,
+    correct: false,
+    articleId: 1,
   },
   parameters: {
     nextjs: {
@@ -28,10 +36,26 @@ export const Default: Story = {
   },
 };
 
-export const Solved: Story = {
+export const Correct: Story = {
   args: {
     content: '딸기는 과일이다',
     isSolved: true,
+    correct: true,
+    articleId: 1,
+  },
+  parameters: {
+    nextjs: {
+      appDirectory: true,
+    },
+  },
+};
+
+export const Wrong: Story = {
+  args: {
+    content: '딸기는 과일이다',
+    isSolved: true,
+    correct: false,
+    articleId: 1,
   },
   parameters: {
     nextjs: {
