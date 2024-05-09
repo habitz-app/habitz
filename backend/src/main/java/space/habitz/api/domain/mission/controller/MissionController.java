@@ -25,6 +25,7 @@ import lombok.RequiredArgsConstructor;
 import space.habitz.api.domain.member.entity.Member;
 import space.habitz.api.domain.mission.dto.MissionApproveRequestDto;
 import space.habitz.api.domain.mission.dto.MissionDto;
+import space.habitz.api.domain.mission.dto.MissionResponseDto;
 import space.habitz.api.domain.mission.dto.UpdateMissionRequestDto;
 import space.habitz.api.domain.mission.service.MissionService;
 import space.habitz.api.global.response.ResponseData;
@@ -42,7 +43,7 @@ public class MissionController {
 		description = "미션 상세 내용을 조회합니다."
 	)
 	@GetMapping("/{missionId}")
-	public ResponseData<MissionDto> getMissionDetail(@PathVariable("missionId") Long missionId) {
+	public ResponseData<MissionResponseDto> getMissionDetail(@PathVariable("missionId") Long missionId) {
 		return ResponseData.success(missionService.getMissionDetail(missionId));
 	}
 
