@@ -7,13 +7,13 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import space.habitz.api.global.entity.BaseTimeEntity;
+import space.habitz.api.global.entity.MutableTimeEntity;
 
 @Entity
 @NoArgsConstructor
@@ -21,13 +21,13 @@ import space.habitz.api.global.entity.BaseTimeEntity;
 @Builder
 @Getter
 @Table(name = "mission_recognition")
-public class MissionRecognition extends BaseTimeEntity {
+public class MissionRecognition extends MutableTimeEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "mission_id")
 	private Mission mission;
 
@@ -37,6 +37,8 @@ public class MissionRecognition extends BaseTimeEntity {
 	@Column(name = "content")
 	private String content;
 
-	@Column(name = "comment", nullable = true)
-	private String comment;
+	public void updateRecognition(String image, String content) {
+		this.image = image;
+		this.content = content;
+	}
 }
