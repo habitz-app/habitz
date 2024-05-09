@@ -1,6 +1,5 @@
 'use client';
 import Article from '@/components/quiz/Article';
-import QuizResult from '@/components/quiz/QuizResult';
 import { css } from 'styled-system/css';
 import Image from 'next/image';
 import axios from '@/apis/axios';
@@ -82,7 +81,6 @@ const Result = ({ params }: { params: { id: string } }) => {
           py: '20px',
         })}
       >
-        <QuizResult isCorrect={true} />
         <Article
           title={article.data?.title || ''}
           date={new Date().toLocaleDateString()}

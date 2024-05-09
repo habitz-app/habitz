@@ -1,14 +1,18 @@
 import { css } from 'styled-system/css';
-import { heartOutline } from 'ionicons/icons';
+import { chevronForwardOutline } from 'ionicons/icons';
 import { IonIcon } from '@ionic/react';
 import { Button } from '@/components/ui/button';
+import { useRouter } from 'next/navigation';
 const KnowledgeItem = ({
+  id,
   title,
   contents,
 }: {
+  id: number;
   title: string;
   contents: string;
 }) => {
+  const router = useRouter();
   return (
     <article
       className={css({
@@ -60,9 +64,12 @@ const KnowledgeItem = ({
           justifyContent={'center'}
           alignSelf={'center'}
           alignItems={'center'}
+          onClick={() => {
+            router.push(`/quiz/knowledge/${id}`);
+          }}
         >
           <IonIcon
-            icon={heartOutline}
+            icon={chevronForwardOutline}
             className={css({
               w: '1.5rem',
               h: '1.5rem',
