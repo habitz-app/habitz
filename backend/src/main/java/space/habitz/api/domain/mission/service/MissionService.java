@@ -22,7 +22,11 @@ import space.habitz.api.domain.member.entity.Role;
 import space.habitz.api.domain.member.repository.ChildRepository;
 import space.habitz.api.domain.member.repository.FamilyRepository;
 import space.habitz.api.domain.member.repository.MemberRepository;
+import space.habitz.api.domain.mission.dto.MissionApprovalDto;
+import space.habitz.api.domain.mission.dto.MissionApproveRequestDto;
 import space.habitz.api.domain.mission.dto.MissionDto;
+import space.habitz.api.domain.mission.dto.MissionRecognitionDto;
+import space.habitz.api.domain.mission.dto.MissionResponseDto;
 import space.habitz.api.domain.mission.dto.UpdateMissionRequestDto;
 import space.habitz.api.domain.mission.entity.Mission;
 import space.habitz.api.domain.mission.entity.MissionRecognition;
@@ -67,10 +71,28 @@ public class MissionService {
 	 * @param missionId 미션 ID
 	 */
 	@Transactional
-	public MissionDto getMissionDetail(Long missionId) {
+	public MissionResponseDto getMissionDetail(Long missionId) {
 		Mission mission = missionRepository.findById(missionId)
 			.orElseThrow(() -> new CustomErrorException(ErrorCode.MISSION_NOT_FOUND));
-		return MissionDto.of(mission);
+		MissionRecognition missionRecognition = mission.getMissionRecognition();
+		if (missionRecognition != null) {
+			// 인증 내용이 존재하면 함께 return
+			return getMissionRecognition(mission, MissionRecognitionDto.of(missionRecognition));
+		}
+		return MissionResponseDto.of(MissionDto.of(mission), null, null);
+	}
+
+	/**
+	 * 미션에 인증 정보가 존재할 경우
+	 * */
+	private MissionResponseDto getMissionRecognition(Mission mission, MissionRecognitionDto missionRecognition) {
+		// 인증 내용이 존재하면 함께 return
+		if (mission.getStatus().equals(StatusCode.ACCEPT) || mission.getStatus().equals(StatusCode.DECLINE)) {
+			return MissionResponseDto.of(MissionDto.of(mission), missionRecognition,
+				MissionApprovalDto.of(mission.getApproveParent().getName(), mission.getComment()));
+		}
+		// 승인 내역이 없고, 인증 상태만 있는 경우
+		return MissionResponseDto.of(MissionDto.of(mission), missionRecognition, null);
 	}
 
 	/**
