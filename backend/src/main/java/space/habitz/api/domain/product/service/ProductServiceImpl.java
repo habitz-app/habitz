@@ -97,10 +97,10 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public Page<ProductInfoDto> getBannedProductInfo(Member parent, String childId, Pageable pageable) {
+	public Page<ProductInfoDto> getBannedProductInfo(Member parent, String childUuid, Pageable pageable) {
 
-		Member childMem = memberRepository.findByUuid(childId)
-			.orElseThrow(() -> new CustomNotFoundException(childId));
+		Member childMem = memberRepository.findByUuid(childUuid)
+			.orElseThrow(() -> new CustomNotFoundException(childUuid));
 		if (parent.getRole() == Role.CHILD || !childMem.getFamily().getId().equals(parent.getFamily().getId())) {
 			throw new CustomNotFoundException("권한이 없습니다.");
 		}
@@ -119,10 +119,10 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	@Transactional
-	public BannedProduct setBanProduct(Member parent, Long productId, String childId) {
-		Member childMem = memberRepository.findByUuid(childId)
-			.orElseThrow(() -> new CustomNotFoundException(childId));
-		// System.out.println("childMem = " + childMem);
+	public BannedProduct setBanProduct(Member parent, Long productId, String childUuid) {
+		Member childMem = memberRepository.findByUuid(childUuid)
+			.orElseThrow(() -> new CustomNotFoundException(childUuid));
+
 		if (parent.getRole() != Role.PARENT || !parent.getFamily().getId().equals(childMem.getFamily().getId())) {
 			throw new CustomAccessDeniedException("허용되지 않은 사용자입니다.");
 		}
@@ -130,7 +130,8 @@ public class ProductServiceImpl implements ProductService {
 		Product product = productRepository.findProductById(productId)
 			.orElseThrow(() -> new CustomNotFoundException(productId));
 		Child child = childRepository.findById_AndMember_Family_Id(childIdLong, parent.getFamily().getId())
-			.orElseThrow(() -> new CustomNotFoundException(childId));
+			.orElseThrow(() -> new CustomNotFoundException(childUuid));
+
 		bannedProductRepository.insertBannedProduct(product.getId(), child.getId());
 
 		return BannedProduct.builder()
@@ -140,16 +141,16 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public void deleteBanProduct(Member parent, Long productId, String childId) {
+	public void deleteBanProduct(Member parent, Long productId, String childUuid) {
 		if (parent.getRole() != Role.PARENT) {
 			throw new CustomNotFoundException("Not Parent");
 		}
-		Long childIdLong = childRepository.findByMember_Id(memberRepository.findByUuid(childId)
-			.orElseThrow(() -> new CustomNotFoundException(childId)).getId()).getId();
+		Long childId = childRepository.findByMember_Id(memberRepository.findByUuid(childUuid)
+			.orElseThrow(() -> new CustomNotFoundException(childUuid)).getId()).getId();
 		Product product = productRepository.findProductById(productId)
 			.orElseThrow(() -> new CustomNotFoundException(productId));
-		Child child = childRepository.findById_AndMember_Family_Id(childIdLong, parent.getFamily().getId())
-			.orElseThrow(() -> new CustomNotFoundException(childId));
+		Child child = childRepository.findById_AndMember_Family_Id(childId, parent.getFamily().getId())
+			.orElseThrow(() -> new CustomNotFoundException(childUuid));
 		bannedProductRepository.deleteByBannedProductID_ProductIdAndBannedProductID_ChildId(product.getId(),
 			child.getId());
 	}
