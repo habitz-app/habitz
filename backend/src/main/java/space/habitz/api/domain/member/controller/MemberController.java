@@ -115,9 +115,24 @@ public class MemberController {
 	}
 
 	@GetMapping("/logout")
-	public ResponseEntity<?> logout() throws Exception {
+	public ResponseEntity<?> logout(@CookieValue(value = "refreshToken") String refreshToken,
+		@CookieValue(value = "accessToken") String accessToken,
+		@CookieValue(value = "role") String role,
+		@CookieValue(value = "tokenType") String tokenType
+	) throws Exception {
 		memberService.logout();
-		return ResponseEntity.status(HttpStatus.OK).body(ResponseData.success("회원 로그아웃 성공"));
+
+		ResponseCookie regeneratedAccessToken = getCookie("accessToken", accessToken, 0);
+		ResponseCookie regeneratedRefreshToken = getCookie("refreshToken", refreshToken, 0);
+		ResponseCookie regeneratedTokenType = getCookie("tokenType", tokenType, 0);
+		ResponseCookie regeneratedRole = getCookie("role", role, 0);
+
+		return ResponseEntity.status(HttpStatus.OK)
+			.header(HttpHeaders.SET_COOKIE, regeneratedTokenType.toString())
+			.header(HttpHeaders.SET_COOKIE, regeneratedAccessToken.toString())
+			.header(HttpHeaders.SET_COOKIE, regeneratedRefreshToken.toString())
+			.header(HttpHeaders.SET_COOKIE, regeneratedRole.toString())
+			.body(ResponseData.success("회원 로그아웃 성공"));
 	}
 
 	@DeleteMapping("/exit")
