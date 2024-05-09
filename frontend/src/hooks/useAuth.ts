@@ -26,7 +26,7 @@ export const useAuth = () => {
   }, []);
 };
 
-export const useRole = (role: string) => {
+export const useRoles = (roles: string[]) => {
   const me = useQuery<MemberResponse>({
     queryKey: ['me'],
     queryFn: getUserData,
@@ -36,14 +36,17 @@ export const useRole = (role: string) => {
   useLayoutEffect(() => {
     const myInfo = me.data;
 
-    if (myInfo && myInfo.role !== role) {
+    if (myInfo && !roles.includes(myInfo.role)) {
       alert('페이지 접근 권한이 없습니다.');
+      if (myInfo.role === 'GUEST') {
+        return router.push('/join');
+      }
       router.back();
     }
-  }, [router, me.data, role]);
+  }, [router, me.data, roles]);
 };
 
-export const useAuthWithRole = (role: string) => {
+export const useAuthWithRoles = (roles: string[]) => {
   useAuth();
-  useRole(role);
+  useRoles(roles);
 };

@@ -1,9 +1,9 @@
 'use client';
 
-import { useAuthWithRole } from '@/hooks/useAuth';
+import { useAuthWithRoles } from '@/hooks/useAuth';
 
 const ParentLayout = ({ children }: { children: React.ReactNode }) => {
-  useAuthWithRole('PARENT');
+  useAuthWithRoles(['PARENT']);
 
   return <>{children}</>;
 };

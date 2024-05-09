@@ -1,10 +1,10 @@
 'use client';
 
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth, useAuthWithRoles } from '@/hooks/useAuth';
 import { css } from 'styled-system/css';
 
 export default function Home() {
-  useAuth();
+  useAuthWithRoles(['PARENT', 'CHILD']);
 
   return (
     <main>
