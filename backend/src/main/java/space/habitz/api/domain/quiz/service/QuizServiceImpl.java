@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 import space.habitz.api.domain.member.entity.Child;
 import space.habitz.api.domain.member.entity.Member;
+import space.habitz.api.domain.member.entity.Role;
 import space.habitz.api.domain.member.repository.ChildRepository;
 import space.habitz.api.domain.point.entity.ChildPointHistory;
 import space.habitz.api.domain.point.repository.ChildPointHistoryRepository;
@@ -29,6 +30,9 @@ public class QuizServiceImpl implements QuizService {
 
 	@Override
 	public QuizHistoryDto getTodayQuiz(Member member) {
+		if (member.getRole() != Role.CHILD) {
+			throw new CustomNotFoundException("아이만 퀴즈를 풀 수 있습니다.");
+		}
 		Child child = childRepository.findByMember_Id(member.getId());
 		LocalDate today = LocalDate.now();
 
@@ -78,6 +82,9 @@ public class QuizServiceImpl implements QuizService {
 
 	@Override
 	public QuizHistoryDto solveQuiz(Member member, String answer) {
+		if (member.getRole() != Role.CHILD) {
+			throw new CustomNotFoundException("아이만 퀴즈를 풀 수 있습니다.");
+		}
 		Child child = childRepository.findByMember_Id(member.getId());
 		LocalDate today = LocalDate.now();
 		Quiz quiz = quizRepository.findByDate(today).orElseThrow(() -> new CustomNotFoundException("오늘의 퀴즈가 없습니다."));
