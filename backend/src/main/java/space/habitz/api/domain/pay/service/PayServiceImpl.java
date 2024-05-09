@@ -72,9 +72,12 @@ public class PayServiceImpl implements PayService {
 		family.addFamilyPoint(parentPayment.getAmount());
 
 		FamilyPointHistory familyPointHistory = FamilyPointHistory.builder()
+			.family(family)
+			.member(parentPayment.getMember())
+			.content("포인트 충전")
 			.parentPayment(parentPayment)
 			.payPoint(parentPayment.getAmount())
-			.remainPoint(family.getFamilyPoint())
+			.totalPoint(family.getFamilyPoint())
 			.build();
 		familyPointHistoryRepository.save(familyPointHistory);
 

@@ -50,7 +50,7 @@ public class Child extends MutableTimeEntity {
 		isDeleted = false;
 	}
 
-	public void setPoint(int changePoint) {
-		this.point += changePoint;
+	public void setQuizPoint(int changePoint) {
+		this.point = changePoint;
 	}
 }
