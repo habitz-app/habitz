@@ -23,11 +23,15 @@ declare global {
 const MobileLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <styled.div
+      className={css({
+        sm: {
+          left: '50vw',
+        },
+      })}
       maxW="430px"
       minH="100vh"
       bgColor="background.normal.normal"
       position="relative"
-      left="50vw"
     >
       {children}
     </styled.div>
@@ -50,6 +54,10 @@ export default function RootLayout({
       >
         <div
           className={css({
+            sm: {
+              display: 'block',
+            },
+            display: 'none',
             textStyle: 'hero1.bold',
             color: 'secondary.normal',
             position: 'fixed',

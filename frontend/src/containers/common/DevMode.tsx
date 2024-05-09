@@ -67,13 +67,16 @@ const DevMode = () => {
       {process.env.NODE_ENV === 'development' && (
         <div
           className={css({
+            sm: {
+              display: 'flex',
+            },
+            display: 'none',
             textStyle: 'headline1.bold',
             position: 'fixed',
             bgColor: 'secondary.normal',
             p: '1rem',
             top: '2rem',
             left: '2rem',
-            display: 'flex',
             flexDir: 'column',
             gap: '2',
             textAlign: 'center',
