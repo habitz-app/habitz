@@ -1,3 +1,5 @@
+'use client';
+
 import { useAuthWithRole } from '@/hooks/useAuth';
 
 const ParentLayout = ({ children }: { children: React.ReactNode }) => {
@@ -5,3 +7,5 @@ const ParentLayout = ({ children }: { children: React.ReactNode }) => {
 
   return <>{children}</>;
 };
+
+export default ParentLayout;
