@@ -100,4 +100,10 @@ public class Mission extends MutableTimeEntity {
 		this.emoji = request.emoji();
 		this.point = request.point();
 	}
+
+	public void updateStatus(StatusCode statusCode, Member parent) {
+		this.status = statusCode;
+		this.approveParent = parent;
+
+	}
 }
