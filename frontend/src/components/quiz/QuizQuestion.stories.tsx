@@ -14,9 +14,6 @@ export default {
     correct: {
       type: 'boolean',
     },
-    articleId: {
-      type: 'number',
-    },
   },
 } as Meta;
 
@@ -27,7 +24,6 @@ export const Default: Story = {
     content: '딸기는 과일이다',
     isSolved: false,
     correct: false,
-    articleId: 1,
   },
   parameters: {
     nextjs: {
@@ -41,7 +37,6 @@ export const Correct: Story = {
     content: '딸기는 과일이다',
     isSolved: true,
     correct: true,
-    articleId: 1,
   },
   parameters: {
     nextjs: {
@@ -55,7 +50,6 @@ export const Wrong: Story = {
     content: '딸기는 과일이다',
     isSolved: true,
     correct: false,
-    articleId: 1,
   },
   parameters: {
     nextjs: {
