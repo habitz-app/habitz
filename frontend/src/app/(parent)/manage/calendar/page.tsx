@@ -1,5 +1,5 @@
 'use client';
-import Calendar from './calendar';
+import Calendar from '@/components/calendar/calendar';
 import { useCallback, useEffect, useState } from 'react';
 import { css } from 'styled-system/css';
 import { hstack } from 'styled-system/patterns';
