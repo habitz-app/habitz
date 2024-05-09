@@ -6,6 +6,7 @@ import lombok.Getter;
 @Builder
 @Getter
 public class ArticleInfoDto {
+	Long id;
 	String title;
 	String content;
 }
