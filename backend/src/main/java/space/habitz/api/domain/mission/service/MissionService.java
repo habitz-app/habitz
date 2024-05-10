@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,6 +34,8 @@ import space.habitz.api.domain.mission.entity.StatusCode;
 import space.habitz.api.domain.mission.repository.MissionRecognitionRepository;
 import space.habitz.api.domain.mission.repository.MissionRepository;
 import space.habitz.api.domain.mission.util.MissionConverter;
+import space.habitz.api.domain.notification.dto.ParentNotificationEvent;
+import space.habitz.api.domain.notification.dto.SingleNotificationEvent;
 import space.habitz.api.domain.point.entity.ChildPointHistory;
 import space.habitz.api.domain.point.entity.FamilyPointHistory;
 import space.habitz.api.domain.point.repository.ChildPointHistoryRepository;
@@ -64,6 +67,7 @@ public class MissionService {
 	private final FamilyPointHistoryRepository familyPointHistoryRepository;
 	// Common
 	private final S3FileUploadService fileUploadService;
+	private final ApplicationEventPublisher eventPublisher;
 
 	/**
 	 * 미션 상세 조회
@@ -256,13 +260,15 @@ public class MissionService {
 		validationMissionRequest(mission.getStatus(), requestDto.status());
 
 		if (requestDto.status().equals(StatusCode.ACCEPT)) {
-			// 미션 상태 변경 (ACCEPT)
+			// 미션 상태 변경 (ACCEPT) / 아이에게 알림전송
 			missionSuccess(parent, mission, memChild, requestDto.status());
+			eventPublisher.publishEvent(
+				SingleNotificationEvent.missionResult(memChild.getId(), mission.getTitle(), true));
 			return "MISSION ACCEPT / 포인트 지급 완료";
 		}
-		// 미션 decline 구현 필요
+		// 미션 decline / 아이에게 알림전송
 		mission.updateStatus(requestDto.status(), parent, requestDto.comment());
-		// TODO :: notification 전송
+		eventPublisher.publishEvent(SingleNotificationEvent.missionResult(memChild.getId(), mission.getTitle(), false));
 		return "MISSION DECLINE";
 	}
 
@@ -345,7 +351,9 @@ public class MissionService {
 
 		// 미션 상태 업데이트
 		mission.setStatus(StatusCode.PENDING);
-		// TODO :: 인증 시, 부모에게 알림 전송
+		// 부모에게 알림 전송
+		eventPublisher.publishEvent(
+			ParentNotificationEvent.missionSubmit(mission.getChild().getId(), mission.getTitle()));
 		return Map.of("missionRecognitionId", missionRecognition.getId());
 	}
 
@@ -370,6 +378,7 @@ public class MissionService {
 	 * @param missionId 미션 ID
 	 * @param content 인증 내용
 	 * */
+	@Transactional
 	public Map<String, Long> updatePerfomMission(Member member, Long missionId, String content,
 		MultipartFile image) throws
 		IOException {
@@ -385,8 +394,9 @@ public class MissionService {
 
 		String imageUrl = getImageStoreURL(image);
 		missionRecognition.updateRecognition(imageUrl, content);
-
-		// TODO :: 인증 시, 부모에게 알림 전송
-		return null;
+		// 부모에게 알림 전송
+		eventPublisher.publishEvent(
+			ParentNotificationEvent.missionSubmit(mission.getChild().getId(), mission.getTitle()));
+		return Map.of("missionRecognitionId", missionRecognition.getId());
 	}
 }
