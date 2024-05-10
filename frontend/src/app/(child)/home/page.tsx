@@ -5,12 +5,26 @@ import { getUserData } from '@/hooks/useAuth';
 import { MemberResponse } from '@/types/api/response';
 import { IonIcon } from '@ionic/react';
 import { useQuery } from '@tanstack/react-query';
+import axios from '@/apis/axios';
 import { notifications } from 'ionicons/icons';
 import { css } from 'styled-system/css';
+import { PointAmount } from '@/types/point';
 const HomePage = () => {
   const me = useQuery<MemberResponse>({
     queryKey: ['me'],
     queryFn: getUserData,
+  });
+
+  const getPoint = async () => {
+    return await axios.get<PointAmount>('/point/amount').then((res) => {
+      console.log(res.data.data);
+      return res.data.data;
+    });
+  };
+
+  const amount = useQuery({
+    queryKey: ['point'],
+    queryFn: getPoint,
   });
 
   return (
@@ -87,7 +101,7 @@ const HomePage = () => {
             })}
           </p>
         </span>
-        <ProfileCard point={10450} />
+        <ProfileCard point={amount.data?.point || 0} />
       </div>
     </>
   );
