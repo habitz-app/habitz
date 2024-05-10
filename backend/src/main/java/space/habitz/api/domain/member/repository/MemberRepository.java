@@ -1,6 +1,5 @@
 package space.habitz.api.domain.member.repository;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,6 +14,4 @@ public interface MemberRepository extends JpaRepository<Member, Long>, MemberCus
 	Optional<Member> findBySocialInform(SocialInform socialInform);
 
 	Optional<Member> findByUuid(String uuid);
-
-	List<Member> findByFamilyIdAndRole(String familyId, Role role);
 }

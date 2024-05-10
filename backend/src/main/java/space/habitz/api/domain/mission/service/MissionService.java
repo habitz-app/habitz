@@ -18,8 +18,8 @@ import space.habitz.api.domain.member.dto.MemberProfileDto;
 import space.habitz.api.domain.member.entity.Child;
 import space.habitz.api.domain.member.entity.Family;
 import space.habitz.api.domain.member.entity.Member;
-import space.habitz.api.domain.member.entity.Role;
 import space.habitz.api.domain.member.repository.ChildRepository;
+import space.habitz.api.domain.member.repository.FamilyCustomRepositoryImpl;
 import space.habitz.api.domain.member.repository.FamilyRepository;
 import space.habitz.api.domain.member.repository.MemberRepository;
 import space.habitz.api.domain.mission.dto.MissionApprovalDto;
@@ -58,6 +58,7 @@ public class MissionService {
 	private final MemberRepository memberRepository;
 	private final FamilyRepository familyRepository;
 	private final ChildRepository childRepository;
+	private final FamilyCustomRepositoryImpl familyCustomRepository;
 	// Point
 	private final ChildPointHistoryRepository childPointHistoryRepository;
 	private final FamilyPointHistoryRepository familyPointHistoryRepository;
@@ -159,7 +160,6 @@ public class MissionService {
 	 * 부모가 자식들의 미션 목록을 조회
 	 * - 로그인 한 유저의 아이 목록을 조회한다.
 	 * - 날짜를 기준으로 아이들의 미션 목록을 조회한다.
-	 * - TODO:: 아이 기준으로 조회 -> 생년월일 순으로 조회되도록 QueryDSL 사용해야함
 	 *
 	 * @param member 로그인한 사용자
 	 * @param date 조회할 날짜
@@ -168,8 +168,8 @@ public class MissionService {
 	public List<Map<String, Object>> getChildrenMissionList(Member member, LocalDate date) {
 
 		// 가족 조회
-		Family family = member.getFamily();
-		List<Member> children = memberRepository.findByFamilyIdAndRole(family.getId(), Role.CHILD);
+		List<Member> children = familyCustomRepository.findByFamilyIdOnlyChildMember(member.getFamily().getId(),
+			true);
 
 		// 가족의 자식 목록 조회
 		List<Map<String, Object>> totalMissionList = new ArrayList<>();
