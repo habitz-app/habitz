@@ -378,6 +378,7 @@ public class MissionService {
 	 * @param missionId 미션 ID
 	 * @param content 인증 내용
 	 * */
+	@Transactional
 	public Map<String, Long> updatePerfomMission(Member member, Long missionId, String content,
 		MultipartFile image) throws
 		IOException {
