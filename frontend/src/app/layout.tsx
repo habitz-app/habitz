@@ -47,7 +47,7 @@ export default function RootLayout({
     <html lang="ko" className={clsx(Pretendard.variable, Yeoljeong.variable)}>
       <body
         className={css({
-          font: 'pretendard',
+          fontFamily: 'pretendard',
           bgColor: 'primary.normal',
           position: 'relative',
         })}
