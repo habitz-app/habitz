@@ -26,7 +26,6 @@ public class FamilyController {
 		return ApiResponseData.success(inviteCode);
 	}
 
-	@PreAuthorize("hasAnyRole('PARENT', 'ADMIN')")
 	@GetMapping("/memberList")
 	public ResponseEntity<?> memberList() {
 		List<FamilyListResponseDto> familyList = familyService.getFamilyList();
