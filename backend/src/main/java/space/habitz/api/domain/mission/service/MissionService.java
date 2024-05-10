@@ -22,6 +22,7 @@ import space.habitz.api.domain.member.repository.FamilyCustomRepositoryImpl;
 import space.habitz.api.domain.member.repository.FamilyRepository;
 import space.habitz.api.domain.member.repository.MemberRepository;
 import space.habitz.api.domain.mission.dto.MissionApprovalDto;
+import space.habitz.api.domain.mission.dto.MissionApproveRequestDto;
 import space.habitz.api.domain.mission.dto.MissionDto;
 import space.habitz.api.domain.mission.dto.MissionRecognitionDto;
 import space.habitz.api.domain.mission.dto.MissionResponseDto;
@@ -239,31 +240,52 @@ public class MissionService {
 	 * 미션 상태 변경
 	 * - 미션의 상태를 변경한다.
 	 *
-	 * @param missionId 미션 ID
-	 * @param statusCode 변경할 상태 코드
+	 * @param requestDto 미션 Approve Request DTO
 	 */
 	@Transactional
-	public String changeMissionStatus(Member parent, Long missionId, StatusCode statusCode) {
+	public String changeMissionStatus(Member parent, MissionApproveRequestDto requestDto) {
 
-		Mission mission = missionRepository.findById(missionId)
+		Mission mission = missionRepository.findById(requestDto.missionId())
 			.orElseThrow(() -> new CustomErrorException(ErrorCode.MISSION_NOT_FOUND));
 		Member memChild = memberRepository.findById(mission.getChild().getId())
 			.orElseThrow(() -> new CustomErrorException(ErrorCode.MEMBER_NOT_FOUND));
 
 		// 부모와 미션의 가족이 일치하는지 확인
 		validateFamily(parent.getFamily().getId(), memChild.getFamily().getId());
+		// 만약 미션의 상태가 ACCEPT라면, 이미 성공한 미션이므로 상태 변경 불가능
+		validationMissionRequest(mission.getStatus(), requestDto.status());
 
-		if (statusCode == StatusCode.ACCEPT && mission.getStatus() != StatusCode.ACCEPT) {
+		if (requestDto.status().equals(StatusCode.ACCEPT)) {
 			// 미션 상태 변경 (ACCEPT)
-			missionSuccess(parent, mission, memChild, statusCode);
-			return "미션 성공, 포인트 지급 완료";
+			missionSuccess(parent, mission, memChild, requestDto.status());
+			return "MISSION ACCEPT / 포인트 지급 완료";
 		}
 		// 미션 decline 구현 필요
-		mission.setStatus(statusCode);
-		return "미션 실패";
+		mission.updateStatus(requestDto.status(), parent, requestDto.comment());
+		// TODO :: notification 전송
+		return "MISSION DECLINE";
 	}
 
-	void missionSuccess(Member parent, Mission mission, Member memChild, StatusCode statusCode) {
+	/**
+	 * 미션 상태에 대한 검증 로직
+	 * 1. 현재 ACCEPT인 상태는, 상태 변경 불가능
+	 * 2. 요청 상태는 ACCEPT와 DECLINE만 가능
+	 *
+	 * @param currentStatus 현재 미션 상태
+	 * @param requestStatus 요청 미션 상태
+	 * */
+	private void validationMissionRequest(StatusCode currentStatus, StatusCode requestStatus) {
+		// 만약 미션의 상태가 ACCEPT라면, 이미 성공한 미션이므로 상태 변경 불가능
+		if (currentStatus.equals(StatusCode.ACCEPT)) {
+			throw new CustomErrorException(ErrorCode.MISSION_ALREADY_ACCEPTED);
+		}
+		// requestStatus는 ACCEPT와 DECLINE 만 가능
+		if (requestStatus.equals(StatusCode.EMPTY) || requestStatus.equals(StatusCode.PENDING)) {
+			throw new CustomValidationException("미션 상태 변경 요청이 잘못되었습니다.");
+		}
+	}
+
+	private void missionSuccess(Member parent, Mission mission, Member memChild, StatusCode statusCode) {
 		Family family = familyRepository.findFamilyById(parent.getFamily().getId());
 		if (family.getFamilyPoint() < mission.getPoint()) {
 			throw new CustomValidationException("가족 포인트가 부족합니다.");
@@ -291,7 +313,8 @@ public class MissionService {
 			.child(child)
 			.build();
 		childPointHistoryRepository.save(childPointHistory);
-		mission.updateStatus(statusCode, parent);
+		// ACCEPT의 comment의 default는 null
+		mission.updateStatus(statusCode, parent, null);
 	}
 
 	/**
@@ -357,7 +380,7 @@ public class MissionService {
 
 		// 승인된 미션은 수정 불가능
 		if (mission.getStatus().equals(StatusCode.ACCEPT)) {
-			throw new CustomErrorException(ErrorCode.MISSION_ACCEPTED_CAN_NOT_UPDATE);
+			throw new CustomErrorException(ErrorCode.MISSION_ALREADY_ACCEPTED);
 		}
 
 		String imageUrl = getImageStoreURL(image);
