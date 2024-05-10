@@ -6,8 +6,9 @@ import { hstack, stack } from 'styled-system/patterns';
 import { Button } from '~/components/ui/button';
 import * as DatePicker from '~/components/ui/date-picker';
 import { IconButton } from '~/components/ui/icon-button';
-import { colors } from './colors';
+import { colors } from '@/app/(parent)/manage/calendar/colors';
 import { CalendarResponse } from '@/types/api/response';
+
 // 달력 조회 시 아이의 일정 조회 API Response 데이터 구조
 interface childInfo {
   name: string;
