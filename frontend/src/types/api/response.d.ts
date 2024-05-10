@@ -111,3 +111,12 @@ export interface QuizResponse {
     correct: true;
   };
 }
+
+export interface Mission {
+  missionId: number;
+  status: 'EMPTY' | 'PENDING' | 'ACCEPT' | 'DECLINE';
+  title: string;
+}
+export interface MissionResponse {
+  data: Mission[];
+}

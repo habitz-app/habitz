@@ -2,14 +2,19 @@
 import ProfileCard from '@/components/common/ProfileCard';
 import { Button } from '@/components/ui/button';
 import { getUserData } from '@/hooks/useAuth';
-import { MemberResponse } from '@/types/api/response';
+import { MemberResponse, MissionResponse } from '@/types/api/response';
 import { IonIcon } from '@ionic/react';
 import { useQuery } from '@tanstack/react-query';
 import axios from '@/apis/axios';
-import { notifications } from 'ionicons/icons';
+import { chevronForwardOutline, notifications } from 'ionicons/icons';
 import { css } from 'styled-system/css';
 import { PointAmount } from '@/types/point';
+import Link from 'next/link';
+import MissionPreview from '@/components/mission/MissionPreview';
 const HomePage = () => {
+  const date = new Date().toISOString().split('T')[0];
+
+  console.log(date);
   const me = useQuery<MemberResponse>({
     queryKey: ['me'],
     queryFn: getUserData,
@@ -17,7 +22,6 @@ const HomePage = () => {
 
   const getPoint = async () => {
     return await axios.get<PointAmount>('/point/amount').then((res) => {
-      console.log(res.data.data);
       return res.data.data;
     });
   };
@@ -25,6 +29,19 @@ const HomePage = () => {
   const amount = useQuery({
     queryKey: ['point'],
     queryFn: getPoint,
+  });
+
+  const getMission = async () => {
+    return await axios
+      .get<MissionResponse>(`/mission/list?date=${date}`)
+      .then((res) => {
+        return res.data.data;
+      });
+  };
+
+  const mission = useQuery({
+    queryKey: ['mission'],
+    queryFn: getMission,
   });
 
   return (
@@ -102,6 +119,44 @@ const HomePage = () => {
           </p>
         </span>
         <ProfileCard point={amount.data?.point || 0} />
+        <section
+          className={css({
+            display: 'flex',
+            flexDir: 'column',
+            gap: '0.625rem',
+          })}
+        >
+          <div
+            className={css({
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              pt: '1.25rem',
+            })}
+          >
+            <p
+              className={css({
+                textStyle: 'title3.bold',
+              })}
+            >
+              오늘의 미션
+            </p>
+            <Link href={'/mission'}>
+              <IonIcon icon={chevronForwardOutline} />
+            </Link>
+          </div>
+          {Array.isArray(mission.data) &&
+            mission.data.map(function (m) {
+              return (
+                <MissionPreview
+                  missionId={m.missionId}
+                  status={m.status}
+                  title={m.title}
+                  key={m.missionId}
+                />
+              );
+            })}
+        </section>
       </div>
     </>
   );
