@@ -16,6 +16,7 @@ import space.habitz.api.domain.member.repository.FamilyRepository;
 import space.habitz.api.domain.member.utils.AuthUtils;
 import space.habitz.api.domain.notification.dto.FamilyNotificationEvent;
 import space.habitz.api.domain.notification.dto.NotificationResponseDto;
+import space.habitz.api.domain.notification.dto.ParentNotificationEvent;
 import space.habitz.api.domain.notification.dto.SingleNotificationEvent;
 import space.habitz.api.domain.notification.entity.Notification;
 import space.habitz.api.domain.notification.entity.NotificationType;
@@ -41,6 +42,14 @@ public class NotificationServiceImpl implements NotificationService {
 			.toList();
 
 		return notificationRepository.saveAll(combinedNotification);
+	}
+
+	@Override
+	@TransactionalEventListener(ParentNotificationEvent.class)
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	public List<Notification> createParentNotification(ParentNotificationEvent parentNotificationEvent) {
+		List<Notification> parentNotification = getParentNotification(parentNotificationEvent);
+		return notificationRepository.saveAll(parentNotification);
 	}
 
 	@Override
@@ -121,6 +130,27 @@ public class NotificationServiceImpl implements NotificationService {
 
 		else
 			parentMembers = familyRepository.findByMemberIds(parentMemberId);
+
+		return parentMembers.stream().map(member -> {
+			return Notification.builder()
+				.type(notificationType)
+				.title(notificationType.getTitle())
+				.content(notificationType.getParentContents(childMember, content))
+				.member(member)
+				.build();
+		}).toList();
+	}
+
+	private List<Notification> getParentNotification(ParentNotificationEvent parentNotificationEvent) {
+		NotificationType notificationType = parentNotificationEvent.getNotificationType();
+		String content = parentNotificationEvent.getContent();
+		Long childMemberId = parentNotificationEvent.getChildMemberId();
+
+		Member childMember = familyRepository.findByMemberId(childMemberId)
+			.orElseThrow(() -> new MemberNotFoundException(childMemberId));
+
+		List<Member> parentMembers = familyRepository.findByFamilyIdOnlyParentMember(childMember.getFamily().getId(),
+			true);
 
 		return parentMembers.stream().map(member -> {
 			return Notification.builder()
