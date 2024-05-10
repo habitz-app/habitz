@@ -15,7 +15,7 @@ const Bill = () => {
   const [brand, setBrand] = useState(dummyBrand);
   const [price, setPrice] = useState(dummyPrice);
   return (
-    <Stack w="full" justify="space-between" align="center">
+    <Stack w="full" justify="space-between" align="center" px="1rem">
       <GoodsCard
         url={url}
         name={name}

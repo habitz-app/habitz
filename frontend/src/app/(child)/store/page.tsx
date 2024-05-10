@@ -14,7 +14,7 @@ const Category = () => {
     { type: 'iceCream', name: '음료/아이스크림' },
   ];
   return (
-    <Stack h={'100%'} justify={'space-between'}>
+    <Stack h={'100%'} justify={'space-between'} px="1rem">
       {categories.map((category, id) => (
         <Link
           key={id}

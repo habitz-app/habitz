@@ -14,7 +14,7 @@ interface brand {
 const Store = () => {
   const searchParams = useSearchParams();
   const [category, setCategory] = useState<string>(
-    searchParams.get('category') || '???',
+    searchParams.get('category') || '전체',
   );
   const [brands, setBrands] = useState<brand[]>([
     {
@@ -35,8 +35,8 @@ const Store = () => {
     },
   ]);
   return (
-    <Stack padding={10}>
-      <h1>{category}</h1>
+    <Stack px="1rem">
+      <p className={css({ textStyle: 'title2.bold' })}>{category}</p>
       <HStack>
         {brands.map((brand, id) => (
           <button
