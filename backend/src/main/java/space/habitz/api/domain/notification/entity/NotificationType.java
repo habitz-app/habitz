@@ -16,7 +16,7 @@ public enum NotificationType {
 
 		@Override
 		public String getParentContents(Member member, String content) {
-			return member.getName() + "님이 미션을 제출했습니다: " + content;
+			return member.getName() + "님이 미션을 제출했습니다\n " + content;
 		}
 	},
 	MISSION_CONFIRM {
@@ -32,10 +32,10 @@ public enum NotificationType {
 
 		@Override
 		public String getParentContents(Member member, String content) {
-			return member.getName() + "님이 제출한 미션을 확인했습니다: " + content;
+			return member.getName() + "님이 제출한 미션을 확인했습니다\n " + content;
 		}
 	},
-	MISSION_REJECT {
+	MISSION_DECLINE {
 		@Override
 		public String getTitle() {
 			return "미션 거절";
@@ -48,10 +48,10 @@ public enum NotificationType {
 
 		@Override
 		public String getParentContents(Member member, String content) {
-			return member.getName() + "님이 제출한 미션을 거절했습니다: " + content;
+			return member.getName() + "님이 제출한 미션을 거절했습니다\n " + content;
 		}
 	},
-	MISSION_APPROVE {
+	MISSION_ACCEPT {
 		@Override
 		public String getTitle() {
 			return "미션 승인";
@@ -64,7 +64,7 @@ public enum NotificationType {
 
 		@Override
 		public String getParentContents(Member member, String content) {
-			return member.getName() + "님이 제출한 미션을 승인했습니다: " + content;
+			return member.getName() + "님이 제출한 미션을 승인했습니다\n " + content;
 		}
 	},
 	MISSION_ARRIVED {
@@ -80,7 +80,7 @@ public enum NotificationType {
 
 		@Override
 		public String getParentContents(Member member, String content) {
-			return member.getName() + "님에게 미션을 부여 했습니다: " + content;
+			return member.getName() + "님에게 미션을 부여 했습니다\n " + content;
 		}
 	},
 	ITEM_BUYING {
@@ -96,7 +96,7 @@ public enum NotificationType {
 
 		@Override
 		public String getParentContents(Member member, String content) {
-			return member.getName() + "님이 아이템을 구매했습니다: " + content;
+			return member.getName() + "님이 아이템을 구매했습니다\n " + content;
 		}
 	},
 	POINT_CHARGE {
@@ -112,7 +112,7 @@ public enum NotificationType {
 
 		@Override
 		public String getParentContents(Member member, String content) {
-			return member.getName() + "님이 포인트를 충전했습니다: " + content;
+			return member.getName() + "님이 포인트를 충전했습니다\n " + content;
 		}
 	},
 	SYSTEM {
@@ -128,7 +128,7 @@ public enum NotificationType {
 
 		@Override
 		public String getParentContents(Member member, String content) {
-			return "시스템 알림: " + content;
+			return "시스템 알림\n " + content;
 		}
 	};
 
