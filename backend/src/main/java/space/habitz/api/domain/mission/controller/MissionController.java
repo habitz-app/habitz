@@ -39,7 +39,7 @@ public class MissionController {
 	private final MissionService missionService;
 
 	@Operation(
-		summary = "미션 조회",
+		summary = "미션 조회 (공통)",
 		description = "미션 상세 내용을 조회합니다."
 	)
 	@GetMapping("/{missionId}")
@@ -48,7 +48,7 @@ public class MissionController {
 	}
 
 	@Operation(
-		summary = "미션 삭제",
+		summary = "미션 삭제 (부모 전용)",
 		description = "미션을 삭제합니다."
 	)
 	@DeleteMapping("/{missionId}")
@@ -58,7 +58,7 @@ public class MissionController {
 	}
 
 	@Operation(
-		summary = "미션 수정",
+		summary = "미션 수정 (부모 전용)",
 		description = "미션을 수정합니다. (일정 수정 X)"
 	)
 	@PutMapping("/{missionId}")
@@ -76,7 +76,7 @@ public class MissionController {
 	}
 
 	@Operation(
-		summary = "날짜를 기준으로 미션 리스트 조회 (아이)",
+		summary = "날짜를 기준으로 미션 리스트 조회 (아이 전용)",
 		description = "아이는 날짜를 기준으로 미션 목록을 조회합니다."
 	)
 	@GetMapping("/list")
@@ -87,7 +87,7 @@ public class MissionController {
 	}
 
 	@Operation(
-		summary = "날짜를 기준으로 아이들에 대한 미션 리스트 조회 (부모)",
+		summary = "날짜를 기준으로 아이들에 대한 미션 리스트 조회 (부모 전용)",
 		description = "부모는 날짜를 기준으로 아이의 미션 목록을 조회합니다. <br> child 값은 memberUUID 를 사용합니다. <br> child는 nullable 하며, null일 경우 전체 아이들의 목록 / null이 아닐 경우 특정 아이에 대한 목록을 조회합니다."
 	)
 	@GetMapping("/children/list")
@@ -105,17 +105,21 @@ public class MissionController {
 		}
 	}
 
+	@Operation(
+		summary = "미션 승인 (부모 전용)",
+		description = "미션을 승인합니다. (상태 업데이트 ACCEPT / DECLINE 변경) <br> DECLINE은 comment를 추가할 수 있습니다."
+	)
 	@PostMapping("/approve")
 	public ResponseData<?> approveMission(
 		@AuthenticationPrincipal Member member,
 		@RequestBody MissionApproveRequestDto requestDto
 	) {
 		return ResponseData.success(
-			missionService.changeMissionStatus(member, requestDto.missionId(), requestDto.status()));
+			missionService.changeMissionStatus(member, requestDto));
 	}
 
 	@Operation(
-		summary = "미션 수행 인증",
+		summary = "미션 수행 인증 (아이 전용)",
 		description = "미션 수행을 인증합니다."
 	)
 	@PostMapping(value = "/{missionId}/perform", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -128,7 +132,7 @@ public class MissionController {
 	}
 
 	@Operation(
-		summary = "미션 수행 내용 수정",
+		summary = "미션 수행 내용 수정 (아이 전용)",
 		description = "미션 수행 내용을 수정합니다."
 	)
 	@PutMapping(value = "/{missionId}/perform", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)

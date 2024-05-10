@@ -27,7 +27,6 @@ import space.habitz.api.domain.mission.dto.UpdateMissionRequestDto;
 import space.habitz.api.domain.schedule.dto.UpdateScheduleRequestDto;
 import space.habitz.api.domain.schedule.entity.Schedule;
 import space.habitz.api.global.entity.MutableTimeEntity;
-import space.habitz.api.global.type.StatusCode;
 
 @Entity
 @Getter
@@ -112,9 +111,9 @@ public class Mission extends MutableTimeEntity {
 		this.point = request.point();
 	}
 
-	public void updateStatus(StatusCode statusCode, Member parent) {
+	public void updateStatus(StatusCode statusCode, Member parent, String comment) {
 		this.status = statusCode;
 		this.approveParent = parent;
-
+		this.comment = comment;
 	}
 }

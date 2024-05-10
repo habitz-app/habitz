@@ -3,8 +3,8 @@ package space.habitz.api.domain.mission.util;
 import java.time.LocalDate;
 
 import space.habitz.api.domain.mission.entity.Mission;
+import space.habitz.api.domain.mission.entity.StatusCode;
 import space.habitz.api.domain.schedule.entity.Schedule;
-import space.habitz.api.global.type.StatusCode;
 
 public class MissionConverter {
 
