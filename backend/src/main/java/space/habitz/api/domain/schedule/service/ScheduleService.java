@@ -1,10 +1,10 @@
 package space.habitz.api.domain.schedule.service;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -115,16 +115,12 @@ public class ScheduleService {
 
 		// 가족 조회
 		List<Member> children = familyCustomRepository.findByFamilyIdOnlyChildMember(member.getFamily().getId(), true);
-
-		// 가족의 자식 목록 조회
-		List<Map<String, Object>> totalScheduleMissionList = new ArrayList<>();
-		for (Member child : children) {
-			MemberProfileDto childInfo = MemberProfileDto.of(child);
-			// 자식들의 일정(미션) 목록 조회
-			List<ScheduleMissionDto> scheduleMissionDtoList = getScheduleMissionList(child, date);
-			totalScheduleMissionList.add(Map.of("childInfo", childInfo, "schedules", scheduleMissionDtoList));
-		}
-		return totalScheduleMissionList;
+		return children.stream()
+			.map(child -> Map.of(
+				"childInfo", MemberProfileDto.of(child),
+				"schedules", getScheduleMissionList(child, date)
+			))
+			.collect(Collectors.toList());
 	}
 
 	/**

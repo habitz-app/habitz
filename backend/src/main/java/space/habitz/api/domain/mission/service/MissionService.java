@@ -2,7 +2,6 @@ package space.habitz.api.domain.mission.service;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -170,17 +169,14 @@ public class MissionService {
 		// 가족 조회
 		List<Member> children = familyCustomRepository.findByFamilyIdOnlyChildMember(member.getFamily().getId(),
 			true);
-
 		// 가족의 자식 목록 조회
-		List<Map<String, Object>> totalMissionList = new ArrayList<>();
-		for (Member child : children) {
-			MemberProfileDto childInfo = MemberProfileDto.of(child);
-			// 자식들의 미션 목록 조회
-			List<MissionDto> missionDtoList = getMissionList(child, date);
-			totalMissionList.add(Map.of("childInfo", childInfo, "missions", missionDtoList));
-		}
-
-		return totalMissionList;
+		return children.stream()
+			.map(child -> {
+				return Map.of(
+					"childInfo", MemberProfileDto.of(child),
+					"missions", getMissionList(child, date));
+			})
+			.collect(Collectors.toList());
 	}
 
 	/**
