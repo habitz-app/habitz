@@ -5,7 +5,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.springframework.scheduling.annotation.Scheduled;
@@ -24,7 +23,6 @@ import space.habitz.api.domain.member.repository.ChildRepository;
 import space.habitz.api.domain.member.repository.FamilyRepository;
 import space.habitz.api.domain.member.repository.MemberRepository;
 import space.habitz.api.domain.mission.dto.MissionApprovalDto;
-import space.habitz.api.domain.mission.dto.MissionApproveRequestDto;
 import space.habitz.api.domain.mission.dto.MissionDto;
 import space.habitz.api.domain.mission.dto.MissionRecognitionDto;
 import space.habitz.api.domain.mission.dto.MissionResponseDto;
@@ -76,24 +74,27 @@ public class MissionService {
 		Mission mission = missionRepository.findById(missionId)
 			.orElseThrow(() -> new CustomErrorException(ErrorCode.MISSION_NOT_FOUND));
 		MissionRecognition missionRecognition = mission.getMissionRecognition();
+		Long scheduleId = mission.getSchedule().getId();
 		if (missionRecognition != null) {
 			// 인증 내용이 존재하면 함께 return
-			return getMissionRecognition(mission, MissionRecognitionDto.of(missionRecognition));
+			return getMissionRecognition(scheduleId, mission, MissionRecognitionDto.of(missionRecognition));
 		}
-		return MissionResponseDto.of(MissionDto.of(mission), null, null);
+		return MissionResponseDto.of(scheduleId, MissionDto.of(mission), null, null);
 	}
 
 	/**
 	 * 미션에 인증 정보가 존재할 경우
 	 * */
-	private MissionResponseDto getMissionRecognition(Mission mission, MissionRecognitionDto missionRecognition) {
+	private MissionResponseDto getMissionRecognition(Long scheduleId, Mission mission,
+		MissionRecognitionDto missionRecognition) {
 		// 인증 내용이 존재하면 함께 return
 		if (mission.getStatus().equals(StatusCode.ACCEPT) || mission.getStatus().equals(StatusCode.DECLINE)) {
-			return MissionResponseDto.of(MissionDto.of(mission), missionRecognition,
+			return MissionResponseDto.of(scheduleId, MissionDto.of(mission),
+				missionRecognition,
 				MissionApprovalDto.of(mission.getApproveParent().getName(), mission.getComment()));
 		}
 		// 승인 내역이 없고, 인증 상태만 있는 경우
-		return MissionResponseDto.of(MissionDto.of(mission), missionRecognition, null);
+		return MissionResponseDto.of(scheduleId, MissionDto.of(mission), missionRecognition, null);
 	}
 
 	/**
