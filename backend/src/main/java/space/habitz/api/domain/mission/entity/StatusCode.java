@@ -1,4 +1,4 @@
-package space.habitz.api.global.type;
+package space.habitz.api.domain.mission.entity;
 
 public enum StatusCode {
 	ACCEPT,

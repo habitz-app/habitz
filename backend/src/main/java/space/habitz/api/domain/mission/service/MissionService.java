@@ -29,6 +29,7 @@ import space.habitz.api.domain.mission.dto.MissionResponseDto;
 import space.habitz.api.domain.mission.dto.UpdateMissionRequestDto;
 import space.habitz.api.domain.mission.entity.Mission;
 import space.habitz.api.domain.mission.entity.MissionRecognition;
+import space.habitz.api.domain.mission.entity.StatusCode;
 import space.habitz.api.domain.mission.repository.MissionRecognitionRepository;
 import space.habitz.api.domain.mission.repository.MissionRepository;
 import space.habitz.api.domain.mission.util.MissionConverter;
@@ -41,7 +42,6 @@ import space.habitz.api.domain.schedule.repository.ScheduleCustomRepositoryImpl;
 import space.habitz.api.global.exception.CustomErrorException;
 import space.habitz.api.global.exception.CustomValidationException;
 import space.habitz.api.global.exception.ErrorCode;
-import space.habitz.api.global.type.StatusCode;
 import space.habitz.api.global.util.fileupload.dto.UploadedFileResponseDto;
 import space.habitz.api.global.util.fileupload.service.S3FileUploadService;
 
