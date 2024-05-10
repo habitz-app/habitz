@@ -16,6 +16,7 @@ import space.habitz.api.domain.member.entity.Member;
 import space.habitz.api.domain.member.repository.FamilyCustomRepositoryImpl;
 import space.habitz.api.domain.member.repository.MemberRepository;
 import space.habitz.api.domain.mission.entity.Mission;
+import space.habitz.api.domain.mission.entity.StatusCode;
 import space.habitz.api.domain.mission.repository.MissionRepository;
 import space.habitz.api.domain.mission.util.MissionConverter;
 import space.habitz.api.domain.schedule.dto.ScheduleDto;
@@ -28,7 +29,6 @@ import space.habitz.api.domain.schedule.repository.ScheduleRepository;
 import space.habitz.api.domain.schedule.util.ScheduleDateUtil;
 import space.habitz.api.global.exception.CustomErrorException;
 import space.habitz.api.global.exception.ErrorCode;
-import space.habitz.api.global.type.StatusCode;
 
 @Slf4j
 @Service
