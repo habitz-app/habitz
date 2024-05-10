@@ -1,10 +1,18 @@
 'use client';
 import ProfileCard from '@/components/common/ProfileCard';
 import { Button } from '@/components/ui/button';
+import { getUserData } from '@/hooks/useAuth';
+import { MemberResponse } from '@/types/api/response';
 import { IonIcon } from '@ionic/react';
+import { useQuery } from '@tanstack/react-query';
 import { notifications } from 'ionicons/icons';
 import { css } from 'styled-system/css';
 const HomePage = () => {
+  const me = useQuery<MemberResponse>({
+    queryKey: ['me'],
+    queryFn: getUserData,
+  });
+
   return (
     <>
       <header
@@ -64,7 +72,7 @@ const HomePage = () => {
               color: 'label.normal',
             })}
           >
-            안녕하세요, 김첫째님!
+            안녕하세요, {me.data?.nickName}님!
           </p>
           <p
             className={css({

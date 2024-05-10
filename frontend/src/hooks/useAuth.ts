@@ -7,7 +7,7 @@ import axios from '@/apis/axios';
 import { MemberResponse } from '@/types/api/response';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 
-const getUserData = async () => {
+export const getUserData = async () => {
   return await axios.get<MemberResponse>('/member').then((res) => {
     return res.data.data;
   });
