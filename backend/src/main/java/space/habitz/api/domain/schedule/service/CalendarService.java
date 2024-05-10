@@ -12,10 +12,8 @@ import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 import space.habitz.api.domain.member.dto.MemberProfileDto;
-import space.habitz.api.domain.member.entity.Family;
 import space.habitz.api.domain.member.entity.Member;
-import space.habitz.api.domain.member.entity.Role;
-import space.habitz.api.domain.member.repository.MemberRepository;
+import space.habitz.api.domain.member.repository.FamilyCustomRepositoryImpl;
 import space.habitz.api.domain.mission.entity.Mission;
 import space.habitz.api.domain.mission.repository.MissionRepository;
 import space.habitz.api.domain.schedule.dto.CalendarDto;
@@ -27,8 +25,8 @@ import space.habitz.api.domain.schedule.util.ScheduleDateUtil;
 @RequiredArgsConstructor
 public class CalendarService {
 
-	private final MemberRepository memberRepository;
 	private final MissionRepository missionRepository;
+	private final FamilyCustomRepositoryImpl familyCustomRepository;
 	private final ScheduleCustomRepositoryImpl scheduleCustomRepository;
 
 	/**
@@ -45,21 +43,19 @@ public class CalendarService {
 		YearMonth yearMonth = YearMonth.of(year, month);
 
 		// 로그인 유저의 아이들 조회
-		Family family = member.getFamily();
-		List<Member> children = memberRepository.findByFamilyIdAndRole(family.getId(), Role.CHILD);
+		List<Member> children = familyCustomRepository.findByFamilyIdOnlyChildMember(member.getFamily().getId(), true);
 
 		// 조회한 "yyyy-MM"에 대하여, 아이의 미션, 일정이 존재하는지 date를 기준으로 반환
-		List<CalendarDto> calendarList = new ArrayList<>();
-		for (Member child : children) {
-			MemberProfileDto childProfile = MemberProfileDto.of(child);                // 아이 프로필
-			List<LocalDate> daysList = getCalendarByMonth(yearMonth, child);        // 아이가 가지고 있는 일정(미션, 스케줄) 목록
-			calendarList.add(
-				CalendarDto.builder()
+		List<CalendarDto> calendarList = children.stream()
+			.map(child -> {
+				MemberProfileDto childProfile = MemberProfileDto.of(child);
+				List<LocalDate> daysList = getCalendarByMonth(yearMonth, child);
+				return CalendarDto.builder()
 					.child(childProfile)
 					.days(ScheduleDateUtil.sortDayList(daysList))
-					.build()
-			);
-		}
+					.build();
+			})
+			.toList();
 
 		return Map.of("month", yearMonth, "calendar", calendarList);
 	}

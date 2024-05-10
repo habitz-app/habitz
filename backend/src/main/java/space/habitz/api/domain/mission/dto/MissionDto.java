@@ -1,10 +1,10 @@
 package space.habitz.api.domain.mission.dto;
 
+import java.time.LocalDateTime;
+
 import lombok.Builder;
 import space.habitz.api.domain.mission.entity.Mission;
-import space.habitz.api.global.type.StatusCode;
-
-import java.time.LocalDateTime;
+import space.habitz.api.domain.mission.entity.StatusCode;
 
 @Builder
 public record MissionDto(
