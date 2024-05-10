@@ -2,7 +2,7 @@
 import BuyButton from '@/components/store/BuyButton';
 import GoodsDetail from '@/components/store/GoodsDetail';
 import GoodsInfo from '@/components/store/GoodsInfo';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { Stack } from 'styled-system/jsx';
 
@@ -12,6 +12,7 @@ const dummyUrl = '/seven-eleven.jpg';
 const dummyInfoUrl = '/height_long.jpeg';
 
 const Product = () => {
+  const route = useRouter();
   const params = useParams();
   const [name, setName] = useState(dummyName);
   const [price, setPrice] = useState(dummyPrice);
@@ -19,6 +20,7 @@ const Product = () => {
   const [infoUrl, setInfoUrl] = useState(dummyInfoUrl);
   const buyHandler = () => {
     console.log('구매하기');
+    route.push('/store/bill');
   };
   return (
     <Stack gap="1rem" position={'relative'}>
