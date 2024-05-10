@@ -56,6 +56,7 @@ const KnowledgeTab = ({ options }: { options: options }) => {
           {options[0]?.items?.map((item, index) => (
             <KnowledgeItem
               key={index}
+              id={item.id}
               title={item.title}
               contents={item.content}
             />
@@ -70,6 +71,7 @@ const KnowledgeTab = ({ options }: { options: options }) => {
           {options[1]?.items?.map((item, index) => (
             <KnowledgeItem
               key={index}
+              id={item.id}
               title={item.title}
               contents={item.content}
             />
@@ -84,6 +86,7 @@ const KnowledgeTab = ({ options }: { options: options }) => {
           {options[2]?.items?.map((item, index) => (
             <KnowledgeItem
               key={index}
+              id={item.id}
               title={item.title}
               contents={item.content}
             />
