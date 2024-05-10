@@ -23,6 +23,7 @@ export const Default: Story = {
         label: '생활/습관',
         items: [
           {
+            id: 1,
             title: '생활/습관',
             content: '생활/습관',
           },
@@ -33,6 +34,7 @@ export const Default: Story = {
         label: '금융/재테크',
         items: [
           {
+            id: 2,
             title: '금융/재테크',
             content: '금융/재테크',
           },
@@ -43,6 +45,7 @@ export const Default: Story = {
         label: '기초상식',
         items: [
           {
+            id: 3,
             title: '기초상식',
             content: '기초상식',
           },
