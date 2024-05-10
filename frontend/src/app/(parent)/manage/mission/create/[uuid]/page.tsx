@@ -12,7 +12,8 @@ import {
   ScheduleResponse,
   TestCreateChildResponse,
 } from '@/types/api/response';
-import { useRouter } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
+import { set } from 'react-hook-form';
 
 interface createSchedule {
   title: string;
@@ -26,13 +27,36 @@ interface createSchedule {
 }
 
 const Page = () => {
+  const searchChild = ({
+    uuid,
+    data,
+  }: {
+    uuid: string;
+    data: ChildListResponse[];
+  }) => {
+    let foundChild: ChildListResponse | null = null;
+    data.forEach((child) => {
+      if (child.uuid === uuid) {
+        foundChild = child;
+        return;
+      }
+    });
+    if (foundChild) {
+      settargetChild(foundChild);
+    } else {
+      // console.log('잘못된 접근입니다.', uuid, data);
+      alert('잘못된 접근입니다.');
+      router.back();
+    }
+  };
   const router = useRouter();
+  const params = useParams<{ uuid: string }>();
   const handleCraeteSchedule = async () => {
     const requestBody: createSchedule = {
       title: title,
       content: content,
       emoji: emoji,
-      childUUID: targetChildUUID,
+      childUUID: targetChild ? targetChild.uuid : '',
       startDate: date[0],
       endDate: date[1],
       weekDays: weekDays,
@@ -68,13 +92,19 @@ const Page = () => {
     false,
     false,
   ]);
-  const [targetChildUUID, setTargetChildUUID] = useState<string>('');
+  const [targetChild, settargetChild] = useState<ChildListResponse>({
+    memberId: -1,
+    memberRole: 'CHILD',
+    name: '',
+    profileImage: '',
+    uuid: '',
+  });
 
   useEffect(() => {
     axios.get<ChildListResponse[]>('/family/childList').then((response) => {
-      console.log(response.data.data);
-      setTargetChildUUID(response.data.data[0].uuid);
-      // console.log('childUUID');
+      console.log('Request Success (ChildList):', response.data.data);
+      // 자식이 맞는지 확인
+      searchChild({ uuid: params.uuid, data: response.data.data });
     });
   }, []);
   return (
@@ -122,8 +152,9 @@ const Page = () => {
       <Button width="full" onClick={handleCraeteSchedule}>
         생성하기
       </Button>
-      {targetChildUUID}
-      <div className={css({ h: '1000px' })}></div>
+      {targetChild.uuid}
+      <hr />
+      {params.uuid}
     </div>
   );
 };
