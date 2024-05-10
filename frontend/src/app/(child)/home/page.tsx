@@ -14,7 +14,6 @@ import MissionPreview from '@/components/mission/MissionPreview';
 const HomePage = () => {
   const date = new Date().toISOString().split('T')[0];
 
-  console.log(date);
   const me = useQuery<MemberResponse>({
     queryKey: ['me'],
     queryFn: getUserData,
