@@ -22,4 +22,9 @@ export const Default: Story = {
     contents:
       '건조한 봄 날씨에는 불이 나기 쉬워요. 화재가 발생하고 5분이 지나면 불길이 번지는 속도가 급격하게 빨라져요',
   },
+  parameters: {
+    nextjs: {
+      appDirectory: true,
+    },
+  },
 };

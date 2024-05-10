@@ -53,4 +53,9 @@ export const Default: Story = {
       },
     ],
   },
+  parameters: {
+    nextjs: {
+      appDirectory: true,
+    },
+  },
 };
