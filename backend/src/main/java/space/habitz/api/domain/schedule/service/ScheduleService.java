@@ -12,9 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import space.habitz.api.domain.member.dto.MemberProfileDto;
-import space.habitz.api.domain.member.entity.Family;
 import space.habitz.api.domain.member.entity.Member;
-import space.habitz.api.domain.member.entity.Role;
+import space.habitz.api.domain.member.repository.FamilyCustomRepositoryImpl;
 import space.habitz.api.domain.member.repository.MemberRepository;
 import space.habitz.api.domain.mission.entity.Mission;
 import space.habitz.api.domain.mission.repository.MissionRepository;
@@ -40,6 +39,7 @@ public class ScheduleService {
 	private final ScheduleRepository scheduleRepository;
 	private final MissionRepository missionRepository;
 	private final ScheduleCustomRepositoryImpl scheduleCustomRepository;
+	private final FamilyCustomRepositoryImpl familyCustomRepository;
 
 	/**
 	 * 일정 생성
@@ -106,7 +106,6 @@ public class ScheduleService {
 	 * 부모가 자식들의 미션 목록을 조회
 	 * - 로그인 한 유저의 아이 목록을 조회한다.
 	 * - 날짜를 기준으로 아이들의 미션 목록을 조회한다.
-	 * - TODO :: 아이 기준으로 조회 -> 생년월일 순으로 조회되도록 QueryDSL 사용해야함
 	 *
 	 * @param member 로그인한 사용자
 	 * @param date   조회할 날짜
@@ -115,8 +114,7 @@ public class ScheduleService {
 	public List<Map<String, Object>> getChildrenScheduleMissionList(Member member, LocalDate date) {
 
 		// 가족 조회
-		Family family = member.getFamily();
-		List<Member> children = memberRepository.findByFamilyIdAndRole(family.getId(), Role.CHILD);
+		List<Member> children = familyCustomRepository.findByFamilyIdOnlyChildMember(member.getFamily().getId(), true);
 
 		// 가족의 자식 목록 조회
 		List<Map<String, Object>> totalScheduleMissionList = new ArrayList<>();
