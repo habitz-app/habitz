@@ -46,17 +46,16 @@ public class CalendarService {
 		List<Member> children = familyCustomRepository.findByFamilyIdOnlyChildMember(member.getFamily().getId(), true);
 
 		// 조회한 "yyyy-MM"에 대하여, 아이의 미션, 일정이 존재하는지 date를 기준으로 반환
-		List<CalendarDto> calendarList = new ArrayList<>();
-		for (Member child : children) {
-			MemberProfileDto childProfile = MemberProfileDto.of(child);                // 아이 프로필
-			List<LocalDate> daysList = getCalendarByMonth(yearMonth, child);        // 아이가 가지고 있는 일정(미션, 스케줄) 목록
-			calendarList.add(
-				CalendarDto.builder()
+		List<CalendarDto> calendarList = children.stream()
+			.map(child -> {
+				MemberProfileDto childProfile = MemberProfileDto.of(child);
+				List<LocalDate> daysList = getCalendarByMonth(yearMonth, child);
+				return CalendarDto.builder()
 					.child(childProfile)
 					.days(ScheduleDateUtil.sortDayList(daysList))
-					.build()
-			);
-		}
+					.build();
+			})
+			.toList();
 
 		return Map.of("month", yearMonth, "calendar", calendarList);
 	}
