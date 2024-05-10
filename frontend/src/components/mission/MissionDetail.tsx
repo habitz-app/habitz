@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { css } from 'styled-system/css';
+import { css, cva } from 'styled-system/css';
 
 const MissionDetail = ({
   emoji,
@@ -31,8 +31,31 @@ const MissionDetail = ({
       statusText = '승인 거절';
       break;
     default:
-      statusText = status;
+      statusText = '진행중';
   }
+
+  const item = cva({
+    base: {
+      textStyle: 'label1.normal.bold',
+    },
+    variants: {
+      visual: {
+        ACCEPT: {
+          color: 'status.positive',
+        },
+        DECLINE: {
+          color: 'status.negative',
+        },
+        EMPTY: {
+          color: 'label.alternative',
+        },
+        PENDING: {
+          color: 'status.cautionary',
+        },
+      },
+    },
+  });
+
   return (
     <>
       <div
@@ -77,9 +100,8 @@ const MissionDetail = ({
             +{point} <Image src="/coin.svg" alt="coin" width={16} height={16} />
           </span>
           <p
-            className={css({
-              textStyle: 'label1.normal.bold',
-              color: 'label.alternative',
+            className={item({
+              visual: status,
             })}
           >
             {statusText}
