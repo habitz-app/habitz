@@ -111,7 +111,7 @@ public class MissionController {
 		@RequestBody MissionApproveRequestDto requestDto
 	) {
 		return ResponseData.success(
-			missionService.changeMissionStatus(member, requestDto.missionId(), requestDto.status()));
+			missionService.changeMissionStatus(member, requestDto));
 	}
 
 	@Operation(

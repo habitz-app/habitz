@@ -112,9 +112,9 @@ public class Mission extends MutableTimeEntity {
 		this.point = request.point();
 	}
 
-	public void updateStatus(StatusCode statusCode, Member parent) {
+	public void updateStatus(StatusCode statusCode, Member parent, String comment) {
 		this.status = statusCode;
 		this.approveParent = parent;
-
+		this.comment = comment;
 	}
 }
