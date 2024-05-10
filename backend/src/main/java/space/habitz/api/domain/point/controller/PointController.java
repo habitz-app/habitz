@@ -13,19 +13,22 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.RequiredArgsConstructor;
 import space.habitz.api.domain.member.entity.Member;
 import space.habitz.api.domain.member.entity.Role;
+import space.habitz.api.domain.point.dto.PointAmount;
 import space.habitz.api.domain.point.dto.PointHistory;
 import space.habitz.api.domain.point.service.ChildPointHistoryService;
 import space.habitz.api.domain.point.service.FamilyPointHistoryService;
+import space.habitz.api.domain.point.service.PointService;
 import space.habitz.api.global.exception.CustomNotFoundException;
 import space.habitz.api.global.response.ResponseData;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/point")
-public class PointHistoryController {
+public class PointController {
 
 	private final ChildPointHistoryService childPointHistoryService;
 	private final FamilyPointHistoryService familyPointHistoryService;
+	private final PointService pointService;
 
 	@GetMapping("/history")
 	public ResponseData<List<PointHistory>> getPointHistory(@AuthenticationPrincipal Member member,
@@ -42,6 +45,11 @@ public class PointHistoryController {
 		}
 
 		throw new CustomNotFoundException("부모, 자녀 계정이 아닙니다.");
+	}
+
+	@GetMapping("/amount")
+	public ResponseData<PointAmount> getPointAmount(@AuthenticationPrincipal Member member) {
+		return new ResponseData<>("success", "포인트 조회 성공", pointService.getPoint(member));
 	}
 
 }
