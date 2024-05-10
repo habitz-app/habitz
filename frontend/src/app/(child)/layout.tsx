@@ -7,6 +7,7 @@ import { css } from 'styled-system/css';
 import { usePathname } from 'next/navigation';
 import { MenuType } from '@/types/tabBar/childTabBar';
 import { useAuthWithRoles } from '@/hooks/useAuth';
+import { Suspense } from 'react';
 
 const ChildLayout = ({ children }: { children: React.ReactNode }) => {
   useAuthWithRoles(['CHILD']);
@@ -14,16 +15,18 @@ const ChildLayout = ({ children }: { children: React.ReactNode }) => {
   const path = usePathname();
   const menu = path?.split('/')[1];
   return (
-    <div
-      className={css({
-        display: 'flex',
-        flexDir: 'column',
-        w: 'full',
-      })}
-    >
-      <main className={css({ minH: '100vh' })}>{children}</main>
-      <ChildTabBar menu={menu as MenuType} />
-    </div>
+    <Suspense>
+      <div
+        className={css({
+          display: 'flex',
+          flexDir: 'column',
+          w: 'full',
+        })}
+      >
+        <main className={css({ minH: '100vh' })}>{children}</main>
+        <ChildTabBar menu={menu as MenuType} />
+      </div>
+    </Suspense>
   );
 };
 
