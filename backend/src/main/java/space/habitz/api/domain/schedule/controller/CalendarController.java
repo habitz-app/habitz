@@ -23,7 +23,7 @@ public class CalendarController {
 	private final CalendarService calendarService;
 
 	@Operation(
-		summary = "날짜에 존재하는 일정을 조회합니다",
+		summary = "날짜에 존재하는 일정을 조회 (부모 전용)",
 		description = "캘린더를 조회합니다."
 	)
 	@PreAuthorize("hasAnyRole('PARENT')")
