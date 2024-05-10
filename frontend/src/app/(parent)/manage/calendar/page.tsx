@@ -6,6 +6,8 @@ import { hstack } from 'styled-system/patterns';
 import { colors } from './colors';
 import { CalendarResponse } from '@/types/api/response';
 import axios from '@/apis/axios';
+import { useQuery } from '@tanstack/react-query';
+import { calendar } from 'ionicons/icons';
 
 // 날짜 별 전체 아이에 대한 미션 목록 인터페이스
 interface childMission {
@@ -211,16 +213,38 @@ const Page = () => {
   const [selectedDate, setSelectedDate] = useState(
     new Date().toISOString().slice(0, 10),
   );
+  const [year, setYear] = useState(new Date().getFullYear());
+  const [month, setMonth] = useState(new Date().getMonth() + 1);
+
   // 선택한 날짜 변경 핸들러
   const selectDateHandler = (date: string) => {
     setSelectedDate(date);
   };
 
   // 달력 조회 시 아이의 일정 조회 API Response State
-  const [calendarResponseData, setCalendarResponseData] = useState(
-    // API 연결 후 더미 데이터 대체
-    dummyCalendarResonseData,
-  );
+  const [calendarResponseData, setCalendarResponseData] =
+    useState<CalendarResponse>({
+      month: `${year}-${month < 10 ? `0${month}` : month}`,
+      calendar: [],
+    });
+
+  const getCalendarData = async (year: number, month: number) => {
+    const res = await axios.get<CalendarResponse>('/calendar', {
+      params: { year: year, month: month },
+    });
+    console.log('Query Success! 😊');
+    return res.data.data;
+  };
+
+  const { data: calendarData } = useQuery<CalendarResponse>({
+    queryKey: ['calendar', year, month],
+    queryFn: () => getCalendarData(year, month),
+    initialData: {
+      month: `${year}-${month < 10 ? `0${month}` : month}`,
+      calendar: [],
+    },
+  });
+
   // 아이 별 색상 지정 핸들러
   const personalColorHandler = (calendarResponseData: CalendarResponse) => {
     const personalColors: { [key: string]: string } = {};
@@ -268,34 +292,45 @@ const Page = () => {
     </div>
   );
 
-  const requestCalendar = async () => {
+  const requestCalendar = useCallback(async () => {
     try {
       console.log('requestCalendar');
-      const response = await axios.get<CalendarResponse>(
-        '/calendar?year=2024&month=5',
-      );
+      const response = await axios.get<CalendarResponse>('/calendar', {
+        params: { year: year, month: month },
+      });
       // const response = await axios.get<any>('family/memberList');
-      console.log(response);
+      console.log('Calendar Request Success:');
+      console.table(response.data.data.calendar);
       // setCalendarResponseData(response.data.data);
     } catch (error) {
       console.log('error occured');
       console.error(error);
     }
-  };
+  }, [month, year]);
 
-  // 마운트 시 달력 조회 API 호출
+  // 마운트 시, 월 변경 시 달력 조회 API 호출
   useEffect(() => {
     requestCalendar(); // Call the requestCalendar function here
-  }, []);
+  }, [month, requestCalendar]);
 
   // 아이 별 색상 지정 Effect
   useEffect(() => {
     setPersonalColors(personalColorHandler(calendarResponseData));
   }, [calendarResponseData]);
 
+  useEffect(() => {
+    console.log(1);
+  }, [calendarData]);
   return (
     <div>
-      <Calendar data={calendarResponseData} selectDate={selectDateHandler} />
+      <Calendar
+        data={calendarResponseData}
+        selectDate={selectDateHandler}
+        year={year}
+        month={month}
+        setYear={setYear}
+        setMonth={setMonth}
+      />
       {childMissionData[selectedDate] && (
         <div>
           {childMissionData[selectedDate].map((child, id) => (
@@ -303,6 +338,11 @@ const Page = () => {
           ))}
         </div>
       )}
+      {selectedDate}
+      {year}
+      {month}
+      <hr />
+      {calendarData.calendar[0]?.child.memberUUID}
     </div>
   );
 };

@@ -8,6 +8,7 @@ import * as DatePicker from '~/components/ui/date-picker';
 import { IconButton } from '~/components/ui/icon-button';
 import { colors } from '@/app/(parent)/manage/calendar/colors';
 import { CalendarResponse } from '@/types/api/response';
+import { set } from 'react-hook-form';
 
 // 달력 조회 시 아이의 일정 조회 API Response 데이터 구조
 interface childInfo {
@@ -19,11 +20,19 @@ interface childInfo {
 interface CalendarProps extends DatePicker.RootProps {
   data: CalendarResponse;
   selectDate: (date: string) => void;
+  year: number;
+  month: number;
+  setYear: (year: number) => void;
+  setMonth: (month: number) => void;
 }
 
 export default function Calendar({
   data,
   selectDate,
+  year,
+  month,
+  setYear,
+  setMonth,
   ...props
 }: CalendarProps) {
   const createChildrenInfoByDate = (data: CalendarResponse) => {
@@ -111,6 +120,14 @@ export default function Calendar({
       startOfWeek={1}
       selectionMode="single"
       open={true}
+      onValueChange={(value) => {
+        console.log('?!');
+        console.table(value);
+      }}
+      onViewChange={(view) => {
+        console.log('view');
+        console.log(view);
+      }}
       closeOnSelect={false}
       {...props}
       className={css({ width: 'full' })}
@@ -130,7 +147,18 @@ export default function Calendar({
               <DatePicker.ViewControl
                 className={css({ justifyContent: 'center' })}
               >
-                <DatePicker.PrevTrigger asChild>
+                <DatePicker.PrevTrigger
+                  asChild
+                  onClick={() => {
+                    console.log('prev');
+                    if (month === 1) {
+                      setYear(year - 1);
+                      setMonth(12);
+                    } else {
+                      setMonth(month - 1);
+                    }
+                  }}
+                >
                   <IconButton variant="ghost" size="sm">
                     <IonIcon icon={chevronBackOutline}></IonIcon>
                   </IconButton>
@@ -140,7 +168,18 @@ export default function Calendar({
                     <DatePicker.RangeText />
                   </Button>
                 </DatePicker.ViewTrigger>
-                <DatePicker.NextTrigger asChild>
+                <DatePicker.NextTrigger
+                  asChild
+                  onClick={() => {
+                    console.log('next');
+                    if (month === 12) {
+                      setYear(year + 1);
+                      setMonth(1);
+                    } else {
+                      setMonth(month + 1);
+                    }
+                  }}
+                >
                   <IconButton variant="ghost" size="sm">
                     <IonIcon icon={chevronForwardOutline}></IonIcon>
                   </IconButton>
@@ -224,7 +263,13 @@ export default function Calendar({
           {(api) => (
             <>
               <DatePicker.ViewControl>
-                <DatePicker.PrevTrigger asChild>
+                <DatePicker.PrevTrigger
+                  asChild
+                  onClick={() => {
+                    console.log('monthView prev');
+                    setYear(year - 1);
+                  }}
+                >
                   <IconButton variant="ghost" size="sm">
                     <IonIcon icon={chevronBackOutline}></IonIcon>
                   </IconButton>
@@ -234,7 +279,13 @@ export default function Calendar({
                     <DatePicker.RangeText />
                   </Button>
                 </DatePicker.ViewTrigger>
-                <DatePicker.NextTrigger asChild>
+                <DatePicker.NextTrigger
+                  asChild
+                  onClick={() => {
+                    console.log('monthView next');
+                    setYear(year + 1);
+                  }}
+                >
                   <IconButton variant="ghost" size="sm">
                     <IonIcon icon={chevronForwardOutline}></IonIcon>
                   </IconButton>
@@ -247,7 +298,14 @@ export default function Calendar({
                     .map((months, id) => (
                       <DatePicker.TableRow key={id}>
                         {months.map((month, id) => (
-                          <DatePicker.TableCell key={id} value={month.value}>
+                          <DatePicker.TableCell
+                            key={id}
+                            value={month.value}
+                            onClick={() => {
+                              console.log('monthCell:', month.value);
+                              setMonth(month.value);
+                            }}
+                          >
                             <DatePicker.TableCellTrigger asChild>
                               <Button variant="ghost">{month.label}</Button>
                             </DatePicker.TableCellTrigger>
@@ -285,7 +343,14 @@ export default function Calendar({
                   {api.getYearsGrid({ columns: 4 }).map((years, id) => (
                     <DatePicker.TableRow key={id}>
                       {years.map((year, id) => (
-                        <DatePicker.TableCell key={id} value={year.value}>
+                        <DatePicker.TableCell
+                          key={id}
+                          value={year.value}
+                          onClick={() => {
+                            console.log('yearCell:', year.value);
+                            setYear(year.value);
+                          }}
+                        >
                           <DatePicker.TableCellTrigger asChild>
                             <Button variant="ghost">{year.label}</Button>
                           </DatePicker.TableCellTrigger>
