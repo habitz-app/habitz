@@ -52,7 +52,7 @@ const Store = () => {
       </HStack>
       <Grid columns={3} gap="5" alignItems={'center'}>
         {[...Array(20)].map((_, id) => (
-          <Link key={id} href={`/store/detail/${id}`}>
+          <Link key={id} href={`/store/${id}`}>
             <GoodsItem
               key={id}
               name="캐치티니핑 캔디콤팩트 캐치티니핑 캔디콤팩트"
