@@ -120,3 +120,29 @@ export interface Mission {
 export interface MissionResponse {
   data: Mission[];
 }
+
+export interface MissionDetailResponse {
+  schedule: {
+    scheduleId: number;
+  };
+  mission: {
+    missionId: number;
+    title: string;
+    content: string;
+    emoji: string;
+    status: 'ACCEPT' | 'DECLINE' | 'EMPTY' | 'PENDING';
+    point: number;
+    repeat: boolean;
+    createdAt: string;
+    createdBy: string;
+  };
+  recognition: {
+    image: string;
+    content: string;
+    updatedAt: string;
+  };
+  approval: {
+    name: string;
+    comment: string;
+  };
+}
