@@ -1,12 +1,21 @@
 import axios from '@/apis/axios';
 import { Button } from '@/components/ui/button';
 import { QuizResponse } from '@/types/api/response';
+import { useQueryClient } from '@tanstack/react-query';
 
 const QuizButton = ({ option }: { option: string }) => {
+  const queryClient = useQueryClient();
   const handleClick = async (option: string) => {
-    await axios.post<QuizResponse>('/quiz/solve-quiz', {
-      answer: option === 'O' ? 'O' : 'X',
-    });
+    await axios
+      .post<QuizResponse>('/quiz/solve-quiz', {
+        answer: option === 'O' ? 'O' : 'X',
+      })
+      .then(() => {
+        queryClient.invalidateQueries({
+          queryKey: ['quiz'],
+          exact: true,
+        });
+      });
   };
 
   return (
