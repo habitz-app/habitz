@@ -1,6 +1,9 @@
 'use client';
 
+import axios from '@/apis/axios';
 import StoreCategory from '@/components/store/StoreCategory';
+import { PointAmount } from '@/types/point';
+import { useQuery } from '@tanstack/react-query';
 import Image from 'next/image';
 import Link from 'next/link';
 import { css } from 'styled-system/css';
@@ -17,6 +20,18 @@ const Category = () => {
     { type: 'convenienceStore', name: '편의점' },
     { type: 'iceCream', name: '음료/아이스크림' },
   ];
+
+  const getPoint = async () => {
+    return await axios.get<PointAmount>('/point/amount').then((res) => {
+      return res.data.data;
+    });
+  };
+
+  const amount = useQuery({
+    queryKey: ['point'],
+    queryFn: getPoint,
+  });
+
   return (
     <>
       <header
@@ -52,7 +67,8 @@ const Category = () => {
             py: '0.25rem',
           })}
         >
-          8430 <Image src="/coin.svg" alt="coin" width={18} height={18} />
+          {amount.data?.point || 0}
+          <Image src="/coin.svg" alt="coin" width={18} height={18} />
         </span>
       </header>
       <div
