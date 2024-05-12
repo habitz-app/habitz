@@ -37,6 +37,11 @@ export default {
       type: 'string',
     },
   },
+  parameters: {
+    nextjs: {
+      appDirectory: true,
+    },
+  },
 } as Meta;
 
 type Story = StoryObj<typeof MissionDetail>;
