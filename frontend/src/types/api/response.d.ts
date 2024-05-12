@@ -116,6 +116,12 @@ export interface Mission {
   missionId: number;
   status: 'EMPTY' | 'PENDING' | 'ACCEPT' | 'DECLINE';
   title: string;
+  point: number;
+  emoji: string;
+  content: string;
+  repeat: boolean;
+  createdAt: string;
+  createdBy: string;
 }
 export interface MissionResponse {
   data: Mission[];

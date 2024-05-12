@@ -3,7 +3,8 @@ import { css, cva } from 'styled-system/css';
 import * as Collapsible from '@/components/ui/collapsible';
 import { Button } from '../ui/button';
 import { IonIcon } from '@ionic/react';
-import { personCircleOutline } from 'ionicons/icons';
+import { chevronBackOutline, personCircleOutline } from 'ionicons/icons';
+import { useRouter } from 'next/navigation';
 const MissionDetail = ({
   emoji,
   title,
@@ -68,8 +69,48 @@ const MissionDetail = ({
     },
   });
 
+  const router = useRouter();
+
   return (
     <>
+      <header
+        className={css({
+          display: 'flex',
+          position: 'sticky',
+          height: '2.5rem',
+          top: 0,
+          bg: 'transparent',
+          backdropFilter: 'auto',
+          backdropBlur: 'sm',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        })}
+      >
+        <Button
+          color="label.alternative"
+          variant="link"
+          onClick={() => {
+            router.back();
+          }}
+        >
+          <IonIcon
+            icon={chevronBackOutline}
+            className={css({
+              w: '24px',
+              h: '24px',
+            })}
+          />
+        </Button>
+        <Button color="label.alternative" variant="link">
+          <Image
+            key="history"
+            src="/history.svg"
+            alt="history"
+            width="19"
+            height="19"
+          ></Image>
+        </Button>
+      </header>
       <div
         className={css({
           display: 'flex',
@@ -77,6 +118,7 @@ const MissionDetail = ({
           alignItems: 'flex-start',
           justifyContent: 'flex-end',
           gap: '2.5rem',
+          px: '1rem',
           mt: '2.5rem',
         })}
       >
@@ -157,17 +199,18 @@ const MissionDetail = ({
         className={css({
           textStyle: 'body2.normal.medium',
           color: 'label.neutral',
+          px: '1rem',
         })}
       >
         {contents}
       </p>
-
       <div
         className={css({
           display: 'flex ',
           flexDir: 'column',
           gap: '0.75rem',
           mt: '1.25rem',
+          px: '1rem',
         })}
       >
         {approvalComment ? (

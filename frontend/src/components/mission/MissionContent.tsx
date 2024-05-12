@@ -1,4 +1,4 @@
-import { css } from 'styled-system/css';
+import { css, cva } from 'styled-system/css';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 const MissionContent = ({
@@ -15,11 +15,51 @@ const MissionContent = ({
   status: 'ACCEPT' | 'DECLINE' | 'EMPTY' | 'PENDING';
 }) => {
   const router = useRouter();
+  let statusText;
+  switch (status) {
+    case 'EMPTY':
+      statusText = '진행중';
+      break;
+    case 'ACCEPT':
+      statusText = '완료';
+      break;
+    case 'PENDING':
+      statusText = '승인 대기';
+      break;
+    case 'DECLINE':
+      statusText = '승인 거절';
+      break;
+    default:
+      statusText = '진행중';
+  }
+
+  const item = cva({
+    base: {
+      display: 'flex',
+      textStyle: 'label1.normal.bold',
+    },
+    variants: {
+      visual: {
+        ACCEPT: {
+          color: 'status.positive',
+        },
+        DECLINE: {
+          color: 'status.negative',
+        },
+        EMPTY: {
+          color: 'label.alternative',
+        },
+        PENDING: {
+          color: 'status.cautionary',
+        },
+      },
+    },
+  });
 
   return [
     status === 'ACCEPT' ? (
       <div
-        onClick={() => router.push(`mission/${missionId}`)}
+        onClick={() => router.push(`mission/detail/${missionId}`)}
         className={css({
           display: 'flex',
           flexDir: 'column',
@@ -80,7 +120,7 @@ const MissionContent = ({
       </div>
     ) : (
       <div
-        onClick={() => router.push(`mission/${missionId}`)}
+        onClick={() => router.push(`mission/detail/${missionId}`)}
         className={css({
           width: 'full',
           height: '80px',
@@ -100,22 +140,36 @@ const MissionContent = ({
           className={css({
             display: 'flex',
             alignItems: 'center',
+            justifyContent: 'space-between',
             pl: '1.8rem',
             textStyle: 'label2.regular',
             color: 'gray.10',
           })}
         >
-          {point}
-          <Image
-            key="image"
-            src="/coin.svg"
-            width={12}
-            height={12}
+          <span
             className={css({
-              ml: '0.1rem',
+              display: 'flex',
             })}
-            alt="coin"
-          />
+          >
+            {point}
+            <Image
+              key="image"
+              src="/coin.svg"
+              width={12}
+              height={12}
+              className={css({
+                ml: '0.1rem',
+              })}
+              alt="coin"
+            />
+          </span>
+          <p
+            className={item({
+              visual: status,
+            })}
+          >
+            {statusText}
+          </p>
         </div>
       </div>
     ),

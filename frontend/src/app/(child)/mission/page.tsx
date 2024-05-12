@@ -3,7 +3,23 @@ import { Button } from '@/components/ui/button';
 import { css } from 'styled-system/css';
 import Image from 'next/image';
 import MissionContent from '@/components/mission/MissionContent';
+import { useQuery } from '@tanstack/react-query';
+import { MissionResponse } from '@/types/api/response';
+import axios from '@/apis/axios';
 const MissionPage = () => {
+  const date = new Date().toISOString().split('T')[0];
+  const getMission = async () => {
+    return await axios
+      .get<MissionResponse>(`/mission/list?date=${date}`)
+      .then((res) => {
+        return res.data.data;
+      });
+  };
+
+  const missionList = useQuery({
+    queryKey: ['mission-list'],
+    queryFn: getMission,
+  });
   return (
     <>
       <header
@@ -52,28 +68,21 @@ const MissionPage = () => {
         >
           진행 중
         </p>
-        <MissionContent
-          title="아침 인사 하기"
-          emoji="😊"
-          point={100}
-          status={'EMPTY'}
-          missionId={1}
-        />
-        <MissionContent
-          title="책상 정리 하기"
-          emoji="📚"
-          point={1000}
-          status={'EMPTY'}
-          missionId={2}
-        />
-        <MissionContent
-          title="일기 쓰기"
-          emoji="📒"
-          point={300}
-          status={'EMPTY'}
-          missionId={3}
-        />
-
+        {Array.isArray(missionList.data) &&
+          missionList.data.map(function (m) {
+            if (m.status !== 'ACCEPT') {
+              return (
+                <MissionContent
+                  missionId={m.missionId}
+                  status={m.status}
+                  title={m.title}
+                  key={m.missionId}
+                  emoji={m.emoji}
+                  point={m.point}
+                />
+              );
+            }
+          })}
         <p
           className={css({
             textStyle: 'title3.bold',
@@ -90,48 +99,21 @@ const MissionPage = () => {
               overflowX: 'auto',
             })}
           >
-            <MissionContent
-              title="아침 인사 하기"
-              emoji="😊"
-              point={100}
-              status={'ACCEPT'}
-              missionId={1}
-            />
-            <MissionContent
-              title="책상 정리 하기"
-              emoji="📚"
-              point={1000}
-              status={'ACCEPT'}
-              missionId={2}
-            />
-            <MissionContent
-              title="일기 쓰기"
-              emoji="📒"
-              point={300}
-              status={'ACCEPT'}
-              missionId={3}
-            />
-            <MissionContent
-              title="아침 인사 하기"
-              emoji="😊"
-              point={100}
-              status={'ACCEPT'}
-              missionId={4}
-            />
-            <MissionContent
-              title="책상 정리 하기"
-              emoji="📚"
-              point={1000}
-              status={'ACCEPT'}
-              missionId={5}
-            />
-            <MissionContent
-              title="일기 쓰기"
-              emoji="📒"
-              point={300}
-              status={'ACCEPT'}
-              missionId={6}
-            />
+            {Array.isArray(missionList.data) &&
+              missionList.data.map(function (m) {
+                if (m.status === 'ACCEPT') {
+                  return (
+                    <MissionContent
+                      missionId={m.missionId}
+                      status={m.status}
+                      title={m.title}
+                      key={m.missionId}
+                      emoji={m.emoji}
+                      point={m.point}
+                    />
+                  );
+                }
+              })}
           </section>
         </div>
       </div>
