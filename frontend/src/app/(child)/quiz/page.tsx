@@ -7,7 +7,7 @@ import { IonIcon } from '@ionic/react';
 import axios from '@/apis/axios';
 import { heart } from 'ionicons/icons';
 import { css } from 'styled-system/css';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 
 const Quiz = () => {
@@ -28,6 +28,20 @@ const Quiz = () => {
       return res.data.data ?? {};
     },
   });
+
+  const queryClient = useQueryClient();
+  const solve = async (option: string) => {
+    await axios
+      .post<QuizResponse>('/quiz/solve-quiz', {
+        answer: option === 'O' ? 'O' : 'X',
+      })
+      .then(() => {
+        queryClient.invalidateQueries({
+          queryKey: ['quiz'],
+          exact: true,
+        });
+      });
+  };
 
   return (
     <>
@@ -78,6 +92,7 @@ const Quiz = () => {
               `/quiz/knowledge/${todayQuiz.data?.quizHistoryInfo?.articleId || 0}`,
             );
           }}
+          solveQuiz={solve}
         />
         <KnowledgeTab
           options={[

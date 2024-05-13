@@ -11,11 +11,13 @@ const QuizQuestion = ({
   isSolved,
   content,
   handleClick,
+  solveQuiz,
 }: {
   correct: boolean;
   isSolved: boolean;
   content: string;
   handleClick: MouseEventHandler;
+  solveQuiz: (option: string) => Promise<void>;
 }) => {
   return (
     <div>
@@ -113,8 +115,8 @@ const QuizQuestion = ({
             alignItems={'center'}
             gap={'0.5rem'}
           >
-            <QuizButton option={'O'} />
-            <QuizButton option={'X'} />
+            <QuizButton option={'O'} handleClick={() => solveQuiz('O')} />
+            <QuizButton option={'X'} handleClick={() => solveQuiz('X')} />
           </Card.Footer>
         </Card.Root>
       )}

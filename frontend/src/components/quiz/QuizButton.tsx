@@ -1,23 +1,12 @@
-import axios from '@/apis/axios';
 import { Button } from '@/components/ui/button';
-import { QuizResponse } from '@/types/api/response';
-import { useQueryClient } from '@tanstack/react-query';
-
-const QuizButton = ({ option }: { option: string }) => {
-  const queryClient = useQueryClient();
-  const handleClick = async (option: string) => {
-    await axios
-      .post<QuizResponse>('/quiz/solve-quiz', {
-        answer: option === 'O' ? 'O' : 'X',
-      })
-      .then(() => {
-        queryClient.invalidateQueries({
-          queryKey: ['quiz'],
-          exact: true,
-        });
-      });
-  };
-
+import { MouseEventHandler } from 'react';
+const QuizButton = ({
+  option,
+  handleClick,
+}: {
+  option: string;
+  handleClick: MouseEventHandler;
+}) => {
   return (
     <Button
       variant={'solid'}
@@ -28,7 +17,7 @@ const QuizButton = ({ option }: { option: string }) => {
       borderRadius={'0.5rem'}
       textStyle={'title3.bold'}
       shadow={'emphasize'}
-      onClick={() => handleClick(option)}
+      onClick={handleClick}
     >
       {option === 'O' ? 'O' : 'X'}
     </Button>
