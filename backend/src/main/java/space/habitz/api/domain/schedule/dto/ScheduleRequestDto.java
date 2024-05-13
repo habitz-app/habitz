@@ -29,34 +29,34 @@ public record ScheduleRequestDto(
 	Boolean[] weekDays, // size 7
 	Integer point
 ) {
-    public Schedule toEntity(Member parent, Member child) {
+	public Schedule toEntity(Member parent, Member child) {
 
-        boolean isRepeatable = !startDate.equals(endDate); // 반복 여부
+		boolean isRepeatable = !startDate.equals(endDate); // 반복 여부
 
-        // 단일 반복이라면 해당 date에만 요일 true
-        if (!isRepeatable) {
-            DayOfWeek dayOfWeek = startDate.getDayOfWeek();
-            Arrays.fill(weekDays, Boolean.FALSE);
-            weekDays[dayOfWeek.getValue() - 1] = Boolean.TRUE;
-        }
+		// 단일 반복이라면 해당 date에만 요일 true
+		if (!isRepeatable) {
+			DayOfWeek dayOfWeek = startDate.getDayOfWeek();
+			Arrays.fill(weekDays, Boolean.FALSE);
+			weekDays[dayOfWeek.getValue() - 1] = Boolean.TRUE;
+		}
 
-        return Schedule.builder()
-                .title(title)
-                .content(content)
-                .emoji(emoji)
-                .point(point)
-                .parent(parent)
-                .child(child)
-                .startDate(startDate)
-                .endDate(endDate)
-                .monday(weekDays[0])
-                .tuesday(weekDays[1])
-                .wednesday(weekDays[2])
-                .thursday(weekDays[3])
-                .friday(weekDays[4])
-                .saturday(weekDays[5])
-                .sunday(weekDays[6])
-                .repeatable(isRepeatable)
-                .build();
-    }
+		return Schedule.builder()
+			.title(title)
+			.content(content)
+			.emoji(emoji)
+			.point(point)
+			.parent(parent)
+			.child(child)
+			.startDate(startDate)
+			.endDate(endDate)
+			.monday(weekDays[0])
+			.tuesday(weekDays[1])
+			.wednesday(weekDays[2])
+			.thursday(weekDays[3])
+			.friday(weekDays[4])
+			.saturday(weekDays[5])
+			.sunday(weekDays[6])
+			.repeatable(isRepeatable)
+			.build();
+	}
 }
