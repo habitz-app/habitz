@@ -1,5 +1,7 @@
 package space.habitz.api.domain.product.controller;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -16,6 +18,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import space.habitz.api.domain.member.entity.Member;
+import space.habitz.api.domain.product.dto.BrandDto;
 import space.habitz.api.domain.product.dto.ProductBanDto;
 import space.habitz.api.domain.product.dto.ProductInfoDto;
 import space.habitz.api.domain.product.dto.ProductPurchaseRequestDto;
@@ -82,6 +85,13 @@ public class ProductController {
 		@RequestBody ProductPurchaseRequestDto productPurchaseRequestDto) {
 		productService.purchaseProduct(member, productPurchaseRequestDto.getProductId());
 		return new ResponseData<>("success", "상품 구매 성공", "상품 구매 성공");
+	}
+
+	@ApiResponse(description = "브랜드 리스트")
+	@GetMapping("/brand-list/{category}")
+	public ResponseData<List<BrandDto>> getBrandList(
+		@Parameter(description = "카테고리", required = true) @PathVariable("category") String category) {
+		return new ResponseData<>("success", "브랜드 리스트 조회 성공", productService.getBrandList(category.replace(",", "/")));
 	}
 
 }

@@ -15,12 +15,14 @@ import space.habitz.api.domain.member.repository.ChildRepository;
 import space.habitz.api.domain.member.repository.MemberRepository;
 import space.habitz.api.domain.point.entity.ChildPointHistory;
 import space.habitz.api.domain.point.repository.ChildPointHistoryRepository;
+import space.habitz.api.domain.product.dto.BrandDto;
 import space.habitz.api.domain.product.dto.ProductInfoDto;
 import space.habitz.api.domain.product.entity.BannedProduct;
 import space.habitz.api.domain.product.entity.BannedProductID;
 import space.habitz.api.domain.product.entity.ChildProductPaymentHistory;
 import space.habitz.api.domain.product.entity.Product;
 import space.habitz.api.domain.product.repository.BannedProductRepository;
+import space.habitz.api.domain.product.repository.BrandRepository;
 import space.habitz.api.domain.product.repository.ChildProductPaymentHistoryRepository;
 import space.habitz.api.domain.product.repository.ProductRepository;
 import space.habitz.api.global.exception.CustomAccessDeniedException;
@@ -37,6 +39,7 @@ public class ProductServiceImpl implements ProductService {
 	private final ChildProductPaymentHistoryRepository childProductPaymentHistoryRepository;
 	private final ChildPointHistoryRepository childPointHistoryRepository;
 	private final MemberRepository memberRepository;
+	private final BrandRepository brandRepository;
 
 	@Override
 	public ProductInfoDto getProductDetail(Member member, Long id) {
@@ -192,4 +195,12 @@ public class ProductServiceImpl implements ProductService {
 
 	}
 
+	@Override
+	public List<BrandDto> getBrandList(String category) {
+		List<String> brandList = productRepository.findBrandByCategory(category);
+		return brandRepository.findByNameIn(brandList)
+			.stream()
+			.map(brand -> new BrandDto(brand.getId(), brand.getName(), brand.getImage()))
+			.toList();
+	}
 }
