@@ -7,6 +7,8 @@ const nextConfig = {
       { protocol: 'http', hostname: '*.kakaocdn.net' },
       { protocol: 'https', hostname: '*.kakaocdn.net' },
       { protocol: 'https', hostname: '*.placeholder.com' },
+      { protocol: 'https', hostname: '*.amazonaws.com' },
+      { protocol: 'https', hostname: '*.githubusercontent.com' },
     ],
   },
   output: 'standalone',

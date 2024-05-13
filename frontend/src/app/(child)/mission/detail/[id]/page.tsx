@@ -3,8 +3,12 @@ import axios from '@/apis/axios';
 import MissionDetail from '@/components/mission/MissionDetail';
 import { Button } from '@/components/ui/button';
 import { MissionDetailResponse } from '@/types/api/response';
+import { IonIcon } from '@ionic/react';
 import { useQuery } from '@tanstack/react-query';
+import { chevronBackOutline } from 'ionicons/icons';
+import { useRouter } from 'next/navigation';
 import { css } from 'styled-system/css';
+import Image from 'next/image';
 
 const Page = ({ params }: { params: { id: string } }) => {
   const mission = useQuery<MissionDetailResponse>({
@@ -16,6 +20,7 @@ const Page = ({ params }: { params: { id: string } }) => {
       return res.data.data ?? {};
     },
   });
+  const router = useRouter();
   return (
     <div
       className={css({
@@ -25,20 +30,46 @@ const Page = ({ params }: { params: { id: string } }) => {
         gap: '1.25rem',
       })}
     >
-      <MissionDetail
-        emoji={mission.data?.mission.emoji || ''}
-        title={mission.data?.mission.title || ''}
-        date={mission.data?.mission.createdAt.split('T')[0] || ''}
-        contents={mission.data?.mission.content || ''}
-        point={mission.data?.mission.point || 0}
-        status={mission.data?.mission.status || 'EMPTY'}
-        image={
-          mission.data?.recognition?.image || 'https://via.placeholder.com/250'
-        }
-        recognitionContent={mission.data?.recognition?.content || ''}
-        approvalName={mission.data?.approval?.name || ''}
-        approvalComment={mission.data?.approval?.comment || ''}
-      />
+      <header
+        className={css({
+          display: 'flex',
+          position: 'sticky',
+          height: '2.5rem',
+          top: 0,
+          bg: 'transparent',
+          backdropFilter: 'auto',
+          backdropBlur: 'sm',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        })}
+      >
+        <Button
+          color="label.alternative"
+          variant="link"
+          onClick={() => {
+            router.back();
+          }}
+        >
+          <IonIcon
+            icon={chevronBackOutline}
+            className={css({
+              w: '24px',
+              h: '24px',
+            })}
+          />
+        </Button>
+        <Button color="label.alternative" variant="link">
+          <Image
+            key="history"
+            src="/history.svg"
+            alt="history"
+            width="19"
+            height="19"
+          ></Image>
+        </Button>
+      </header>
+
+      <MissionDetail mission={mission.data} />
       {mission.data?.mission.status === 'EMPTY' ? (
         <Button
           variant="solid"
@@ -47,6 +78,7 @@ const Page = ({ params }: { params: { id: string } }) => {
           color="label.neutral"
           w="full"
           shadow="strong"
+          onClick={() => router.push(`/mission/authenticate/${params.id}`)}
         >
           지금 바로 미션 인증하기
         </Button>
