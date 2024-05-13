@@ -49,7 +49,7 @@ public class ProductController {
 		@Parameter(description = "브랜드", required = true) @PathVariable("brand") String brand,
 		Pageable pageable) {
 		return new ResponseData<>("success", "상품 리스트 조회 성공",
-			productService.getProductList(member, category, brand, pageable));
+			productService.getProductList(member, category.replace(",", "/"), brand, pageable));
 	}
 
 	@ApiResponse(description = "제한한 상품 조회")
