@@ -152,3 +152,13 @@ export interface MissionDetailResponse {
     comment: string;
   };
 }
+
+export interface BannedProductReponse {
+  productId: number;
+  productName: string;
+  price: number;
+  productImage: string;
+  description: string;
+  category: string;
+  brand: string;
+}
