@@ -1,12 +1,17 @@
-package space.habitz.api.global.handler;
+package space.habitz.api.global.exception.handler;
 
-
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import space.habitz.api.global.exception.*;
+
+import lombok.extern.slf4j.Slf4j;
+import space.habitz.api.global.exception.CustomAccessDeniedException;
+import space.habitz.api.global.exception.CustomNotFoundException;
+import space.habitz.api.global.exception.CustomRestClientException;
+import space.habitz.api.global.exception.CustomServerErrorException;
+import space.habitz.api.global.exception.CustomUnAuthorizedException;
+import space.habitz.api.global.exception.CustomValidationException;
 import space.habitz.api.global.response.ResponseData;
 
 @Slf4j
