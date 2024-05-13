@@ -1,6 +1,7 @@
 package space.habitz.api.domain.quiz.service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import org.springframework.stereotype.Service;
 
@@ -95,14 +96,13 @@ public class QuizServiceImpl implements QuizService {
 		quizHistoryRepository.findByChildAndQuiz(child, quiz).ifPresent(quizHistory -> {
 			throw new CustomNotFoundException("이미 푼 퀴즈입니다.");
 		});
-
+		
 		QuizHistory quizHistory = QuizHistory
 			.builder()
 			.quiz(quiz)
 			.child(child)
 			.chosenAnswer(answer)
 			.isCorrect(quiz.getAnswer().equals(answer))
-			.createdAt(new java.sql.Timestamp(System.currentTimeMillis()))
 			.build();
 
 		quizHistoryRepository.save(quizHistory);
@@ -115,7 +115,6 @@ public class QuizServiceImpl implements QuizService {
 				.content(LocalDate.now() + " 퀴즈 정답 맞춤")
 				.totalPoint(child.getPoint())
 				.point(10)
-				.createdAt(new java.sql.Timestamp(System.currentTimeMillis()))
 				.build();
 			childPointHistoryRepository.save(childPointHistory);
 
