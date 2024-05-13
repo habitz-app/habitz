@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import lombok.Builder;
 
 @Builder
+@ValidSchedule
 public record UpdateScheduleRequestDto(
 	String title,
 	String content,

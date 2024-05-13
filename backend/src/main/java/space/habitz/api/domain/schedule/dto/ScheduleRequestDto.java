@@ -1,5 +1,10 @@
 package space.habitz.api.domain.schedule.dto;
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.util.Arrays;
+
+import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import space.habitz.api.domain.member.entity.Member;
 import space.habitz.api.domain.schedule.entity.Schedule;
@@ -9,15 +14,20 @@ import java.time.LocalDate;
 import java.util.Arrays;
 
 @Builder
+@ValidSchedule
 public record ScheduleRequestDto(
-        String title,
-        String content,
-        String emoji,
-        String childUUID,
-        LocalDate startDate,
-        LocalDate endDate,
-        Boolean[] weekDays, // size 7
-        Integer point
+	@Size(max = 64, message = "일정 제목은 64자를 넘을 수 없습니다.")
+	String title,
+	@Size(max = 255, message = "일정 내용은 255자를 넘을 수 없습니다.")
+	String content,
+	@Emoji
+	String emoji,
+	String childUUID,
+	LocalDate startDate,
+	LocalDate endDate,
+	@Size(min = 7, max = 7, message = "요일은 7개여야 합니다.")
+	Boolean[] weekDays, // size 7
+	Integer point
 ) {
     public Schedule toEntity(Member parent, Member child) {
 

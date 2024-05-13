@@ -103,12 +103,8 @@ public class ScheduleController {
 	@PutMapping("/{scheduleId}")
 	public ResponseData<ScheduleDto> updateSchedule(@AuthenticationPrincipal Member member,
 		@PathVariable("scheduleId") Long scheduleId,
-		@RequestBody UpdateScheduleRequestDto requestDto) {
-
-		// 미션 수정 실패 로직
-		if (requestDto.endDate().isBefore(LocalDate.now())) {
-			return ResponseData.failure("생성되지 않는 미션 일정입니다.");
-		}
+		@RequestBody @Valid UpdateScheduleRequestDto requestDto) {
+		
 		return ResponseData.success(scheduleService.updateSchedule(member, scheduleId, requestDto));
 	}
 
