@@ -19,6 +19,7 @@ interface childInfo {
 // Props 데이터 구조
 interface CalendarProps extends DatePicker.RootProps {
   data: CalendarResponse;
+  selectedDate: string;
   selectDate: (date: string) => void;
   year: number;
   month: number;
@@ -28,6 +29,7 @@ interface CalendarProps extends DatePicker.RootProps {
 
 export default function Calendar({
   data,
+  selectedDate,
   selectDate,
   year,
   month,
@@ -129,6 +131,7 @@ export default function Calendar({
         console.log(view);
       }}
       closeOnSelect={false}
+      value={[selectedDate]}
       {...props}
       className={css({ width: 'full' })}
     >
