@@ -1,15 +1,17 @@
 package space.habitz.api.domain.member.service;
 
-import lombok.RequiredArgsConstructor;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
+
+import lombok.RequiredArgsConstructor;
+import space.habitz.api.domain.member.dto.FamilyChildListResponseDto;
 import space.habitz.api.domain.member.dto.FamilyListResponseDto;
 import space.habitz.api.domain.member.dto.MemberInviteCodeResponse;
 import space.habitz.api.domain.member.entity.Family;
 import space.habitz.api.domain.member.entity.Member;
 import space.habitz.api.domain.member.repository.FamilyRepository;
 import space.habitz.api.domain.member.utils.AuthUtils;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -45,5 +47,15 @@ public class FamilyServiceImpl implements FamilyService {
 			.toList();
 	}
 
+	@Override
+	public List<FamilyChildListResponseDto> getFamilyChildList() {
+		Member member = AuthUtils.getAuthenticatedMember();
+		String familyId = member.getFamily().getId();
+
+		return familyRepository.findByFamilyIdOnlyChildMember(familyId)
+			.stream()
+			.map(FamilyChildListResponseDto::convertToDto)
+			.toList();
+	}
 
 }
