@@ -8,10 +8,8 @@ import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import space.habitz.api.domain.member.entity.Member;
 import space.habitz.api.domain.schedule.entity.Schedule;
-
-import java.time.DayOfWeek;
-import java.time.LocalDate;
-import java.util.Arrays;
+import space.habitz.api.global.validator.emoji.Emoji;
+import space.habitz.api.global.validator.schedule.ValidSchedule;
 
 @Builder
 @ValidSchedule
