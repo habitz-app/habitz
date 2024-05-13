@@ -1,9 +1,12 @@
 package space.habitz.api.domain.product.service;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import space.habitz.api.domain.member.entity.Member;
+import space.habitz.api.domain.product.dto.BrandDto;
 import space.habitz.api.domain.product.dto.ProductInfoDto;
 import space.habitz.api.domain.product.entity.BannedProduct;
 
@@ -19,4 +22,6 @@ public interface ProductService {
 	void deleteBanProduct(Member parent, Long productId, String childId);
 
 	void purchaseProduct(Member member, Long productId);
+
+	List<BrandDto> getBrandList(String category);
 }
