@@ -1,6 +1,6 @@
 package space.habitz.api.domain.quiz.dto;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -13,5 +13,5 @@ public class QuizHistoryInfoDto {
 	private Long articleId;
 	private String chosenAnswer;
 	private boolean isCorrect;
-	private Timestamp createdAt;
+	private LocalDateTime createdAt;
 }
