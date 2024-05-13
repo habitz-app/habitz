@@ -5,6 +5,7 @@ const nextConfig = {
     remotePatterns: [
       { protocol: 'https', hostname: '*.bing.com' },
       { protocol: 'http', hostname: '*.kakaocdn.net' },
+      { protocol: 'https', hostname: '*.kakaocdn.net' },
       { protocol: 'https', hostname: '*.placeholder.com' },
     ],
   },
