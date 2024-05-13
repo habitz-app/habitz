@@ -1,7 +1,5 @@
 package space.habitz.api.domain.quiz.entity;
 
-import java.sql.Timestamp;
-
 import net.minidev.json.annotate.JsonIgnore;
 
 import jakarta.persistence.Column;
@@ -17,13 +15,14 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import space.habitz.api.domain.member.entity.Child;
+import space.habitz.api.global.entity.BaseTimeEntity;
 
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class QuizHistory {
+public class QuizHistory extends BaseTimeEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -44,8 +43,5 @@ public class QuizHistory {
 
 	@Column(name = "is_correct")
 	private boolean isCorrect;
-
-	@Column(name = "created_at")
-	private Timestamp createdAt;
 
 }
