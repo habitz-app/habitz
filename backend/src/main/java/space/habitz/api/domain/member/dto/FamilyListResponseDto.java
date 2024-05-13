@@ -2,13 +2,15 @@ package space.habitz.api.domain.member.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import space.habitz.api.domain.member.entity.Member;
 import space.habitz.api.domain.member.entity.Role;
 
 @AllArgsConstructor
 @Builder
-@Data
+@Getter
+@NoArgsConstructor
 public class FamilyListResponseDto {
 	private Role memberRole;
 	private Long memberId;

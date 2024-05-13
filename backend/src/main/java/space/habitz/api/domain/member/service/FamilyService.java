@@ -1,10 +1,10 @@
 package space.habitz.api.domain.member.service;
 
-import space.habitz.api.domain.member.dto.FamilyListResponseDto;
-import space.habitz.api.domain.member.dto.MemberInviteCodeResponse;
-
 import java.util.List;
 
+import space.habitz.api.domain.member.dto.FamilyChildListResponseDto;
+import space.habitz.api.domain.member.dto.FamilyListResponseDto;
+import space.habitz.api.domain.member.dto.MemberInviteCodeResponse;
 
 public interface FamilyService {
 	MemberInviteCodeResponse getInviteCode();
@@ -12,4 +12,6 @@ public interface FamilyService {
 	List<FamilyListResponseDto> getFamilyList();
 
 	List<FamilyListResponseDto> getChildList();
+
+	List<FamilyChildListResponseDto> getFamilyChildList();
 }

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
+import space.habitz.api.domain.member.dto.FamilyChildListResponseDto;
 import space.habitz.api.domain.member.dto.FamilyListResponseDto;
 import space.habitz.api.domain.member.dto.MemberInviteCodeResponse;
 import space.habitz.api.domain.member.service.FamilyService;
@@ -37,6 +38,13 @@ public class FamilyController {
 	public ResponseEntity<?> childList() {
 		List<FamilyListResponseDto> familyList = familyService.getChildList();
 		return ApiResponseData.success(familyList);
+	}
+
+	@PreAuthorize("hasAnyRole('PARENT', 'ADMIN')")
+	@GetMapping("/childList2")
+	public ResponseEntity<?> childPointList() {
+		List<FamilyChildListResponseDto> familyChildList = familyService.getFamilyChildList();
+		return ApiResponseData.success(familyChildList);
 	}
 }
 
