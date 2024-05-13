@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +21,7 @@ import space.habitz.api.domain.point.service.ChildPointHistoryService;
 import space.habitz.api.domain.point.service.FamilyPointHistoryService;
 import space.habitz.api.domain.point.service.PointService;
 import space.habitz.api.global.exception.CustomNotFoundException;
+import space.habitz.api.global.response.ApiResponseData;
 import space.habitz.api.global.response.ResponseData;
 
 @RestController
@@ -50,6 +53,17 @@ public class PointController {
 	@GetMapping("/amount")
 	public ResponseData<PointAmount> getPointAmount(@AuthenticationPrincipal Member member) {
 		return new ResponseData<>("success", "포인트 조회 성공", pointService.getPoint(member));
+	}
+
+	@GetMapping("/childPointHistory")
+	@PreAuthorize("hasAnyRole('PARENT', 'ADMIN')")
+	public ResponseEntity<?> getPointHistory(@AuthenticationPrincipal Member member,
+		@RequestParam("start") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate startDate,
+		@RequestParam("end") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate,
+		@RequestParam("childUuid") String childUuid
+	) {
+		return ApiResponseData.success(childPointHistoryService.getMonthlyChildPointHistory(member,
+			childUuid, startDate, endDate.plusDays(1)));
 	}
 
 }

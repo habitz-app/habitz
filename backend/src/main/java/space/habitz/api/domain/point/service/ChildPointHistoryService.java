@@ -9,4 +9,8 @@ import space.habitz.api.domain.point.dto.PointHistory;
 public interface ChildPointHistoryService {
 
 	List<PointHistory> getPointHistory(Member member, LocalDate startDate, LocalDate endDate);
+
+	List<PointHistory> getMonthlyChildPointHistory(Member member, String childUuid, LocalDate startDate,
+		LocalDate endDate);
+
 }
