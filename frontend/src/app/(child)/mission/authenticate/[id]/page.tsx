@@ -140,6 +140,36 @@ const AuthenticatePage = ({ params }: { params: { id: string } }) => {
       >
         미션 인증하기
       </strong>
+      <div
+        className={css({
+          display: 'flex',
+          flexDir: 'column',
+        })}
+      >
+        <span
+          className={css({
+            fontSize: '4.6875rem',
+          })}
+        >
+          {mission.data?.mission.emoji}
+        </span>
+        <p
+          className={css({
+            textStyle: 'caption1.medium',
+            color: 'label.alternative',
+          })}
+        >
+          {new Date().toISOString().split('T')[0]}
+        </p>
+        <p
+          className={css({
+            textStyle: 'title3.bold',
+            color: 'label.normal',
+          })}
+        >
+          {mission.data?.mission.title}
+        </p>
+      </div>
       <form onSubmit={handleSubmit(onSubmit)} encType="multipart/form-data">
         <FileUpload.Root maxFiles={1} {...register('image')}>
           <FileUpload.Dropzone>
@@ -174,14 +204,46 @@ const AuthenticatePage = ({ params }: { params: { id: string } }) => {
           </FileUpload.Dropzone>
         </FileUpload.Root>
         {errors.image && <span>{errors.image.message}</span>}
-        <input
-          {...register('content')}
-          type="text"
-          id="content"
-          placeholder="내용을 입력하세요"
-        />
-        {errors.content && <span>{errors.content.message}</span>}
-        <button type="submit">인증</button>
+        <div
+          className={css({
+            display: 'flex',
+            flexDir: 'column',
+            gap: '1rem',
+            mt: '1.25rem',
+            alignItems: 'center',
+          })}
+        >
+          <input
+            {...register('content')}
+            type="text"
+            id="content"
+            placeholder="내용을 입력하세요"
+            className={css({
+              w: 'full',
+              h: '5rem',
+              bg: 'background.normal.alternative',
+              textStyle: 'body2.normal.medium',
+            })}
+          />
+          {errors.content && (
+            <span
+              className={css({
+                color: 'status.negative',
+              })}
+            >
+              {errors.content.message}
+            </span>
+          )}
+          <Button
+            type="submit"
+            bgColor="primary.normal"
+            color="label.normal"
+            w={120}
+            shadow={'strong'}
+          >
+            인증
+          </Button>
+        </div>
       </form>
     </div>
   );
