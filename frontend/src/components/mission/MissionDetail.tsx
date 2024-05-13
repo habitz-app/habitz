@@ -234,7 +234,7 @@ const MissionDetail = ({
             gap: '1rem',
           })}
         >
-          {mission?.recognition ? (
+          {mission?.recognition && mission?.recognition?.image ? (
             <Image
               src={`${mission?.recognition?.image}`}
               alt="image"
