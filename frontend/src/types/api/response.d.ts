@@ -108,7 +108,7 @@ export interface QuizResponse {
     articleId: number;
     chosenAnswer: string;
     createdAt: string;
-    correct: true;
+    correct: boolean;
   };
 }
 
@@ -151,4 +151,42 @@ export interface MissionDetailResponse {
     name: string;
     comment: string;
   };
+}
+
+export interface BannedProductReponse {
+  productId: number;
+  productName: string;
+  price: number;
+  productImage: string;
+  description: string;
+  category: string;
+  brand: string;
+}
+export interface BannedProductListResponse {
+  content: BannedProductReponse[];
+  totalPages: number;
+  totalElements: number;
+  pageable: {
+    pageNumber: number;
+    pageSize: number;
+    paged: boolean;
+    unpaged: boolean;
+    offset: number;
+    sort: {
+      sorted: boolean;
+      unsorted: boolean;
+      empty: boolean;
+    };
+  };
+  size: number;
+  number: number;
+  sort: {
+    sorted: boolean;
+    unsorted: boolean;
+    empty: boolean;
+  };
+  first: boolean;
+  last: boolean;
+  numberOfElements: number;
+  empty: boolean;
 }
