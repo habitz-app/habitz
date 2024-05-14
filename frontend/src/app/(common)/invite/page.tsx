@@ -7,7 +7,6 @@ import { useQuery } from '@tanstack/react-query';
 import {
   chevronBackOutline,
   copyOutline,
-  checkmarkOutline,
   checkmarkDoneOutline,
 } from 'ionicons/icons';
 import Image from 'next/image';
@@ -123,7 +122,7 @@ const Invite = () => {
               color="label.alternative"
               variant="link"
               onClick={() => {
-                router.push('/mypage');
+                router.push('/more');
               }}
             >
               <IonIcon

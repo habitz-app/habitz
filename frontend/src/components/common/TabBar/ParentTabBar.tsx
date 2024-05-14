@@ -16,7 +16,15 @@ const ParentTabBar = ({ menu }: { menu: MenuType }) => {
   }, [menu]);
 
   const handleClick = (menu: MenuType) => {
-    router.push(`/manage/${menu}`);
+    const routes = {
+      home: '/',
+      child: '/manage/child',
+      mission: '/manage/mission',
+      store: '/manage/store',
+      more: '/more',
+    };
+
+    router.push(routes[menu]);
     setCurrentMenu(menu);
   };
 
@@ -135,7 +143,7 @@ const ParentTabBar = ({ menu }: { menu: MenuType }) => {
           <span className={css({ fontSize: '0.75rem' })}>상점</span>
         </li>
         <li
-          onClick={() => handleClick('menu')}
+          onClick={() => handleClick('more')}
           className={css({
             display: 'flex',
             w: 'full',
@@ -145,7 +153,7 @@ const ParentTabBar = ({ menu }: { menu: MenuType }) => {
             flexDir: 'column',
             flexGrow: 1,
             color:
-              currentMenu === 'menu' ? 'label.normal' : 'label.alternative',
+              currentMenu === 'more' ? 'label.normal' : 'label.alternative',
           })}
         >
           <IonIcon
@@ -155,7 +163,7 @@ const ParentTabBar = ({ menu }: { menu: MenuType }) => {
               w: '1.5rem',
             })}
           />
-          <span className={css({ fontSize: '0.75rem' })}>메뉴</span>
+          <span className={css({ fontSize: '0.75rem' })}>더보기</span>
         </li>
       </ul>
     </nav>

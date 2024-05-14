@@ -190,3 +190,8 @@ export interface BannedProductListResponse {
   numberOfElements: number;
   empty: boolean;
 }
+
+export interface PointAmountResponse {
+  point: number;
+  familyPoint: boolean;
+}
