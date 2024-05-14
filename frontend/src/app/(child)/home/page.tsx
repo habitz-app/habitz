@@ -1,8 +1,8 @@
 'use client';
 import ProfileCard from '@/components/common/ProfileCard';
 import { Button } from '@/components/ui/button';
-import { getUserData } from '@/hooks/useAuth';
-import { MemberResponse, MissionResponse } from '@/types/api/response';
+import { useMe } from '@/hooks/useAuth';
+import { MissionResponse } from '@/types/api/response';
 import { IonIcon } from '@ionic/react';
 import { useQuery } from '@tanstack/react-query';
 import axios from '@/apis/axios';
@@ -14,10 +14,7 @@ import MissionPreview from '@/components/mission/MissionPreview';
 const HomePage = () => {
   const date = new Date().toISOString().split('T')[0];
 
-  const me = useQuery<MemberResponse>({
-    queryKey: ['me'],
-    queryFn: getUserData,
-  });
+  const me = useMe();
 
   const getPoint = async () => {
     return await axios.get<PointAmount>('/point/amount').then((res) => {

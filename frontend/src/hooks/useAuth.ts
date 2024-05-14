@@ -5,13 +5,7 @@ import { reissue } from '@/apis/axios';
 import { useRouter } from 'next/navigation';
 import axios from '@/apis/axios';
 import { MemberResponse } from '@/types/api/response';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
-
-export const getUserData = async () => {
-  return await axios.get<MemberResponse>('/member').then((res) => {
-    return res.data.data;
-  });
-};
+import { useQuery } from '@tanstack/react-query';
 
 export const useAuth = () => {
   // access token 검증 로직
@@ -26,11 +20,21 @@ export const useAuth = () => {
   }, []);
 };
 
-export const useRoles = (roles: string[]) => {
-  const me = useQuery<MemberResponse>({
+export const useMe = () => {
+  const getUserData = async () => {
+    return await axios.get<MemberResponse>('/member').then((res) => {
+      return res.data.data;
+    });
+  };
+
+  return useQuery<MemberResponse>({
     queryKey: ['me'],
     queryFn: getUserData,
   });
+};
+
+export const useRoles = (roles: string[]) => {
+  const me = useMe();
   const router = useRouter();
 
   useLayoutEffect(() => {
