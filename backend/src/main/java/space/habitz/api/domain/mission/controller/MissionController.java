@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import space.habitz.api.domain.member.entity.Member;
 import space.habitz.api.domain.mission.dto.MissionApproveRequestDto;
@@ -31,6 +33,7 @@ import space.habitz.api.domain.mission.service.MissionService;
 import space.habitz.api.global.response.ResponseData;
 
 @Tag(name = "Mission", description = "미션 관련 API")
+@Validated
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/mission")
@@ -125,7 +128,9 @@ public class MissionController {
 	@PostMapping(value = "/{missionId}/perform", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseData<?> performMission(@AuthenticationPrincipal Member member,
 		@PathVariable("missionId") Long missionId,
-		@RequestPart("content") String content,
+		@RequestPart("content")
+		@Size(max = 255, message = "미션 인증 내용은 255자를 넘을 수 없습니다.")
+		String content,
 		@RequestPart(name = "image", required = false) MultipartFile image) throws IOException {
 
 		return ResponseData.success(missionService.performMission(member, missionId, content, image));
@@ -137,7 +142,10 @@ public class MissionController {
 	)
 	@PutMapping(value = "/{missionId}/perform", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseData<?> updatePerformMission(@AuthenticationPrincipal Member member,
-		@PathVariable("missionId") Long missionId, @RequestPart("content") String content,
+		@PathVariable("missionId") Long missionId,
+		@RequestPart("content")
+		@Size(max = 255, message = "미션 인증 내용은 255자를 넘을 수 없습니다.")
+		String content,
 		@RequestPart(name = "image", required = false) MultipartFile image) throws IOException {
 		return ResponseData.success(missionService.updatePerfomMission(member, missionId, content, image));
 	}

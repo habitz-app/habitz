@@ -24,7 +24,6 @@ public class ResponseData<T> {
 		this.data = data;
 	}
 
-
 	public static <T> ResponseData<T> success(T data) {
 		return new ResponseData<>(Response.SUCCESS, data);
 	}
@@ -39,6 +38,10 @@ public class ResponseData<T> {
 
 	public static <T> ResponseData<T> failure(String message) {
 		return new ResponseData<>(Response.FAILURE, message, null);
+	}
+
+	public static <T> ResponseData<T> failure(String message, T data) {
+		return new ResponseData<>(Response.FAILURE, message, data);
 	}
 
 	public static <T> ResponseData<T> expired() {
