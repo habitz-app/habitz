@@ -35,6 +35,11 @@ export const Default: Story = {
         },
       ],
     },
+    selectedDate: '2024-05-08',
     selectDate: () => {},
+    year: 2024,
+    month: 5,
+    setYear: () => {},
+    setMonth: () => {},
   },
 };
