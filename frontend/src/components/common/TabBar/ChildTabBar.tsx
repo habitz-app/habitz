@@ -133,7 +133,7 @@ const ChildTabBar = ({ menu }: { menu: MenuType }) => {
           <span className={css({ fontSize: '0.75rem' })}>상점</span>
         </li>
         <li
-          onClick={() => handleClick('menu')}
+          onClick={() => handleClick('more')}
           className={css({
             display: 'flex',
             w: 'full',
@@ -143,7 +143,7 @@ const ChildTabBar = ({ menu }: { menu: MenuType }) => {
             flexDir: 'column',
             flexGrow: 1,
             color:
-              currentMenu === 'menu' ? 'label.normal' : 'label.alternative',
+              currentMenu === 'more' ? 'label.normal' : 'label.alternative',
           })}
         >
           <IonIcon
@@ -153,7 +153,7 @@ const ChildTabBar = ({ menu }: { menu: MenuType }) => {
               w: '1.5rem',
             })}
           />
-          <span className={css({ fontSize: '0.75rem' })}>메뉴</span>
+          <span className={css({ fontSize: '0.75rem' })}>더보기</span>
         </li>
       </ul>
     </nav>

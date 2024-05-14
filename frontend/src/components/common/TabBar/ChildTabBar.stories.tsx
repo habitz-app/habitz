@@ -7,7 +7,7 @@ export default {
   argTypes: {
     menu: {
       control: 'select',
-      options: ['home', 'quiz', 'mission', 'store', 'menu'],
+      options: ['home', 'quiz', 'mission', 'store', 'more'],
     },
   },
 } as Meta;
@@ -60,7 +60,7 @@ export const Store: Story = {
 
 export const Menu: Story = {
   args: {
-    menu: 'menu',
+    menu: 'more',
   },
   parameters: {
     nextjs: {
