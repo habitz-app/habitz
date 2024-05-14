@@ -2,7 +2,9 @@ package space.habitz.api.domain.point.service;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -29,6 +31,12 @@ public class ChildPointHistoryServiceImpl implements ChildPointHistoryService {
 	private final ChildRepository childRepository;
 	private final MemberRepository memberRepository;
 
+	private final Map<String, String> emojiMap = new HashMap<String, String>() {{
+		put("MISSION", "");
+		put("PURCHASE", "💸");
+		put("QUIZ", "🧠");
+	}};
+
 	@Override
 	public List<PointHistory> getPointHistory(Member member, LocalDate startDate, LocalDate endDate) {
 		if (member.getRole() != Role.CHILD) {
@@ -41,7 +49,7 @@ public class ChildPointHistoryServiceImpl implements ChildPointHistoryService {
 			.stream()
 			.map(childPoint -> PointHistory.builder()
 				.point(childPoint.getPoint())
-				.point(childPoint.getTotalPoint())
+				.totalPoint(childPoint.getTotalPoint())
 				.content(childPoint.getContent())
 				.date(childPoint.getCreatedAt())
 				.build())
@@ -72,7 +80,7 @@ public class ChildPointHistoryServiceImpl implements ChildPointHistoryService {
 			.stream()
 			.map(childPoint -> PointHistory.builder()
 				.point(childPoint.getPoint())
-				.point(childPoint.getTotalPoint())
+				.totalPoint(childPoint.getTotalPoint())
 				.content(childPoint.getContent())
 				.date(childPoint.getCreatedAt())
 				.build())
@@ -90,15 +98,24 @@ public class ChildPointHistoryServiceImpl implements ChildPointHistoryService {
 		Child child = childRepository.findByMember_Id(memChild.getId());
 		List<PointRecentHistoryInfoDto> list = childPointHistoryRepository
 			.findChildPointHistoriesByChild_Id(child.getId());
-		System.out.println("list = " + list.toString());
+
 		return list
 			.stream()
-			.map(childPoint -> PointRecentHistoryDto.builder()
-				.historyInfo(childPoint)
-				.status(getStatus(childPoint))
-				.emoji(getEmoji(childPoint))
-				.build())
+			.map(this::setStatusPointRecentHistory)
 			.collect(Collectors.toList());
+
+	}
+
+	public PointRecentHistoryDto setStatusPointRecentHistory(PointRecentHistoryInfoDto pointRecentHistoryInfoDto) {
+
+		String status = getStatus(pointRecentHistoryInfoDto);
+		String emoji = status.equals("MISSION") ? pointRecentHistoryInfoDto.getEmoji() : emojiMap.get(status);
+
+		return PointRecentHistoryDto.builder()
+			.historyInfo(pointRecentHistoryInfoDto)
+			.status(status)
+			.emoji(emoji)
+			.build();
 
 	}
 
@@ -111,16 +128,5 @@ public class ChildPointHistoryServiceImpl implements ChildPointHistoryService {
 			return "PURCHASE";
 		}
 		return "QUIZ";
-	}
-
-	String getEmoji(PointRecentHistoryInfoDto pointRecentHistoryInfoDto) {
-		String status = getStatus(pointRecentHistoryInfoDto);
-		if (status.equals("MISSION")) {
-			return pointRecentHistoryInfoDto.getEmoji();
-		}
-		if (status.equals("PURCHASE")) {
-			return "💸";
-		}
-		return "🧠";
 	}
 }
