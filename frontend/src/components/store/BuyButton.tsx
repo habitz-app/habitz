@@ -20,7 +20,7 @@ const BuyButton = ({ clickHandler }: { clickHandler: () => void }) => {
         onClick={clickHandler}
         variant={'ghost'}
         w={'full'}
-        bg={'#CDEA80'}
+        bg={'lime.300'}
         rounded={'1rem'}
         minH={'4.25rem'}
         fontSize={'1.5rem'}

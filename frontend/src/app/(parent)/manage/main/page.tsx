@@ -1,156 +1,130 @@
 'use client';
-import { useState } from 'react';
-import Image from 'next/image';
-import { Circle, HStack } from 'styled-system/jsx';
-import { circle, hstack, stack } from 'styled-system/patterns';
-import { css } from 'styled-system/css';
-import { IonIcon } from '@ionic/react';
-import { chevronForwardOutline } from 'ionicons/icons';
+import { useEffect, useState } from 'react';
+import { HStack, Stack } from 'styled-system/jsx';
+import ProfileCard from '@/components/common/ProfileCard';
+import axios from '@/apis/axios';
+import { useQuery } from '@tanstack/react-query';
+import {
+  ChildList2Response,
+  Mission,
+  PointHistoryResponse,
+} from '@/types/api/response';
+import ProfileIcon from '@/components/common/ProfileIcon';
+import MonthlyPoint from '@/components/main/MonthlyPoint';
+import TodayMission from '@/components/main/TodayMission';
 
-const testCss = {
-  bg: 'red.400',
-  _hover: {
-    bg: 'orange.400',
-  },
-};
+const Page = () => {
+  const [selectedChild, setSelectedChild] = useState<ChildList2Response>({
+    memberRole: 'CHILD',
+    memberId: -1,
+    name: '',
+    profileImage: '',
+    uuid: '',
+    point: 0,
+  });
+  const date = new Date();
+  const today = date.toISOString().slice(0, 10);
 
-type pointhistory = {
-  pointHistoryId: number;
-  content: string;
-  changedDate: Date;
-  amount: number;
-  totalPoint: number;
-  type: 'gain' | 'loss';
-};
+  const getChildList = async () => {
+    const res = await axios.get<ChildList2Response[]>('/family/childList2');
+    console.log('Get ChildrenList Success! 😊');
+    return res.data.data;
+  };
 
-interface dummyChild {
-  memberId: number;
-  name: string;
-  point: number;
-  imageUrl: string;
-  histories?: pointhistory[];
-}
+  const getPointHistory = async (uuid: string) => {
+    const res = await axios.get<PointHistoryResponse>('/point/history', {
+      params: {
+        start: `${date.getFullYear()}-${date.getMonth() + 1 < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1}-01`,
+        end: today,
+      },
+    });
+    console.log('Get PointHistory Success! 😊');
+    return res.data.data;
+  };
 
-const dummyChildren: dummyChild[] = [
-  {
-    memberId: 1,
-    name: '김싸피',
-    point: 10450,
-    imageUrl:
-      'https://th.bing.com/th/id/OIG3.XjJC_rWVtDY_8a5.T.ux?w=1024&h=1024&rs=1&pid=ImgDetMain',
-    histories: [
-      {
-        pointHistoryId: 1,
-        content: '플라스틱 줍기',
-        changedDate: new Date('2024-04-16T00:10:56'),
-        amount: 100,
-        type: 'gain',
-        totalPoint: 10450,
-      },
-      {
-        pointHistoryId: 2,
-        content: '캔 줍기',
-        changedDate: new Date('2024-04-16T00:12:56'),
-        amount: 100,
-        type: 'gain',
-        totalPoint: 10450,
-      },
-    ],
-  },
-  {
-    memberId: 2,
-    name: '김첫째',
-    point: 12250,
-    imageUrl:
-      'https://th.bing.com/th/id/OIG1.cyZykh.a17LIEHsNeBLo?w=1024&h=1024&rs=1&pid=ImgDetMain',
-    histories: [
-      {
-        pointHistoryId: 1,
-        content: '강아지 산책시키기',
-        changedDate: new Date('2021-09-01'),
-        amount: 200,
-        type: 'gain',
-        totalPoint: 10450,
-      },
-      {
-        pointHistoryId: 2,
-        content: '수학 숙제 5 페이지',
-        changedDate: new Date('2021-08-01'),
-        amount: 100,
-        type: 'gain',
-        totalPoint: 10450,
-      },
-      {
-        pointHistoryId: 3,
-        content: '닌텐도 스위치 구매',
-        changedDate: new Date('2021-08-04'),
-        amount: 330000,
-        type: 'loss',
-        totalPoint: 10450,
-      },
-    ],
-  },
-];
+  const getDateMissionData = async (date: string, uuid: string) => {
+    const res = await axios.get<Mission[]>('/mission/children/list', {
+      params: { date: date, child: uuid },
+    });
+    console.log('Get Mission Success! 😊');
+    return res.data.data;
+  };
 
-const Page: React.FC = () => {
-  const [selectedChild, setSelectedChild] = useState<dummyChild>(
-    dummyChildren[0],
-  );
+  // useQuery
+  const { data: childrenList, refetch: refetchChildrenList } = useQuery<
+    ChildList2Response[]
+  >({
+    queryKey: ['Children'],
+    queryFn: () => getChildList(),
+    initialData: [],
+  });
+
+  const { data: pointHistory, refetch: refetchPointHistory } =
+    useQuery<PointHistoryResponse>({
+      queryKey: ['pointHistory', selectedChild.uuid],
+      queryFn: () => getPointHistory(selectedChild.uuid),
+      initialData: [],
+    });
+
+  const { data: dateMissionData, refetch: refetchMissionData } = useQuery<
+    Mission[]
+  >({
+    queryKey: ['dateMission', today, selectedChild.uuid],
+    queryFn: () => getDateMissionData(today, selectedChild.uuid),
+    initialData: [],
+  });
+
+  // useEffect
+  useEffect(() => {
+    console.log('😎 childrenList set');
+    refetchChildrenList();
+    console.log('childrenList:', childrenList);
+
+    if (childrenList.length > 0) [setSelectedChild(childrenList[0])];
+  }, [childrenList, refetchChildrenList]);
+
+  useEffect(() => {
+    refetchPointHistory();
+    refetchMissionData();
+  }, [childrenList, refetchPointHistory, selectedChild, refetchMissionData]);
+
+  useEffect(() => {
+    refetchMissionData();
+  }, [selectedChild, refetchMissionData]);
+
   return (
-    <div>
+    <Stack px="1rem" py="1.25rem" gap="0.625rem">
       {/*'프로필 아이콘'*/}
       <HStack>
-        {dummyChildren.map((child) => (
-          <div
-            key={child.memberId}
-            className={circle({
-              size: 50,
-              overflow: 'hidden',
-              position: 'relative',
-            })}
-            onClick={() => setSelectedChild(child)}
+        {childrenList.map((child, id) => (
+          <button
+            key={id}
+            onClick={() => {
+              console.log('set Child:', child.name);
+              setSelectedChild(child);
+            }}
           >
-            <Image src={child.imageUrl} alt={child.name} fill />
-          </div>
+            <ProfileIcon
+              alt={'test'}
+              imageUrl={
+                child.profileImage ||
+                'https://th.bing.com/th/id/OIG3.XjJC_rWVtDY_8a5.T.ux?w=1024&h=1024&rs=1&pid=ImgDetMain'
+              }
+            />
+          </button>
         ))}
       </HStack>
-      <div
-        className={stack({
-          width: 328,
-          height: 150,
-          bg: 'red.300',
-          rounded: 20,
-          justifyContent: 'space-between',
-          p: 4,
-        })}
-      >
-        <h1>{selectedChild.name} 어린이</h1>
-        <div>
-          보유 해빗
-          <div>{selectedChild.point}</div>
-        </div>
-      </div>
-      <div>
-        <HStack justify="space-between">
-          <span>활동 내역</span>
-          <IonIcon icon={chevronForwardOutline} />
-        </HStack>
-        <ul>
-          {selectedChild.histories?.map((history) => {
-            return (
-              <li
-                key={history.pointHistoryId}
-                className={hstack({ justify: 'space-between' })}
-              >
-                <div>{history.content}</div>
-                <div>{history.changedDate.toISOString().split('T', 1)}</div>
-                <div>{history.amount}</div>
-              </li>
-            );
-          })}
-        </ul>
-      </div>
-    </div>
+
+      <ProfileCard name={selectedChild.name} point={selectedChild.point} />
+      <MonthlyPoint
+        month={date.getMonth() + 1}
+        point={(pointHistory[0] && pointHistory[0].totalPoint) || 0}
+        clickHandler={() => {
+          console.log('내역');
+        }}
+      ></MonthlyPoint>
+      <TodayMission missions={dateMissionData} />
+    </Stack>
   );
 };
 
