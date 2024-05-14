@@ -9,6 +9,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -34,6 +35,7 @@ public class MissionRecognition extends MutableTimeEntity {
 	@Column(name = "image")
 	private String image;
 
+	@Size(max = 255, message = "인증 내용은 255자를 넘을 수 없습니다.")
 	@Column(name = "content")
 	private String content;
 
