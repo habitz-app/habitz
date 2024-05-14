@@ -1,11 +1,11 @@
 'use client';
 import InputLabeled from '@/components/mission/inputLabeled';
-import DatePicker from '@/components/mission/datePicker';
+import DatePicker from '@/components/mission/DatePicker';
 import { useState, Dispatch, useEffect } from 'react';
 import { stack } from 'styled-system/patterns';
 import { css } from 'styled-system/css';
 import { Button } from '@/components/ui/button';
-import DayPicker from '@/components/mission/dayPicker';
+import DayPicker from '@/components/mission/DayPicker';
 import axios from '@/apis/axios';
 import {
   ChildListResponse,

@@ -227,3 +227,9 @@ export interface PointHistory {
 export interface PointHistoryResponse {
   data: PointHistory[];
 }
+
+export interface MissionApproveResponse {
+  status: 'success' | 'error' | 'expired' | 'unauthorized' | 'failure';
+  message: string;
+  data: string;
+}
