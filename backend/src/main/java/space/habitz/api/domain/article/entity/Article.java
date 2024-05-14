@@ -36,4 +36,18 @@ public class Article {
 	@Column(name = "category", nullable = false)
 	private Category category;
 
+	@Column(name = "url")
+	private String url;
+
+	@Column(name = "preview_image")
+	private String imageUrl;
+
+	@Column(name = "writer_name")
+	private String writerName;
+
+	@Column(name = "writer_image")
+	private String writerImage;
+
+	@Column(name = "source")
+	private String source;
 }
