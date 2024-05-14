@@ -9,7 +9,8 @@ import org.springframework.stereotype.Repository;
 import space.habitz.api.domain.point.entity.ChildPointHistory;
 
 @Repository
-public interface ChildPointHistoryRepository extends JpaRepository<ChildPointHistory, Long> {
+public interface ChildPointHistoryRepository
+	extends JpaRepository<ChildPointHistory, Long>, ChildPointHistoryCustomRepository {
 	List<ChildPointHistory> findChildPointHistoriesByChild_IdAndCreatedAtBetweenOrderByCreatedAtDesc(Long childId,
 		Timestamp createdAt, Timestamp createdAt2);
 }
