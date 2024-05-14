@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import space.habitz.api.domain.member.entity.Member;
 import space.habitz.api.domain.schedule.dto.ScheduleDto;
@@ -28,6 +30,7 @@ import space.habitz.api.domain.schedule.service.ScheduleService;
 import space.habitz.api.global.response.ResponseData;
 
 @Tag(name = "Schedule", description = "일정 관련 API")
+@Validated
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/schedule")
@@ -42,7 +45,7 @@ public class ScheduleController {
 	)
 	@PostMapping
 	public ResponseData<?> createSchedule(@AuthenticationPrincipal Member member,
-		@RequestBody ScheduleRequestDto scheduleRequestDto) {
+		@RequestBody @Valid ScheduleRequestDto scheduleRequestDto) {
 		return ResponseData.success(scheduleService.createSchedule(member, scheduleRequestDto));
 	}
 
@@ -104,7 +107,7 @@ public class ScheduleController {
 	public ResponseData<ScheduleDto> updateSchedule(@AuthenticationPrincipal Member member,
 		@PathVariable("scheduleId") Long scheduleId,
 		@RequestBody @Valid UpdateScheduleRequestDto requestDto) {
-		
+
 		return ResponseData.success(scheduleService.updateSchedule(member, scheduleId, requestDto));
 	}
 
