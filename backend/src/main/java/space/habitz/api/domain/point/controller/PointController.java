@@ -17,6 +17,7 @@ import space.habitz.api.domain.member.entity.Member;
 import space.habitz.api.domain.member.entity.Role;
 import space.habitz.api.domain.point.dto.PointAmount;
 import space.habitz.api.domain.point.dto.PointHistory;
+import space.habitz.api.domain.point.dto.PointRecentHistoryDto;
 import space.habitz.api.domain.point.service.ChildPointHistoryService;
 import space.habitz.api.domain.point.service.FamilyPointHistoryService;
 import space.habitz.api.domain.point.service.PointService;
@@ -66,4 +67,11 @@ public class PointController {
 			childUuid, startDate, endDate.plusDays(1)));
 	}
 
+	@GetMapping("recent/history/{childUuid}")
+	@PreAuthorize("hasAnyRole('PARENT', 'ADMIN')")
+	public ResponseData<List<PointRecentHistoryDto>> getRecentPointHistory(@AuthenticationPrincipal Member member,
+		@RequestParam("childUuid") String childUuid) {
+		return new ResponseData<>("success", "최근 포인트 내역 조회 성공",
+			childPointHistoryService.getRecentPointHistory(member, childUuid));
+	}
 }
