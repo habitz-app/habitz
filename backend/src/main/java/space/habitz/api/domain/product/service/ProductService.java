@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 
 import space.habitz.api.domain.member.entity.Member;
 import space.habitz.api.domain.product.dto.BrandDto;
+import space.habitz.api.domain.product.dto.ChildBannedProductInfo;
 import space.habitz.api.domain.product.dto.ProductInfoDto;
 import space.habitz.api.domain.product.entity.BannedProduct;
 
@@ -24,4 +25,6 @@ public interface ProductService {
 	void purchaseProduct(Member member, Long productId);
 
 	List<BrandDto> getBrandList(String category);
+
+	List<ChildBannedProductInfo> getBannedProductInfo(Member parent, Long productId);
 }

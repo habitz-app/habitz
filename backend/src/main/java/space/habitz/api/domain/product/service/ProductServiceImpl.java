@@ -16,6 +16,7 @@ import space.habitz.api.domain.member.repository.MemberRepository;
 import space.habitz.api.domain.point.entity.ChildPointHistory;
 import space.habitz.api.domain.point.repository.ChildPointHistoryRepository;
 import space.habitz.api.domain.product.dto.BrandDto;
+import space.habitz.api.domain.product.dto.ChildBannedProductInfo;
 import space.habitz.api.domain.product.dto.ProductInfoDto;
 import space.habitz.api.domain.product.entity.BannedProduct;
 import space.habitz.api.domain.product.entity.BannedProductID;
@@ -203,4 +204,11 @@ public class ProductServiceImpl implements ProductService {
 			.map(brand -> new BrandDto(brand.getId(), brand.getName(), brand.getImage()))
 			.toList();
 	}
+
+	@Override
+	public List<ChildBannedProductInfo> getBannedProductInfo(Member parent, Long productId) {
+		return bannedProductRepository.findBannedProductInfo(parent,
+			productId);
+	}
+
 }

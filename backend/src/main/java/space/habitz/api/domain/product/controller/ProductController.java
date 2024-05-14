@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import space.habitz.api.domain.member.entity.Member;
 import space.habitz.api.domain.product.dto.BrandDto;
+import space.habitz.api.domain.product.dto.ChildBannedProductInfo;
 import space.habitz.api.domain.product.dto.ProductBanDto;
 import space.habitz.api.domain.product.dto.ProductInfoDto;
 import space.habitz.api.domain.product.dto.ProductPurchaseRequestDto;
@@ -92,6 +94,17 @@ public class ProductController {
 	public ResponseData<List<BrandDto>> getBrandList(
 		@Parameter(description = "카테고리", required = true) @PathVariable("category") String category) {
 		return new ResponseData<>("success", "브랜드 리스트 조회 성공", productService.getBrandList(category.replace(",", "/")));
+	}
+
+	@ApiResponse(description = "부모가 상품을 조회할 때에, 자녀의 해당 상품 제한 여부를 리턴")
+	@GetMapping("/banned-product/{productId}")
+	@PreAuthorize("hasAnyRole('PARENT', 'ADMIN')")
+	public ResponseData<List<ChildBannedProductInfo>> getChildrenBannedProductInfo(
+		@AuthenticationPrincipal Member member,
+		@Parameter(description = "상품 ID", required = true) @PathVariable("productId") long productId
+	) {
+		return new ResponseData<>("success", "제한한 상품 조회 성공",
+			productService.getBannedProductInfo(member, productId));
 	}
 
 }
