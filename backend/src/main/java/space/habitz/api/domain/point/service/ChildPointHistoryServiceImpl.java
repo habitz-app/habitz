@@ -3,6 +3,7 @@ package space.habitz.api.domain.point.service;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -15,6 +16,8 @@ import space.habitz.api.domain.member.exeption.MemberNotFoundException;
 import space.habitz.api.domain.member.repository.ChildRepository;
 import space.habitz.api.domain.member.repository.MemberRepository;
 import space.habitz.api.domain.point.dto.PointHistory;
+import space.habitz.api.domain.point.dto.PointRecentHistoryDto;
+import space.habitz.api.domain.point.dto.PointRecentHistoryInfoDto;
 import space.habitz.api.domain.point.repository.ChildPointHistoryRepository;
 import space.habitz.api.global.exception.CustomErrorException;
 
@@ -76,4 +79,48 @@ public class ChildPointHistoryServiceImpl implements ChildPointHistoryService {
 			.collect(Collectors.toList());
 	}
 
+	@Override
+	public List<PointRecentHistoryDto> getRecentPointHistory(Member member, String childUuid) {
+		Member memChild = memberRepository.findByUuid(childUuid)
+			.orElseThrow(() -> new IllegalArgumentException("child not found"));
+
+		if (!Objects.equals(member.getFamily().getId(), memChild.getFamily().getId())) {
+			throw new IllegalArgumentException("child not in family");
+		}
+		Child child = childRepository.findByMember_Id(memChild.getId());
+		List<PointRecentHistoryInfoDto> list = childPointHistoryRepository
+			.findChildPointHistoriesByChild_Id(child.getId());
+		System.out.println("list = " + list.toString());
+		return list
+			.stream()
+			.map(childPoint -> PointRecentHistoryDto.builder()
+				.historyInfo(childPoint)
+				.status(getStatus(childPoint))
+				.emoji(getEmoji(childPoint))
+				.build())
+			.collect(Collectors.toList());
+
+	}
+
+	String getStatus(PointRecentHistoryInfoDto pointRecentHistoryInfoDto) {
+
+		if (pointRecentHistoryInfoDto.getMissionId() != null) {
+			return "MISSION";
+		}
+		if (pointRecentHistoryInfoDto.getProductId() != null) {
+			return "PURCHASE";
+		}
+		return "QUIZ";
+	}
+
+	String getEmoji(PointRecentHistoryInfoDto pointRecentHistoryInfoDto) {
+		String status = getStatus(pointRecentHistoryInfoDto);
+		if (status.equals("MISSION")) {
+			return pointRecentHistoryInfoDto.getEmoji();
+		}
+		if (status.equals("PURCHASE")) {
+			return "💸";
+		}
+		return "🧠";
+	}
 }
