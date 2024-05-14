@@ -1,7 +1,6 @@
 package space.habitz.api.domain.product.repository;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -11,6 +10,10 @@ import com.querydsl.jpa.impl.JPAQuery;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import space.habitz.api.domain.member.entity.Member;
+import space.habitz.api.domain.member.entity.QChild;
+import space.habitz.api.domain.product.dto.ChildBannedProductInfo;
+import space.habitz.api.domain.product.dto.QChildBannedProductInfo;
 import space.habitz.api.domain.product.entity.Product;
 import space.habitz.api.domain.product.entity.QBannedProduct;
 import space.habitz.api.domain.product.entity.QProduct;
@@ -34,5 +37,24 @@ public class BannedProductCustomRepositoryImpl implements BannedProductCustomRep
 			.fetch();
 
 		return new PageImpl<>(products, pageable, products.size());
+	}
+
+	@Override
+	public List<ChildBannedProductInfo> findBannedProductInfo(Member parent, Long productId) {
+		JPAQuery<?> query = new JPAQuery<>(em);
+		QBannedProduct bannedProduct = QBannedProduct.bannedProduct;
+		QChild child = QChild.child;
+		return query.select(
+				new QChildBannedProductInfo(
+					child.member.uuid,
+					child.member.name,
+					child.member.image,
+					bannedProduct.bannedProductID.product.id.isNull()
+				)
+			).from(child)
+			.leftJoin(bannedProduct).on(bannedProduct.bannedProductID.child.id.eq(child.id)
+				.and(bannedProduct.bannedProductID.product.id.eq(productId)))
+			.where(child.member.family.id.eq(parent.getFamily().getId()))
+			.fetch();
 	}
 }
