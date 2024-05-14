@@ -12,7 +12,7 @@ import { PointAmountResponse } from '@/types/api/response';
 import Link from 'next/link';
 import useAuthStore from '@/stores/authStore';
 
-const MyPage = () => {
+const More = () => {
   const router = useRouter();
   const setAccessToken = useAuthStore.use.setAccessToken();
 
@@ -121,9 +121,7 @@ const MyPage = () => {
                     flex: 1,
                   })}
                 >
-                  {Intl.NumberFormat('ko-KR', {
-                    maximumSignificantDigits: 3,
-                  }).format(point?.data ?? 0)}
+                  {Intl.NumberFormat('ko-KR').format(point?.data ?? 0)}
                 </span>
                 {me.data.role === 'PARENT' && (
                   <Link
@@ -202,4 +200,4 @@ const MyPage = () => {
   );
 };
 
-export default MyPage;
+export default More;
