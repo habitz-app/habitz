@@ -49,7 +49,7 @@ public class BannedProductCustomRepositoryImpl implements BannedProductCustomRep
 					child.member.uuid,
 					child.member.name,
 					child.member.image,
-					bannedProduct.bannedProductID.product.id.isNull()
+					bannedProduct.bannedProductID.product.id.isNotNull()
 				)
 			).from(child)
 			.leftJoin(bannedProduct).on(bannedProduct.bannedProductID.child.id.eq(child.id)
