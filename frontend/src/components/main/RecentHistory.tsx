@@ -9,15 +9,22 @@ import { useRouter } from 'next/navigation';
 
 const RecentHistory = ({
   history,
+  uuid,
 }: {
   history: ChildRecentHistoryResponse;
+  uuid: string;
 }) => {
   const router = useRouter();
   return (
     <Stack p="1.25rem" gap="0.625rem" rounded="0.75rem" shadow="normal">
       <HStack justify="space-between">
         <p className={css({ textStyle: 'title3.bold' })}>최근 활동</p>
-        <IconButton variant="ghost">
+        <IconButton
+          variant="ghost"
+          onClick={() => {
+            router.push('/manage/');
+          }}
+        >
           <IonIcon
             icon={chevronForwardOutline}
             className={css({ fontSize: '1.5rem' })}

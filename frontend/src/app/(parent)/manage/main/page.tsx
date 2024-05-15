@@ -14,6 +14,7 @@ import {
 import ProfileIcon from '@/components/common/ProfileIcon';
 import MonthlyPoint from '@/components/main/MonthlyPoint';
 import TodayMission from '@/components/main/TodayMission';
+import RecentHistory from '@/components/main/RecentHistory';
 
 const Page = () => {
   const [selectedChild, setSelectedChild] = useState<ChildList2Response>({
@@ -84,7 +85,7 @@ const Page = () => {
     initialData: [],
   });
 
-  const { data: monthMissionData, refetch: refetchMonthMissionData } =
+  const { data: recentHistoryData, refetch: refetchRecentHistoryData } =
     useQuery<ChildRecentHistoryResponse>({
       queryKey: ['recentHistory', selectedChild.uuid],
       queryFn: () => getChildRecentHistory(selectedChild.uuid),
@@ -134,14 +135,16 @@ const Page = () => {
       <ProfileCard name={selectedChild.name} point={selectedChild.point} />
       <MonthlyPoint
         month={date.getMonth() + 1}
-        point={0}
-        // point={(pointHistory[0] && pointHistory[0].totalPoint) || 0}
+        // point={0}
+        point={(pointHistory && pointHistory[0].totalPoint) || 0}
         clickHandler={() => {
           console.log('내역');
         }}
       ></MonthlyPoint>
       <TodayMission missions={dateMissionData} />
-      {monthMissionData && <p>{monthMissionData[0]?.emoji}</p>}
+      {recentHistoryData && (
+        <RecentHistory uuid={selectedChild.uuid} history={recentHistoryData} />
+      )}
     </Stack>
   );
 };

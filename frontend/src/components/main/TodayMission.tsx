@@ -4,16 +4,19 @@ import { HStack, Stack } from 'styled-system/jsx';
 import { IonIcon } from '@ionic/react';
 import { alertCircleOutline, chevronForwardOutline } from 'ionicons/icons';
 import { css } from 'styled-system/css';
+import { IconButton } from '../ui/icon-button';
 
 const TodayMission = ({ missions }: { missions: Mission[] }) => {
   return (
     <Stack p="1.25rem" gap="0.625rem" rounded="0.75rem" shadow="normal">
       <HStack justify="space-between">
         <p className={css({ textStyle: 'title3.bold' })}>오늘의 미션</p>
-        <IonIcon
-          icon={chevronForwardOutline}
-          className={css({ fontSize: '1.5rem' })}
-        ></IonIcon>
+        <IconButton variant={'ghost'}>
+          <IonIcon
+            icon={chevronForwardOutline}
+            className={css({ fontSize: '1.5rem' })}
+          ></IonIcon>
+        </IconButton>
       </HStack>
       <ul className={css({ textAlign: 'center' })}>
         {missions.length > 0 ? (
