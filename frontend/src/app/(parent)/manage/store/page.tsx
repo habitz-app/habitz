@@ -37,12 +37,9 @@ const Page = () => {
     console.log('childUUID:', childUUID);
     console.log('productId:', productId);
     axios
-      .delete<string>(`/store/banned-product/restrict`, {
-        data: {
-          productId: productId,
-          childId: childUUID,
-        },
-      })
+      .delete<string>(
+        `/store/banned-product/restrict/${childUUID}/${productId}`,
+      )
       .then((response) => {
         console.log('Request Success (RemoveBannedProduct):', response.data);
         getBannedProduct(childUUID);
@@ -83,12 +80,6 @@ const Page = () => {
                 height={100}
               />
               <p>{bannedProduct.productName}</p>
-              <Button
-                className={css({ backgroundColor: 'status.negative' })}
-                onClick={() =>
-                  removeBannedProduct(childStatus, bannedProduct.productId)
-                }
-              />
             </div>
           ))}
         </div>

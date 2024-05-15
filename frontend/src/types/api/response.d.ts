@@ -153,7 +153,7 @@ export interface MissionDetailResponse {
   };
 }
 
-export interface BannedProductReponse {
+export interface ProductResponse {
   productId: number;
   productName: string;
   price: number;
@@ -161,4 +161,11 @@ export interface BannedProductReponse {
   description: string;
   category: string;
   brand: string;
+}
+
+export interface ProductBannedChildResponse {
+  childUuid: string;
+  name: string;
+  profileImageUrl: string;
+  isBanned: boolean;
 }
