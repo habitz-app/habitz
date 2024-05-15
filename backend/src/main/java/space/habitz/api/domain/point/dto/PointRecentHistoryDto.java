@@ -15,5 +15,4 @@ public class PointRecentHistoryDto {
 	String status;
 	String emoji;
 	PointRecentHistoryInfoDto historyInfo;
-
 }
