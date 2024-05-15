@@ -73,10 +73,11 @@ public class ProductController {
 	}
 
 	@ApiResponse(description = "상품 제한 해제")
-	@DeleteMapping("/banned-product/restrict")
+	@DeleteMapping("/banned-product/restrict/{childUuid}/{productId}")
 	public ResponseData<String> deleteBannedProduct(@AuthenticationPrincipal Member member,
-		@RequestBody ProductBanDto productBanDto) {
-		productService.deleteBanProduct(member, productBanDto.getProductId(), productBanDto.getChildId());
+		@Parameter(description = "Child UUID", required = true) @PathVariable("childUuid") String childUuid,
+		@Parameter(description = "Product Id", required = true) @PathVariable("productId") Long productId) {
+		productService.deleteBanProduct(member, productId, childUuid);
 		return new ResponseData<>("success", "상품 제한 해제 성공", "상품 제한 해제 성공");
 	}
 
