@@ -124,7 +124,7 @@ public class ChildPointHistoryServiceImpl implements ChildPointHistoryService {
 		if (pointRecentHistoryInfoDto.getMissionId() != null) {
 			return "MISSION";
 		}
-		if (pointRecentHistoryInfoDto.getProductId() != null) {
+		if (pointRecentHistoryInfoDto.getProductPaymentId() != null) {
 			return "PURCHASE";
 		}
 		return "QUIZ";
