@@ -88,7 +88,7 @@ public class ProductServiceImpl implements ProductService {
 			.map(
 				bannedProduct -> bannedProduct.getBannedProductID().getProduct().getId())
 			.toList();
-		// System.out.println("productIdList = " + productIdList);
+		
 		return productRepository.findProductsByBrandAndCategoryAndIdIsNotIn(brand, category, productIdList, pageable)
 			.map(product -> ProductInfoDto.builder()
 				.productId(product.getId())
