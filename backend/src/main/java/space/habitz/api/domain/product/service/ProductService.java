@@ -9,7 +9,6 @@ import space.habitz.api.domain.member.entity.Member;
 import space.habitz.api.domain.product.dto.BrandDto;
 import space.habitz.api.domain.product.dto.ChildBannedProductInfo;
 import space.habitz.api.domain.product.dto.ProductInfoDto;
-import space.habitz.api.domain.product.entity.BannedProduct;
 
 public interface ProductService {
 	ProductInfoDto getProductDetail(Member member, Long id);
@@ -18,7 +17,7 @@ public interface ProductService {
 
 	Page<ProductInfoDto> getBannedProductInfo(Member parent, String childId, Pageable pageable);
 
-	BannedProduct setBanProduct(Member parent, Long productId, String childId);
+	void setBanProduct(Member parent, Long productId, String childId);
 
 	void deleteBanProduct(Member parent, Long productId, String childId);
 

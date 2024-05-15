@@ -18,8 +18,6 @@ import space.habitz.api.domain.point.repository.ChildPointHistoryRepository;
 import space.habitz.api.domain.product.dto.BrandDto;
 import space.habitz.api.domain.product.dto.ChildBannedProductInfo;
 import space.habitz.api.domain.product.dto.ProductInfoDto;
-import space.habitz.api.domain.product.entity.BannedProduct;
-import space.habitz.api.domain.product.entity.BannedProductID;
 import space.habitz.api.domain.product.entity.ChildProductPaymentHistory;
 import space.habitz.api.domain.product.entity.Product;
 import space.habitz.api.domain.product.repository.BannedProductRepository;
@@ -88,7 +86,7 @@ public class ProductServiceImpl implements ProductService {
 			.map(
 				bannedProduct -> bannedProduct.getBannedProductID().getProduct().getId())
 			.toList();
-		
+
 		return productRepository.findProductsByBrandAndCategoryAndIdIsNotIn(brand, category, productIdList, pageable)
 			.map(product -> ProductInfoDto.builder()
 				.productId(product.getId())
@@ -123,7 +121,7 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	@Transactional
-	public BannedProduct setBanProduct(Member parent, Long productId, String childUuid) {
+	public void setBanProduct(Member parent, Long productId, String childUuid) {
 		Member childMem = memberRepository.findByUuid(childUuid)
 			.orElseThrow(() -> new CustomNotFoundException(childUuid));
 
@@ -137,11 +135,7 @@ public class ProductServiceImpl implements ProductService {
 			.orElseThrow(() -> new CustomNotFoundException(childUuid));
 
 		bannedProductRepository.insertBannedProduct(product.getId(), child.getId());
-
-		return BannedProduct.builder()
-			.bannedProductID(new BannedProductID(product, child))
-			.build();
-
+		
 	}
 
 	@Override
