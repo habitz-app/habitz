@@ -233,3 +233,19 @@ export interface MissionApproveResponse {
   message: string;
   data: string;
 }
+
+export interface ChildRecentHistory {
+  status: string;
+  emoji: string;
+  historyInfo: {
+    date: string;
+    point: number;
+    totalPoint: number;
+    content: string;
+    emoji: string;
+    missionId: number;
+    productPaymentId: number;
+  };
+}
+
+export interface ChildRecentHistoryResponse extends Array<ChildRecentHistory> {}

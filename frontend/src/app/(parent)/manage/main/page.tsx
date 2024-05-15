@@ -6,6 +6,8 @@ import axios from '@/apis/axios';
 import { useQuery } from '@tanstack/react-query';
 import {
   ChildList2Response,
+  ChildRecentHistory,
+  ChildRecentHistoryResponse,
   Mission,
   PointHistoryResponse,
 } from '@/types/api/response';
@@ -50,6 +52,14 @@ const Page = () => {
     return res.data.data;
   };
 
+  const getChildRecentHistory = async (uuid: string) => {
+    const res = await axios.get<ChildRecentHistoryResponse>(
+      `point/recent/history/${uuid}`,
+    );
+    console.log('Get ChildRecentHistory Success! 😊');
+    return res.data.data;
+  };
+
   // useQuery
   const { data: childrenList, refetch: refetchChildrenList } = useQuery<
     ChildList2Response[]
@@ -63,7 +73,7 @@ const Page = () => {
     useQuery<PointHistoryResponse>({
       queryKey: ['pointHistory', selectedChild.uuid],
       queryFn: () => getPointHistory(selectedChild.uuid),
-      initialData: [],
+      // initialData: [],
     });
 
   const { data: dateMissionData, refetch: refetchMissionData } = useQuery<
@@ -73,6 +83,12 @@ const Page = () => {
     queryFn: () => getDateMissionData(today, selectedChild.uuid),
     initialData: [],
   });
+
+  const { data: monthMissionData, refetch: refetchMonthMissionData } =
+    useQuery<ChildRecentHistoryResponse>({
+      queryKey: ['recentHistory', selectedChild.uuid],
+      queryFn: () => getChildRecentHistory(selectedChild.uuid),
+    });
 
   // useEffect
   useEffect(() => {
@@ -118,12 +134,14 @@ const Page = () => {
       <ProfileCard name={selectedChild.name} point={selectedChild.point} />
       <MonthlyPoint
         month={date.getMonth() + 1}
-        point={(pointHistory[0] && pointHistory[0].totalPoint) || 0}
+        point={0}
+        // point={(pointHistory[0] && pointHistory[0].totalPoint) || 0}
         clickHandler={() => {
           console.log('내역');
         }}
       ></MonthlyPoint>
       <TodayMission missions={dateMissionData} />
+      {monthMissionData && <p>{monthMissionData[0]?.emoji}</p>}
     </Stack>
   );
 };
