@@ -2,7 +2,7 @@ import Image from 'next/image';
 import { css } from 'styled-system/css';
 import { Stack } from 'styled-system/jsx';
 
-const ProfileCard = ({ name, point }: { name: string; point: number }) => {
+const ProfileCard = ({ name, point }: { name?: string; point: number }) => {
   return (
     <div
       className={css({

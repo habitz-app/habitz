@@ -114,7 +114,7 @@ const HomePage = () => {
             })}
           </p>
         </span>
-        <ProfileCard name="" point={amount.data?.point || 0} />
+        <ProfileCard point={amount.data?.point || 0} />
         <section
           className={css({
             display: 'flex',
