@@ -195,3 +195,15 @@ export interface PointAmountResponse {
   point: number;
   familyPoint: boolean;
 }
+
+export interface PointHistory {
+  date: string;
+  point: number;
+  totalPoint: number;
+  content: string;
+  nickname: string;
+}
+
+export interface PointHistoryResponse {
+  data: PointHistory[];
+}
