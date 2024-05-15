@@ -24,7 +24,6 @@ import space.habitz.api.domain.product.dto.ChildBannedProductInfo;
 import space.habitz.api.domain.product.dto.ProductBanDto;
 import space.habitz.api.domain.product.dto.ProductInfoDto;
 import space.habitz.api.domain.product.dto.ProductPurchaseRequestDto;
-import space.habitz.api.domain.product.entity.BannedProduct;
 import space.habitz.api.domain.product.service.ProductService;
 import space.habitz.api.global.response.ResponseData;
 
@@ -67,10 +66,10 @@ public class ProductController {
 
 	@ApiResponse(description = "상품 제한하기")
 	@PostMapping("/banned-product/restrict")
-	public ResponseData<BannedProduct> getBannedProductList(@AuthenticationPrincipal Member member,
+	public ResponseData<String> getBannedProductList(@AuthenticationPrincipal Member member,
 		@RequestBody ProductBanDto productBanDto) {
-		return new ResponseData<>("success", "상품 제한 성공",
-			productService.setBanProduct(member, productBanDto.getProductId(), productBanDto.getChildId()));
+		productService.setBanProduct(member, productBanDto.getProductId(), productBanDto.getChildId());
+		return new ResponseData<>("success", "상품 제한 성공", "상품 제한 성공");
 	}
 
 	@ApiResponse(description = "상품 제한 해제")
