@@ -14,11 +14,11 @@ const Category = () => {
     type: 'toy' | 'book' | 'stationery' | 'convenienceStore' | 'iceCream';
     name: string;
   }[] = [
-    { type: 'toy', name: '장난감/인형' },
-    { type: 'book', name: '도서/동화책' },
+    { type: 'toy', name: '장난감,인형' },
+    { type: 'book', name: '도서,동화책' },
     { type: 'stationery', name: '문구류' },
     { type: 'convenienceStore', name: '편의점' },
-    { type: 'iceCream', name: '음료/아이스크림' },
+    { type: 'iceCream', name: '음료,아이스크림' },
   ];
 
   const getPoint = async () => {

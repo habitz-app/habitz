@@ -42,7 +42,7 @@ const Page = () => {
       }
     });
     if (foundChild) {
-      settargetChild(foundChild);
+      setTargetChild(foundChild);
     } else {
       // console.log('잘못된 접근입니다.', uuid, data);
       alert('잘못된 접근입니다.');
@@ -51,7 +51,7 @@ const Page = () => {
   };
   const router = useRouter();
   const params = useParams<{ uuid: string }>();
-  const handleCraeteSchedule = async () => {
+  const handleCreateSchedule = async () => {
     const requestBody: createSchedule = {
       title: title,
       content: content,
@@ -92,7 +92,7 @@ const Page = () => {
     false,
     false,
   ]);
-  const [targetChild, settargetChild] = useState<ChildListResponse>({
+  const [targetChild, setTargetChild] = useState<ChildListResponse>({
     memberId: -1,
     memberRole: 'CHILD',
     name: '',
@@ -149,7 +149,7 @@ const Page = () => {
       ></InputLabeled>
       <DatePicker date={date} setDate={setDate} />
       <DayPicker weekDays={weekDays} setWeekDays={setWeekDays} />
-      <Button width="full" onClick={handleCraeteSchedule}>
+      <Button width="full" onClick={handleCreateSchedule}>
         생성하기
       </Button>
       {targetChild.uuid}

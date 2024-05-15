@@ -1,11 +1,11 @@
 'use client';
-import { useState, Dispatch, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { HStack, Stack } from 'styled-system/jsx';
 import axios from '@/apis/axios';
 import { useRouter } from 'next/navigation';
 import {
   ChildListResponse,
-  BannedProductReponse,
+  BannedProductResponse,
   BannedProductListResponse,
 } from '@/types/api/response';
 import Image from 'next/image';
@@ -15,7 +15,7 @@ import { Button } from '@/components/ui/button';
 const Page = () => {
   const [children, setChildren] = useState<ChildListResponse[]>([]);
   const [bannedProductList, setBannedProductList] = useState<
-    BannedProductReponse[]
+    BannedProductResponse[]
   >([]);
   const router = useRouter();
   const [childStatus, setChildStatus] = useState<string>('');

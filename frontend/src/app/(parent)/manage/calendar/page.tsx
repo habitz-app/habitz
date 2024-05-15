@@ -1,15 +1,12 @@
 'use client';
 import Calendar from '@/components/calendar/calendar';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { css } from 'styled-system/css';
 import { hstack } from 'styled-system/patterns';
 import { colors } from './colors';
 import { CalendarResponse } from '@/types/api/response';
 import axios from '@/apis/axios';
 import { useQuery } from '@tanstack/react-query';
-import { calendar, chevronForwardOutline } from 'ionicons/icons';
-import { IonIcon } from '@ionic/react';
-import { IconButton } from '@/components/ui/icon-button';
 import { HStack, Stack } from 'styled-system/jsx';
 import { token, Token } from 'styled-system/tokens';
 

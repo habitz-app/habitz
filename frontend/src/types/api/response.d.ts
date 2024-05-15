@@ -1,3 +1,4 @@
+import { ChildListResponse, pointHistory } from './response.d';
 export interface CommonResponse<T> {
   data: T;
   message: string;
@@ -61,6 +62,15 @@ export interface ChildListResponse {
   name: string;
   uuid: string;
   profileImage: string;
+}
+
+export interface ChildList2Response {
+  memberRole: 'CHILD' | 'PARENT';
+  memberId: number;
+  name: string;
+  uuid: string;
+  profileImage: string;
+  point: number;
 }
 
 export interface TestCreateChildResponse {
@@ -153,7 +163,17 @@ export interface MissionDetailResponse {
   };
 }
 
-export interface BannedProductReponse {
+export interface PointHistory {
+  date: string;
+  point: number;
+  totalPoint: number;
+  content: string;
+  nickname: string;
+}
+
+export interface PointHistoryResponse extends Array<PointHistory> {}
+
+export interface BannedProductResponse {
   productId: number;
   productName: string;
   price: number;
@@ -163,7 +183,7 @@ export interface BannedProductReponse {
   brand: string;
 }
 export interface BannedProductListResponse {
-  content: BannedProductReponse[];
+  content: BannedProductResponse[];
   totalPages: number;
   totalElements: number;
   pageable: {
