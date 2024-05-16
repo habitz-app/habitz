@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -54,6 +55,7 @@ public class MissionController {
 		summary = "미션 삭제 (부모 전용)",
 		description = "미션을 삭제합니다."
 	)
+	@PreAuthorize("hasAnyRole('PARENT')")
 	@DeleteMapping("/{missionId}")
 	public ResponseData<?> deleteMission(@AuthenticationPrincipal Member member,
 		@PathVariable("missionId") Long missionId) {
@@ -64,6 +66,7 @@ public class MissionController {
 		summary = "미션 수정 (부모 전용)",
 		description = "미션을 수정합니다. (일정 수정 X)"
 	)
+	@PreAuthorize("hasAnyRole('PARENT')")
 	@PutMapping("/{missionId}")
 	public ResponseData<?> updateMission(
 		@AuthenticationPrincipal Member member, @PathVariable("missionId") Long missionId,
@@ -82,6 +85,7 @@ public class MissionController {
 		summary = "날짜를 기준으로 미션 리스트 조회 (아이 전용)",
 		description = "아이는 날짜를 기준으로 미션 목록을 조회합니다."
 	)
+	@PreAuthorize("hasAnyRole('CHILD')")
 	@GetMapping("/list")
 	public ResponseData<List<MissionDto>> getMissionList(
 		@AuthenticationPrincipal Member member,
@@ -93,6 +97,7 @@ public class MissionController {
 		summary = "날짜를 기준으로 아이들에 대한 미션 리스트 조회 (부모 전용)",
 		description = "부모는 날짜를 기준으로 아이의 미션 목록을 조회합니다. <br> child 값은 memberUUID 를 사용합니다. <br> child는 nullable 하며, null일 경우 전체 아이들의 목록 / null이 아닐 경우 특정 아이에 대한 목록을 조회합니다."
 	)
+	@PreAuthorize("hasAnyRole('PARENT')")
 	@GetMapping("/children/list")
 	public ResponseData<?> getChildrenMissionList(
 		@AuthenticationPrincipal Member member,
@@ -112,6 +117,7 @@ public class MissionController {
 		summary = "미션 승인 (부모 전용)",
 		description = "미션을 승인합니다. (상태 업데이트 ACCEPT / DECLINE 변경) <br> DECLINE은 comment를 추가할 수 있습니다."
 	)
+	@PreAuthorize("hasAnyRole('PARENT')")
 	@PostMapping("/approve")
 	public ResponseData<?> approveMission(
 		@AuthenticationPrincipal Member member,
@@ -125,6 +131,7 @@ public class MissionController {
 		summary = "미션 수행 인증 (아이 전용)",
 		description = "미션 수행을 인증합니다."
 	)
+	@PreAuthorize("hasAnyRole('CHILD')")
 	@PostMapping(value = "/{missionId}/perform", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseData<?> performMission(@AuthenticationPrincipal Member member,
 		@PathVariable("missionId") Long missionId,
@@ -140,6 +147,7 @@ public class MissionController {
 		summary = "미션 수행 내용 수정 (아이 전용)",
 		description = "미션 수행 내용을 수정합니다."
 	)
+	@PreAuthorize("hasAnyRole('CHILD')")
 	@PutMapping(value = "/{missionId}/perform", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseData<?> updatePerformMission(@AuthenticationPrincipal Member member,
 		@PathVariable("missionId") Long missionId,
