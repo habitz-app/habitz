@@ -49,7 +49,7 @@ const Quiz = () => {
         className={css({
           display: 'flex',
           position: 'sticky',
-          height: '2.5rem',
+          height: '3.75rem',
           top: 0,
           bg: 'background.normal.normal/80',
           backdropFilter: 'auto',
