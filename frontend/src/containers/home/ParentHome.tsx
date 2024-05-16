@@ -201,7 +201,9 @@ const ParentHome = () => {
                             color: 'secondary.strong',
                           })}
                         >
-                          {child.point}
+                          {Intl.NumberFormat('ko-kr').format(
+                            Number(child.point),
+                          )}
                           <Image
                             src="/coin.svg"
                             alt="coin"
