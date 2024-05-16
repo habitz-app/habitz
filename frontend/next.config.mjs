@@ -9,6 +9,7 @@ const nextConfig = {
       { protocol: 'https', hostname: '*.placeholder.com' },
       { protocol: 'https', hostname: '*.amazonaws.com' },
       { protocol: 'https', hostname: '*.githubusercontent.com' },
+      { protocol: 'https', hostname: '*.econoi.com' },
     ],
   },
   output: 'standalone',
