@@ -34,7 +34,7 @@ const Page = ({ params }: { params: { id: string } }) => {
         className={css({
           display: 'flex',
           position: 'sticky',
-          height: '2.5rem',
+          height: '3.75rem',
           top: 0,
           bg: 'transparent',
           backdropFilter: 'auto',

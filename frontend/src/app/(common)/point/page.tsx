@@ -64,6 +64,7 @@ const Point = () => {
           textStyle: 'title3.bold',
           color: 'label.normal',
           display: 'flex',
+          h: '3.75rem',
           justifyContent: 'center',
           alignItems: 'center',
         })}
@@ -77,7 +78,6 @@ const Point = () => {
           justifyContent: 'flex-start',
           alignItems: 'center',
           px: '1rem',
-          py: '1.25rem',
         })}
       >
         <span
