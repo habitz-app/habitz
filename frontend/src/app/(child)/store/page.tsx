@@ -14,11 +14,11 @@ const Category = () => {
     type: 'toy' | 'book' | 'stationery' | 'convenienceStore' | 'iceCream';
     name: string;
   }[] = [
-    { type: 'toy', name: '장난감,인형' },
-    { type: 'book', name: '도서,동화책' },
+    { type: 'toy', name: '장난감/인형' },
+    { type: 'book', name: '도서/동화책' },
     { type: 'stationery', name: '문구류' },
     { type: 'convenienceStore', name: '편의점' },
-    { type: 'iceCream', name: '음료,아이스크림' },
+    { type: 'iceCream', name: '음료/아이스크림' },
   ];
 
   const getPoint = async () => {
@@ -31,6 +31,8 @@ const Category = () => {
     queryKey: ['point'],
     queryFn: getPoint,
   });
+
+  const defaultBrand = ['드림아트', '', '', 'GS25', ''];
 
   return (
     <>
@@ -92,7 +94,7 @@ const Category = () => {
               key={id}
               href={{
                 pathname: '/store/category',
-                query: { category: category.name },
+                query: { category: category.name, brand: defaultBrand[id] },
               }}
             >
               <StoreCategory

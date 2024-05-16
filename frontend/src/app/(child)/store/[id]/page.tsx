@@ -6,28 +6,89 @@ import { useParams, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { Stack } from 'styled-system/jsx';
 
-const dummyName = '세븐일레븐 기프트 카드 1만원권';
-const dummyPrice = 10000;
-const dummyUrl = '/seven-eleven.jpg';
-const dummyInfoUrl = '/height_long.jpeg';
+import type { ProductResponse } from '@/types/api/response';
+import axios from '@/apis/axios';
+import { useQuery } from '@tanstack/react-query';
+import { css } from 'styled-system/css';
+import Link from 'next/link';
 
-const Product = () => {
+const Product = ({ params }: { params: { id: number } }) => {
   const route = useRouter();
-  const params = useParams();
-  const [name, setName] = useState(dummyName);
-  const [price, setPrice] = useState(dummyPrice);
-  const [url, setUrl] = useState(dummyUrl);
-  const [infoUrl, setInfoUrl] = useState(dummyInfoUrl);
+
+  const productInfo = useQuery({
+    queryKey: ['productInfo', params.id],
+    queryFn: async () => {
+      const res = await axios.get<ProductResponse>(`/store/${params.id}`);
+
+      return res.data?.data ?? {};
+    },
+  });
+
   const buyHandler = () => {
-    console.log('구매하기');
-    route.push('/store/bill');
+    route.push(`/store/bill/${params.id}`);
   };
   return (
-    <Stack gap="1rem" position={'relative'}>
-      <GoodsDetail name={name} price={price} url={url} />
-      <GoodsInfo url={infoUrl} />
-      <BuyButton clickHandler={buyHandler} />
-    </Stack>
+    <div>
+      <header
+        className={css({
+          display: 'flex',
+          position: 'sticky',
+          height: '3.75rem',
+          top: 0,
+          bg: 'background.normal.normal/80',
+          backdropFilter: 'auto',
+          backdropBlur: 'sm',
+          px: '1rem',
+          justifyContent: 'space-between',
+          alignItems: 'end',
+        })}
+      >
+        <Link
+          className={css({
+            fontFamily: 'yeoljeong',
+            fontSize: '28px',
+            lineHeight: '38.02px',
+            color: 'label.alternative',
+          })}
+          href={'/'}
+        >
+          habitz
+        </Link>
+        <span
+          className={css({
+            display: 'flex',
+            textStyle: 'headline1.bold',
+            gap: '0.125rem',
+            py: '0.25rem',
+          })}
+        ></span>
+      </header>
+      <div
+        className={css({
+          display: 'flex',
+          w: 'full',
+          flexDir: 'column',
+          p: '1rem',
+        })}
+      ></div>
+      <Stack gap="1rem" position={'relative'}>
+        <GoodsDetail
+          name={productInfo.data?.productName ?? '상품이 존재하지 않습니다.'}
+          price={productInfo.data?.price ?? 0}
+          url={productInfo.data?.productImage ?? ''}
+        />
+
+        <div
+          className={css({
+            display: 'flex',
+            gap: '1rem',
+            justifyContent: 'end',
+            pr: 10,
+          })}
+        ></div>
+        <BuyButton clickHandler={buyHandler} />
+      </Stack>
+    </div>
   );
 };
 export default Product;
