@@ -317,3 +317,8 @@ export interface ScheduleResponse {
   weekDays: boolean[];
   point: number;
 }
+
+export interface SchedulePostResponse {
+  scheduleId: number;
+  missionId?: number;
+}

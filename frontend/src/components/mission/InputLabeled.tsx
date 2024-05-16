@@ -45,6 +45,7 @@ export const InputLabeled = ({
           placeholder={placeholder}
           value={inputValue}
           type={type}
+          step={100}
           onChange={(e) => {
             setInputValue(e.target.value);
           }}
