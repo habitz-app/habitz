@@ -1,5 +1,7 @@
 package space.habitz.api.domain.article.dto;
 
+import java.time.LocalDate;
+
 import lombok.Builder;
 import lombok.Getter;
 import space.habitz.api.domain.article.entity.Article;
@@ -17,6 +19,7 @@ public class ArticleInfoDto {
 	String source;
 	String url;
 	Category category;
+	LocalDate publishDate;
 
 	public static ArticleInfoDto of(Article article) {
 		return ArticleInfoDto.builder()
@@ -29,6 +32,7 @@ public class ArticleInfoDto {
 			.source(article.getSource())
 			.url(article.getUrl())
 			.category(article.getCategory())
+			.publishDate(article.getDate())
 			.build();
 	}
 }
