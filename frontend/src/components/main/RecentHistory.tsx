@@ -25,7 +25,7 @@ const RecentHistory = ({
           variant="ghost"
           onClick={() => {
             router.push(
-              `/manage/main/recent/${uuid}${name ? '?name=' + name : ''}`,
+              `/manage/activity/${uuid}${name ? '?name=' + name : ''}`,
             );
           }}
         >

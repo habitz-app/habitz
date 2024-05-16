@@ -47,6 +47,10 @@ const Page = () => {
   const router = useRouter();
   const params = useParams<{ uuid: string }>();
   const handleCreateSchedule = async () => {
+    if (!title || point <= 0) {
+      alert('필수 입력값을 입력해주세요.');
+      return;
+    }
     const requestBody: createSchedule = {
       title: title,
       content: content,
@@ -78,15 +82,9 @@ const Page = () => {
     new Date().toISOString().slice(0, 10),
     new Date().toISOString().slice(0, 10),
   ]);
-  const [weekDays, setWeekDays] = useState<boolean[]>([
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-  ]);
+  const [weekDays, setWeekDays] = useState<boolean[]>(
+    Array.from({ length: 7 }, (_, i) => i === (new Date().getDay() + 6) % 7),
+  );
   const [targetChild, setTargetChild] = useState<ChildListResponse>({
     memberId: -1,
     memberRole: 'CHILD',
@@ -111,7 +109,9 @@ const Page = () => {
         align: 'center',
       })}
     >
-      <h1 className={css({ width: 'full' })}>미션 생성</h1>
+      <h1 className={css({ width: 'full', textStyle: 'title2.bold' })}>
+        미션 생성
+      </h1>
       <InputLabeled
         id="미션"
         label="미션"
@@ -144,7 +144,15 @@ const Page = () => {
       ></InputLabeled>
       <DatePicker date={date} setDate={setDate} />
       <DayPicker weekDays={weekDays} setWeekDays={setWeekDays} />
-      <Button width="full" onClick={handleCreateSchedule}>
+      <Button
+        width="full"
+        h="3.75rem"
+        rounded={'0.875rem'}
+        bg="primary.normal"
+        color="static.black"
+        textStyle={'headline1.bold'}
+        onClick={handleCreateSchedule}
+      >
         생성하기
       </Button>
       {/* {targetChild.uuid}

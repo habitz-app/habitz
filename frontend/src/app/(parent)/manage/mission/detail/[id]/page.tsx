@@ -10,6 +10,56 @@ import { Button } from '@/components/ui/button';
 import DeclineModal from '@/components/mission/DeclineModal';
 import { useRouter } from 'next/navigation';
 import ApprovalProfile from '@/components/mission/ApprovalProfile';
+import { IonIcon } from '@ionic/react';
+import { ellipsisVertical } from 'ionicons/icons';
+import { IconButton } from '@/components/ui/icon-button';
+import * as Menu from '@/components/ui/menu';
+import { MenuSelectionDetails } from '@ark-ui/react';
+const MenuComponent = ({
+  updateHandler,
+  ...props
+}: {
+  updateHandler: () => void;
+  props?: Menu.RootProps;
+}) => {
+  return (
+    <Menu.Root
+      {...props}
+      onSelect={(details: MenuSelectionDetails) => {
+        if (details.value === 'update') {
+          console.log('😉 Update!');
+          updateHandler();
+        }
+      }}
+    >
+      <Menu.Trigger asChild>
+        <IconButton variant={'link'} size="sm">
+          <IonIcon
+            icon={ellipsisVertical}
+            className={css({
+              color: 'label.alternative',
+              fontSize: '1.5rem',
+            })}
+          ></IonIcon>
+        </IconButton>
+      </Menu.Trigger>
+      <Menu.Positioner>
+        <Menu.Content w="auto">
+          <Menu.ItemGroup id="group">
+            <Menu.Item
+              id="update"
+              onClick={() => {
+                console.log('😉');
+              }}
+            >
+              수정
+            </Menu.Item>
+          </Menu.ItemGroup>
+        </Menu.Content>
+      </Menu.Positioner>
+    </Menu.Root>
+  );
+};
 
 const ParentMissionDetail = ({ params }: { params: { id: number } }) => {
   const router = useRouter();
@@ -39,7 +89,7 @@ const ParentMissionDetail = ({ params }: { params: { id: number } }) => {
       })
       .then((res) => {
         console.log('Post MissionApproval Success! 😊', res);
-        router.push('/manage/main');
+        router.push('');
       })
       .catch((error) => {
         alert('Post MissionApproval Fail! 😢 \n' + error.response.data.message);
@@ -63,24 +113,35 @@ const ParentMissionDetail = ({ params }: { params: { id: number } }) => {
       align="center"
       position="relative"
     >
-      <p className={css({ w: 'full' })}>
-        {missionDetail ? statusMap[missionDetail.mission.status] : ''}
-      </p>
-      <Stack w="full">
-        <p className={css({ textStyle: 'title3.bold' })}>
-          {missionDetail?.mission?.title}
-        </p>
-        <HStack justify={'space-between'}>
-          <HStack>
-            <p className={css({ color: 'accent.lime' })}>
-              + {missionDetail?.mission.point}
-            </p>
-            <Image src="/coin.svg" alt="coin" width="30" height="30" />
-          </HStack>
-          {missionDetail?.approval ? (
-            <ApprovalProfile name={missionDetail?.approval?.name} />
-          ) : null}
+      <Stack w="full" gap="1.25rem">
+        <HStack w="full">
+          <p className={css({ w: 'full' })}>
+            {missionDetail ? statusMap[missionDetail.mission.status] : ''}
+          </p>
+          <MenuComponent
+            updateHandler={() => {
+              router.push(
+                `/manage/mission/update/${missionDetail?.schedule.scheduleId}`,
+              );
+            }}
+          ></MenuComponent>
         </HStack>
+        <Stack w="full">
+          <p className={css({ textStyle: 'title3.bold' })}>
+            {missionDetail?.mission?.title}
+          </p>
+          <HStack justify={'space-between'}>
+            <HStack>
+              <p className={css({ color: 'accent.lime' })}>
+                + {missionDetail?.mission.point}
+              </p>
+              <Image src="/coin.svg" alt="coin" width="30" height="30" />
+            </HStack>
+            {missionDetail?.approval ? (
+              <ApprovalProfile name={missionDetail?.approval?.name} />
+            ) : null}
+          </HStack>
+        </Stack>
       </Stack>
       <Stack justify="space-between" align="center">
         {missionDetail?.recognition?.image ? (
@@ -102,49 +163,51 @@ const ParentMissionDetail = ({ params }: { params: { id: number } }) => {
           {missionDetail?.recognition?.content}
         </p>
       </Stack>
-      <HStack w="full" justify="space-around" gap="1.125rem">
-        <Button
-          w="50%"
-          h="3rem"
-          rounded="0.875rem"
-          bg="blue.500"
-          textStyle="headline1.bold"
-          onClick={() => postMissionApprove(params.id, 'ACCEPT')}
-        >
-          승인
-        </Button>
-        <Button
-          w="50%"
-          h="3rem"
-          rounded="0.875rem"
-          bg="red.500"
-          textStyle="headline1.bold"
-          onClick={() => setIsModalVisible(!isModalVisible)}
-        >
-          거절
-        </Button>
-      </HStack>
-      {missionDetail?.mission.status !== 'ACCEPT' ? (
-        <div
-          className={css({
-            w: 'full',
-            display: 'flex',
-            justifyContent: 'flex-end',
-          })}
-        >
-          <ApprovalProfile
-            name={missionDetail?.mission.createdBy}
-          ></ApprovalProfile>
-        </div>
-      ) : null}
-      {isModalVisible ? (
-        <DeclineModal
-          cancelHandler={() => setIsModalVisible(false)}
-          declineHandler={(val: string) =>
-            postMissionApprove(params.id, 'DECLINE', val)
-          }
-        ></DeclineModal>
-      ) : null}
+      <Stack w="full" gap="1.25rem">
+        <HStack w="full" justify="space-around" gap="1.125rem">
+          <Button
+            w="50%"
+            h="3rem"
+            rounded="0.875rem"
+            bg="blue.500"
+            textStyle="headline1.bold"
+            onClick={() => postMissionApprove(params.id, 'ACCEPT')}
+          >
+            승인
+          </Button>
+          <Button
+            w="50%"
+            h="3rem"
+            rounded="0.875rem"
+            bg="red.500"
+            textStyle="headline1.bold"
+            onClick={() => setIsModalVisible(!isModalVisible)}
+          >
+            거절
+          </Button>
+        </HStack>
+        {missionDetail?.mission.status !== 'ACCEPT' ? (
+          <div
+            className={css({
+              w: 'full',
+              display: 'flex',
+              justifyContent: 'flex-end',
+            })}
+          >
+            <ApprovalProfile
+              name={missionDetail?.mission.createdBy}
+            ></ApprovalProfile>
+          </div>
+        ) : null}
+        {isModalVisible ? (
+          <DeclineModal
+            cancelHandler={() => setIsModalVisible(false)}
+            declineHandler={(val: string) =>
+              postMissionApprove(params.id, 'DECLINE', val)
+            }
+          ></DeclineModal>
+        ) : null}
+      </Stack>
     </Stack>
   );
 };

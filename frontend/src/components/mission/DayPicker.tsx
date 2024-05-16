@@ -35,7 +35,7 @@ const Day = ({
   handleClick: () => void;
 }) => {
   return (
-    <HStack>
+    <HStack textStyle={'heading1.bold'}>
       <button
         onClick={handleClick}
         className={button({ selected: isSelected })}

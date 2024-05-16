@@ -49,7 +49,7 @@ const RecentHistory = ({ params }: { params: { uuid: string } }) => {
             <HStack
               key={id}
               shadow={'normal'}
-              h={'5rem'}
+              h={'6rem'}
               rounded={'20px'}
               px={'0.75rem'}
               py={'0.5rem'}
@@ -63,9 +63,11 @@ const RecentHistory = ({ params }: { params: { uuid: string } }) => {
                 alignSelf={'center'}
                 py="0.75rem"
               >
-                <p>{history.emoji}</p>
-                <p>{history.historyInfo.content}</p>
-                <HStack ps="2.25rem" gap="0.25rem">
+                <HStack maxH="2rem">
+                  <p>{history.emoji}</p>
+                  <p>{history.historyInfo.content}</p>
+                </HStack>
+                <HStack ps="2.25rem" gap="0.25rem" flexShrink={1}>
                   <p
                     className={css({
                       textStyle: 'caption1.bold',
@@ -77,7 +79,7 @@ const RecentHistory = ({ params }: { params: { uuid: string } }) => {
                   <Image src="/coin.svg" alt="coin" width={16} height={16} />
                 </HStack>
               </HStack>
-              <HStack w="full" justify={'end'}>
+              <HStack w="full" justify={'end'} flexShrink={2}>
                 <IconButton
                   variant={'ghost'}
                   onClick={() => {

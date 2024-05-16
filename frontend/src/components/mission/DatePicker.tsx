@@ -34,7 +34,7 @@ export const DatePicker = ({
         setDate(value.valueAsString);
       }}
     >
-      <DP.Label className={css({ fontSize: '2xl' })}>일정</DP.Label>
+      <DP.Label className={css({ textStyle: 'title3.bold' })}>일정</DP.Label>
       <DP.Control>
         <DP.Input index={0} asChild>
           <Input />

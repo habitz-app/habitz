@@ -6,7 +6,6 @@ import axios from '@/apis/axios';
 import { useQuery } from '@tanstack/react-query';
 import {
   ChildList2Response,
-  ChildRecentHistory,
   ChildRecentHistoryResponse,
   Mission,
   PointHistoryResponse,

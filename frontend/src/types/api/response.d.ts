@@ -1,4 +1,3 @@
-import { ChildListResponse, pointHistory } from './response.d';
 export interface CommonResponse<T> {
   data: T;
   message: string;
@@ -41,11 +40,6 @@ export interface MemberResponse {
   birthDate: string;
   uuid: string;
   role: string;
-}
-
-export interface ScheduleResponse {
-  scheduleId: number;
-  missionId?: number;
 }
 
 export interface CalendarResponse {
@@ -302,9 +296,24 @@ export interface ProductBannedChildResponse {
   profileImageUrl: string;
   childUuid: string;
 }
-export interface BanStatusReponse {
+export interface BanStatusResponse {
   childUuid: string;
   name: string;
   profileImageUrl: string;
   isBanned: boolean;
+}
+
+export interface ScheduleResponse {
+  scheduleId: number;
+  title: string;
+  content: string;
+  emoji: string;
+  child: {
+    name: string;
+    memberUUID: string;
+  };
+  startDate: string;
+  endDate: string;
+  weekDays: boolean[];
+  point: number;
 }

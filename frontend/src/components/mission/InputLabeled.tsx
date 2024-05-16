@@ -30,7 +30,10 @@ export const InputLabeled = ({
 }: InputProps) => {
   return (
     <Stack gap="1.5" width="full">
-      <FormLabel className={css({ fontSize: '2 rem' })} htmlFor={id}>
+      <FormLabel
+        className={css({ fontSize: '2 rem', textStyle: 'title3.bold' })}
+        htmlFor={id}
+      >
         {label}
       </FormLabel>
       <HStack position="relative">
