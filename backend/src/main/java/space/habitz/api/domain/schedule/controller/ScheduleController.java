@@ -6,7 +6,6 @@ import java.util.List;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,7 +29,6 @@ import space.habitz.api.domain.schedule.service.ScheduleService;
 import space.habitz.api.global.response.ResponseData;
 
 @Tag(name = "Schedule", description = "일정 관련 API")
-@Validated
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/schedule")
