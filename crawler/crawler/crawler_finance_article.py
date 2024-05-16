@@ -1,5 +1,6 @@
 import re
 import csv
+import os
 
 import requests
 
@@ -9,7 +10,7 @@ from bs4 import BeautifulSoup
 
 import pandas as pd
 from sqlalchemy import create_engine
-
+from dotenv import load_dotenv, find_dotenv
 
 @dataclass
 class Article :
@@ -30,7 +31,6 @@ class Article :
         return list(self.__dict__.values())
 
 def save_to_csv(articles, filename):
-    import csv, os
     if not articles:
         return
 
@@ -49,11 +49,8 @@ def save_to_csv(articles, filename):
             writer.writerow(article.to_dict())
 
 def bulk_insert(csv_file_name) : 
-    from dotenv import load_dotenv
-    import os
 
     load_dotenv()
-
     mysql_name = os.getenv("MYSQL_USERNAME")
     mysql_password = os.getenv("MYSQL_PASSWORD")
     mysql_host = os.getenv("MYSQL_HOST")
@@ -62,10 +59,10 @@ def bulk_insert(csv_file_name) :
     df = pd.read_csv(csv_file_name)
 
     db_connection_string = f"mysql+pymysql://{mysql_name}:{mysql_password}@{mysql_host}:3306/{mysql_db_name}"
+    print(db_connection_string)
     engine = create_engine(db_connection_string)
 
-    table_name = "article"
-    df.to_sql(table_name, con = engine, if_exists = "append", index = False)
+    df.to_sql("article", con = engine, if_exists = "append", index = False)
     mylogger.info("Success !! Insert csv file !!! ")
 
 
@@ -140,8 +137,9 @@ def econoi_detail_cralwer(article) -> Article:
     content = ""
     content_tag = soup.find("article", class_ = "article-veiw-body")
     if content_tag :
+        # content = content_tag.prettify()
         for paragrah in content_tag.find_all("p") :
-            content += paragrah.get_text(strip = True) + "\n"
+            content += paragrah.get_text(strip = True) + "\n\n"
 
     # 기사 작성자 찾기
     writer_tag = soup.find("article", class_="writer")
@@ -170,6 +168,7 @@ def econoi_detail_cralwer(article) -> Article:
 def econoi_crawler() -> list:
     mylogger.info("Start_경제 기사 크롤링!! ")
     categories = [("S2N1", "LIFE"), ("S2N2", "DEFAULT"), ("S2N25", "FINANCE"), ("S2N26", "LIFE")]
+    # categories = [("S2N1", "LIFE")]
 
     total_article_list = []
     for category in categories : 
@@ -199,6 +198,7 @@ def econoi_crawler() -> list:
 if __name__ == "__main__" :
 
     import logging
+
     now = datetime.now()
     today = now.strftime('%Y-%m-%d')
 
@@ -213,14 +213,18 @@ if __name__ == "__main__" :
     mylogger.setLevel(logging.INFO)
     mylogger.addHandler(stream_handler)
 
-    total_article_list = econoi_crawler()
-    print(len(total_article_list))
-
-    print("====================================")
+    # # 크롤러 실행 
+    # total_article_list = econoi_crawler()
+    # mylogger.info(len(total_article_list))
+    
+    # # CSV 저장
+    # mylogger.info("====================================")
     csv_file_path = f"../data/econoi_article_{today}.csv"
-    save_to_csv(total_article_list, csv_file_path)
-    mylogger.info("SAVED !!! ")
-    print("====================================")
+    # save_to_csv(total_article_list, csv_file_path)
+    # mylogger.info("SAVED !!! ")    
+    # mylogger.info("====================================")
+
+    # CSV DB에 insert 
     bulk_insert(csv_file_path)
 
 
