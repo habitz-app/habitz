@@ -6,20 +6,26 @@ import axios from '@/apis/axios';
 import { ChildListResponse, ProductListResponse } from '@/types/api/response';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import Link from 'next/link';
+
 import { IonIcon } from '@ionic/react';
-import { storefrontOutline } from 'ionicons/icons';
+import { chevronBack, storefrontOutline } from 'ionicons/icons';
 import { useState } from 'react';
 import { HStack, Stack } from 'styled-system/jsx';
+
 const Store = () => {
   const router = useRouter();
+
   const [showStatus, setShowStatus] = useState(false);
+
   const children = useQuery({
     queryKey: ['ChildList'],
     queryFn: async () => {
       const res = await axios.get<ChildListResponse[]>(`/family/childList`);
       console.log(res.data?.data);
-
+      if (res.data?.data) {
+        setChildUuid(res.data?.data[0].uuid);
+        getBannedProduct(res.data?.data[0].uuid);
+      }
       return res.data?.data ?? [];
     },
   });
@@ -54,13 +60,13 @@ const Store = () => {
       empty: false,
     });
 
-  const getBannedProduct = async (childUuid: string) => {
+  const getBannedProduct = async (childUuidInput: string) => {
     const res = await axios.get<ProductListResponse>(
-      `/store/banned-product/list/${childUuid}`,
+      `/store/banned-product/list/${childUuidInput}`,
     );
     setBannedProductList(res.data?.data ?? []);
     setShowStatus(true);
-    setChildUuid(childUuid);
+    setChildUuid(childUuidInput);
   };
 
   const removeBan = async (childUuid: string, productId: number) => {
@@ -70,7 +76,26 @@ const Store = () => {
     getBannedProduct(childUuid);
     console.log(res.data.message);
   };
-
+  const item = cva({
+    base: {
+      display: 'flex',
+      textStyle: 'label1.normal.bold',
+    },
+    variants: {
+      visual: {
+        isSelect: {
+          borderRadius: '50%',
+          border: '1px solid',
+          filter: 'brightness(50%)',
+        },
+        noSelect: {
+          borderRadius: '50%',
+          border: '1px solid',
+          // filter: 'brightness(60%)',
+        },
+      },
+    },
+  });
   const [childUuid, setChildUuid] = useState<string>('');
 
   return (
@@ -78,36 +103,19 @@ const Store = () => {
       <header
         className={css({
           display: 'flex',
-          position: 'sticky',
-          height: '3.75rem',
-          top: 0,
-          bg: 'background.normal.normal/80',
-          backdropFilter: 'auto',
-          backdropBlur: 'sm',
-          px: '1rem',
-          justifyContent: 'space-between',
-          alignItems: 'end',
+          alignItems: 'center',
+          gap: '1rem',
+          p: '1rem',
+          justifyContent: 'center',
         })}
       >
-        <Link
+        <p
           className={css({
-            fontFamily: 'yeoljeong',
-            fontSize: '28px',
-            lineHeight: '38.02px',
-            color: 'label.alternative',
+            textStyle: 'title2.bold',
           })}
-          href={'/'}
         >
-          habitz
-        </Link>
-        <span
-          className={css({
-            display: 'flex',
-            textStyle: 'headline1.bold',
-            gap: '0.125rem',
-            py: '0.25rem',
-          })}
-        ></span>
+          상점 관리
+        </p>
       </header>
       <div
         className={css({
@@ -149,9 +157,8 @@ const Store = () => {
                 width={100}
                 height={100}
                 alt={child.name + '의 프로필'}
-                className={css({
-                  borderRadius: '50%',
-                  border: '1px solid',
+                className={item({
+                  visual: childUuid == child.uuid ? 'noSelect' : 'isSelect',
                 })}
               />
               <p>{child.name}</p>
@@ -159,7 +166,7 @@ const Store = () => {
           ))}
         </HStack>
 
-        {showStatus ? (
+        {showStatus && (
           <div>
             <p
               className={css({
@@ -188,8 +195,7 @@ const Store = () => {
                   />
                   <div
                     className={css({
-                      w: '17rem',
-                      pr: '1rem',
+                      w: '15rem',
                     })}
                   >
                     <div
@@ -230,8 +236,6 @@ const Store = () => {
               </div>
             ))}
           </div>
-        ) : (
-          <div></div>
         )}
       </div>
     </div>
