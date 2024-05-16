@@ -9,7 +9,9 @@ import { useSearchParams } from 'next/navigation';
 import axios from '@/apis/axios';
 import type { ProductListResponse } from '@/types/api/response';
 import { useQuery } from '@tanstack/react-query';
-
+import { IonIcon } from '@ionic/react';
+import { chevronBack } from 'ionicons/icons';
+import { useRouter } from 'next/navigation';
 interface brand {
   id: number;
   image: string;
@@ -17,6 +19,7 @@ interface brand {
 }
 const Store = () => {
   const params = useSearchParams();
+  const router = useRouter();
   const [category, setCategory] = useState<string>(
     params.get('category') || '전체',
   );
@@ -53,36 +56,32 @@ const Store = () => {
       <header
         className={css({
           display: 'flex',
-          position: 'sticky',
-          height: '2.5rem',
-          top: 0,
-          bg: 'background.normal.normal/80',
-          backdropFilter: 'auto',
-          backdropBlur: 'sm',
-          px: '1rem',
-          justifyContent: 'space-between',
-          alignItems: 'end',
+          alignItems: 'center',
+          gap: '1rem',
+          p: '1rem',
+          justifyContent: 'center',
         })}
       >
-        <Link
+        <IonIcon
+          icon={chevronBack}
           className={css({
-            fontFamily: 'yeoljeong',
-            fontSize: '28px',
-            lineHeight: '38.02px',
+            fontSize: '30',
             color: 'label.alternative',
+            position: 'absolute',
+            left: '1rem',
           })}
-          href={'/'}
-        >
-          habitz
-        </Link>
-        <span
+          onClick={() => {
+            router.back();
+          }}
+        />
+
+        <p
           className={css({
-            display: 'flex',
-            textStyle: 'headline1.bold',
-            gap: '0.125rem',
-            py: '0.25rem',
+            textStyle: 'title2.bold',
           })}
-        ></span>
+        >
+          상점 관리
+        </p>
       </header>
       <div
         className={css({
@@ -90,7 +89,6 @@ const Store = () => {
           w: 'full',
           flexDir: 'column',
           gap: '1rem',
-          mt: '1rem',
         })}
       >
         <Stack px="1rem">
@@ -102,6 +100,9 @@ const Store = () => {
                 gap: '0.75rem',
                 overflowX: 'scroll',
                 h: '7rem',
+                '&::-webkit-scrollbar': {
+                  display: 'none',
+                },
               })}
             >
               {brandList.data?.map((brand, id) => (
@@ -122,7 +123,7 @@ const Store = () => {
             {productList.data?.map((product) => (
               <Link
                 key={product.productId}
-                href={`/manage/store/list/${product.productId}`}
+                href={`/manage/store/${product.productId}`}
               >
                 <GoodsItem
                   key={product.productId}

@@ -4,11 +4,12 @@ import axios from '@/apis/axios';
 import StoreCategory from '@/components/store/StoreCategory';
 import { PointAmount } from '@/types/point';
 import { useQuery } from '@tanstack/react-query';
-import Image from 'next/image';
 import Link from 'next/link';
 import { css } from 'styled-system/css';
 import { Stack } from 'styled-system/jsx';
-
+import { useRouter } from 'next/navigation';
+import { IonIcon } from '@ionic/react';
+import { chevronBack } from 'ionicons/icons';
 const Category = () => {
   const categories: {
     type: 'toy' | 'book' | 'stationery' | 'convenienceStore' | 'iceCream';
@@ -20,7 +21,7 @@ const Category = () => {
     { type: 'convenienceStore', name: '편의점' },
     { type: 'iceCream', name: '음료/아이스크림' },
   ];
-
+  const router = useRouter();
   const getPoint = async () => {
     return await axios.get<PointAmount>('/point/amount').then((res) => {
       return res.data.data;
@@ -38,39 +39,32 @@ const Category = () => {
       <header
         className={css({
           display: 'flex',
-          position: 'sticky',
-          height: '2.5rem',
-          top: 0,
-          bg: 'background.normal.normal/80',
-          backdropFilter: 'auto',
-          backdropBlur: 'sm',
-          px: '1rem',
-          justifyContent: 'space-between',
-          alignItems: 'end',
+          alignItems: 'center',
+          gap: '1rem',
+          p: '1rem',
+          justifyContent: 'center',
         })}
       >
-        <Link
+        <IonIcon
+          icon={chevronBack}
           className={css({
-            fontFamily: 'yeoljeong',
-            fontSize: '28px',
-            lineHeight: '38.02px',
+            fontSize: '30',
             color: 'label.alternative',
+            position: 'absolute',
+            left: '1rem',
           })}
-          href={'/'}
-        >
-          habitz
-        </Link>
-        <span
+          onClick={() => {
+            router.back();
+          }}
+        />
+
+        <p
           className={css({
-            display: 'flex',
-            textStyle: 'headline1.bold',
-            gap: '0.125rem',
-            py: '0.25rem',
+            textStyle: 'title2.bold',
           })}
         >
-          {amount.data?.point || 0}
-          <Image src="/coin.svg" alt="coin" width={18} height={18} />
-        </span>
+          상점 관리
+        </p>
       </header>
       <div
         className={css({
@@ -92,7 +86,7 @@ const Category = () => {
             <Link
               key={id}
               href={{
-                pathname: '/manage/store/list',
+                pathname: '/manage/store/category',
                 query: { category: category.name, brand: defaultBrand[id] },
               }}
             >
