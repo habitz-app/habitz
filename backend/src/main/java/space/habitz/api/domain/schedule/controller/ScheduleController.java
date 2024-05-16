@@ -43,6 +43,7 @@ public class ScheduleController {
 		summary = "일정 생성 (부모 전용)",
 		description = "일정을 생성합니다."
 	)
+	@PreAuthorize("hasAnyRole('PARENT')")
 	@PostMapping
 	public ResponseData<?> createSchedule(@AuthenticationPrincipal Member member,
 		@RequestBody @Valid ScheduleRequestDto scheduleRequestDto) {
@@ -64,8 +65,8 @@ public class ScheduleController {
 		summary = "날짜를 기준으로 일정 리스트 조회 (아이 전용)",
 		description = "아이는 날짜를 기준으로 일정 목록을 조회합니다."
 	)
+	@PreAuthorize("hasAnyRole('PARENT')")
 	@GetMapping("/list")
-	@PreAuthorize("hasAnyRole('CHILD', 'ADMIN')")
 	public ResponseData<List<ScheduleMissionDto>> getScheduleList(
 		@AuthenticationPrincipal Member member,
 		@RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
@@ -76,6 +77,7 @@ public class ScheduleController {
 		summary = "날짜를 기준으로 아이들에 대한 미션 리스트 조회 (부모 전용)",
 		description = "부모는 날짜를 기준으로 아이의 미션 목록을 조회합니다. <br> child 값은 memberUUID 를 사용합니다. <br> child는 nullable 하며, null일 경우 전체 아이들의 목록 / null이 아닐 경우 특정 아이에 대한 목록을 조회합니다."
 	)
+	@PreAuthorize("hasAnyRole('PARENT')")
 	@GetMapping("/children/list")
 	public ResponseData<?> getChildrenScheduleMissionList(
 		@AuthenticationPrincipal Member member,
@@ -93,6 +95,7 @@ public class ScheduleController {
 		summary = "일정 삭제 (부모 전용)",
 		description = "일정을 삭제합니다."
 	)
+	@PreAuthorize("hasAnyRole('PARENT')")
 	@DeleteMapping("/{scheduleId}")
 	public ResponseData<String> deleteSchedule(@AuthenticationPrincipal Member member,
 		@PathVariable("scheduleId") Long scheduleId) {
@@ -103,6 +106,7 @@ public class ScheduleController {
 		summary = "일정 수정 (부모 전용)",
 		description = "일정을 수정합니다."
 	)
+	@PreAuthorize("hasAnyRole('PARENT')")
 	@PutMapping("/{scheduleId}")
 	public ResponseData<ScheduleDto> updateSchedule(@AuthenticationPrincipal Member member,
 		@PathVariable("scheduleId") Long scheduleId,
