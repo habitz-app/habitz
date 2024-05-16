@@ -42,6 +42,7 @@ const Article = ({
           className={css({
             textStyle: 'body2.reading.regular',
             color: 'label.neutral',
+            whiteSpace: 'pre-wrap',
           })}
         >
           {contents}

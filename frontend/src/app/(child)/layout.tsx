@@ -13,7 +13,17 @@ const ChildLayout = ({ children }: { children: React.ReactNode }) => {
   useAuthWithRoles(['CHILD']);
 
   const path = usePathname();
-  const menu = path?.split('/')[1];
+
+  const menus: {
+    [key: string]: MenuType;
+  } = {
+    '/': 'home',
+    '/quiz': 'quiz',
+    '/mission': 'mission',
+    '/store': 'store',
+    '/more': 'more',
+  };
+
   return (
     <Suspense>
       <div
@@ -24,7 +34,7 @@ const ChildLayout = ({ children }: { children: React.ReactNode }) => {
         })}
       >
         <main className={css({ minH: '100vh' })}>{children}</main>
-        <ChildTabBar menu={menu as MenuType} />
+        <ChildTabBar menu={menus[path] as MenuType} />
       </div>
     </Suspense>
   );
