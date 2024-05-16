@@ -10,9 +10,11 @@ import { useRouter } from 'next/navigation';
 const RecentHistory = ({
   history,
   uuid,
+  name,
 }: {
   history: ChildRecentHistoryResponse;
   uuid: string;
+  name?: string;
 }) => {
   const router = useRouter();
   return (
@@ -22,7 +24,9 @@ const RecentHistory = ({
         <IconButton
           variant="ghost"
           onClick={() => {
-            router.push('/manage/');
+            router.push(
+              `/manage/main/recent/${uuid}${name ? '?name=' + name : ''}`,
+            );
           }}
         >
           <IonIcon

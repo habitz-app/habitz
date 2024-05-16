@@ -147,9 +147,9 @@ const Page = () => {
       <Button width="full" onClick={handleCreateSchedule}>
         생성하기
       </Button>
-      {targetChild.uuid}
+      {/* {targetChild.uuid}
       <hr />
-      {params.uuid}
+      {params.uuid} */}
     </div>
   );
 };

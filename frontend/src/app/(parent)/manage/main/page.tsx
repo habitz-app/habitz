@@ -47,7 +47,7 @@ const Page = () => {
 
   const getDateMissionData = async (date: string, uuid: string) => {
     const res = await axios.get<Mission[]>('/mission/children/list', {
-      params: { date: date, child: uuid },
+      params: uuid ? { date: date, child: uuid } : { date: date },
     });
     console.log('Get Mission Success! 😊');
     return res.data.data;
@@ -117,7 +117,6 @@ const Page = () => {
           <button
             key={id}
             onClick={() => {
-              console.log('set Child:', child.name);
               setSelectedChild(child);
             }}
           >
@@ -141,9 +140,13 @@ const Page = () => {
           console.log('내역');
         }}
       ></MonthlyPoint>
-      <TodayMission missions={dateMissionData} />
+      <TodayMission missions={dateMissionData} uuid={selectedChild.uuid} />
       {recentHistoryData && (
-        <RecentHistory uuid={selectedChild.uuid} history={recentHistoryData} />
+        <RecentHistory
+          uuid={selectedChild.uuid}
+          history={recentHistoryData}
+          name={selectedChild.name}
+        />
       )}
     </Stack>
   );

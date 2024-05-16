@@ -28,7 +28,7 @@ const MonthlyPoint = ({
             w: '3.125rem',
             h: '3.125rem',
             position: 'relative',
-            bg: 'red.400',
+            bg: 'neutral.200',
           })}
         >
           <Image

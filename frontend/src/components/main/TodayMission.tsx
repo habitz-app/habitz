@@ -5,13 +5,26 @@ import { IonIcon } from '@ionic/react';
 import { alertCircleOutline, chevronForwardOutline } from 'ionicons/icons';
 import { css } from 'styled-system/css';
 import { IconButton } from '../ui/icon-button';
+import { useRouter } from 'next/navigation';
 
-const TodayMission = ({ missions }: { missions: Mission[] }) => {
+const TodayMission = ({
+  missions,
+  uuid,
+}: {
+  missions: Mission[];
+  uuid: string;
+}) => {
+  const router = useRouter();
   return (
     <Stack p="1.25rem" gap="0.625rem" rounded="0.75rem" shadow="normal">
       <HStack justify="space-between">
         <p className={css({ textStyle: 'title3.bold' })}>오늘의 미션</p>
-        <IconButton variant={'ghost'}>
+        <IconButton
+          variant={'ghost'}
+          onClick={() => {
+            router.push(`/manage/mission/create/${uuid}`);
+          }}
+        >
           <IonIcon
             icon={chevronForwardOutline}
             className={css({ fontSize: '1.5rem' })}
@@ -28,6 +41,7 @@ const TodayMission = ({ missions }: { missions: Mission[] }) => {
                   missionId={mission.missionId}
                   title={mission.title}
                   status={mission.status}
+                  isParent={true}
                 />
               </HStack>
             </li>

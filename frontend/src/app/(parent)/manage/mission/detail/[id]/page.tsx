@@ -83,19 +83,21 @@ const ParentMissionDetail = ({ params }: { params: { id: number } }) => {
         </HStack>
       </Stack>
       <Stack justify="space-between" align="center">
-        <Image
-          src={missionDetail ? missionDetail.recognition?.image : ''}
-          width={0}
-          height={0}
-          sizes="100vw"
-          alt="인증 이미지"
-          className={css({
-            w: 'full',
-            h: 'auto',
-            rounded: '1rem',
-            shadow: 'md',
-          })}
-        />
+        {missionDetail?.recognition?.image ? (
+          <Image
+            src={missionDetail ? missionDetail.recognition?.image : ''}
+            width={0}
+            height={0}
+            sizes="100vw"
+            alt="인증 이미지"
+            className={css({
+              w: 'full',
+              h: 'auto',
+              rounded: '1rem',
+              shadow: 'md',
+            })}
+          />
+        ) : null}
         <p className={css({ textStyle: 'heading1.medium' })}>
           {missionDetail?.recognition?.content}
         </p>
