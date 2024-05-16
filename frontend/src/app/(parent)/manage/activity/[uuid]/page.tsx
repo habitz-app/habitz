@@ -28,6 +28,11 @@ const RecentHistory = ({ params }: { params: { uuid: string } }) => {
   const getChildRecentHistory = async (uuid: string) => {
     const res = await axios.get<ChildRecentHistoryResponse>(
       `point/recent/history/${uuid}`,
+      {
+        params: {
+          limit: 50,
+        },
+      },
     );
     console.log('Get ChildRecentHistory Success! 😊');
     return res.data.data;

@@ -8,14 +8,17 @@ import {
   ChildListResponse,
   ChildRecentHistoryResponse,
   Mission,
-  PointHistoryResponse,
+  HabitzHistoryResponse,
 } from '@/types/api/response';
 import ProfileIcon from '@/components/common/ProfileIcon';
 import MonthlyPoint from '@/components/main/MonthlyPoint';
 import TodayMission from '@/components/main/TodayMission';
 import RecentHistory from '@/components/main/RecentHistory';
+import { useRouter } from 'next/navigation';
+import Header from '@/components/common/Header';
 
 const ManageChildren = () => {
+  const router = useRouter();
   const [selectedChild, setSelectedChild] = useState<ChildListResponse>({
     memberRole: 'CHILD',
     memberId: -1,
@@ -34,7 +37,7 @@ const ManageChildren = () => {
   };
 
   const getPointHistory = async (uuid: string) => {
-    const res = await axios.get<PointHistoryResponse>('/point/history', {
+    const res = await axios.get<HabitzHistoryResponse>('/point/history', {
       params: {
         start: `${date.getFullYear()}-${date.getMonth() + 1 < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1}-01`,
         end: today,
@@ -55,6 +58,7 @@ const ManageChildren = () => {
   const getChildRecentHistory = async (uuid: string) => {
     const res = await axios.get<ChildRecentHistoryResponse>(
       `point/recent/history/${uuid}`,
+      { params: { limit: 5 } },
     );
     console.log('Get ChildRecentHistory Success! 😊');
     return res.data.data;
@@ -70,7 +74,7 @@ const ManageChildren = () => {
   });
 
   const { data: pointHistory, refetch: refetchPointHistory } =
-    useQuery<PointHistoryResponse>({
+    useQuery<HabitzHistoryResponse>({
       queryKey: ['pointHistory', selectedChild.uuid],
       queryFn: () => getPointHistory(selectedChild.uuid),
       // initialData: [],
@@ -109,45 +113,40 @@ const ManageChildren = () => {
   }, [selectedChild, refetchMissionData]);
 
   return (
-    <Stack px="1rem" py="1.25rem" gap="0.625rem">
-      {/*'프로필 아이콘'*/}
-      <HStack>
-        {childrenList.map((child, id) => (
-          <button
-            key={id}
-            onClick={() => {
-              setSelectedChild(child);
-            }}
-          >
-            <ProfileIcon
-              alt={'test'}
-              imageUrl={
-                child.profileImage ||
-                'https://th.bing.com/th/id/OIG3.XjJC_rWVtDY_8a5.T.ux?w=1024&h=1024&rs=1&pid=ImgDetMain'
-              }
-            />
-          </button>
-        ))}
-      </HStack>
+    <>
+      <Header />
+      <Stack px="1rem" py="1.25rem" gap="0.625rem">
+        {/*'프로필 아이콘'*/}
+        <HStack>
+          {childrenList.map((child, id) => (
+            <button
+              key={id}
+              onClick={() => {
+                setSelectedChild(child);
+              }}
+            >
+              <ProfileIcon
+                alt={'test'}
+                imageUrl={
+                  child.profileImage ||
+                  'https://th.bing.com/th/id/OIG3.XjJC_rWVtDY_8a5.T.ux?w=1024&h=1024&rs=1&pid=ImgDetMain'
+                }
+              />
+            </button>
+          ))}
+        </HStack>
 
-      <ProfileCard name={selectedChild.name} point={selectedChild.point} />
-      <MonthlyPoint
-        month={date.getMonth() + 1}
-        // point={0}
-        point={(pointHistory && pointHistory[0].totalPoint) || 0}
-        clickHandler={() => {
-          console.log('내역');
-        }}
-      ></MonthlyPoint>
-      <TodayMission missions={dateMissionData} uuid={selectedChild.uuid} />
-      {recentHistoryData && (
-        <RecentHistory
-          uuid={selectedChild.uuid}
-          history={recentHistoryData}
-          name={selectedChild.name}
-        />
-      )}
-    </Stack>
+        <ProfileCard name={selectedChild.name} point={selectedChild.point} />
+        <TodayMission missions={dateMissionData} uuid={selectedChild.uuid} />
+        {recentHistoryData && (
+          <RecentHistory
+            uuid={selectedChild.uuid}
+            history={recentHistoryData}
+            name={selectedChild.name}
+          />
+        )}
+      </Stack>
+    </>
   );
 };
 

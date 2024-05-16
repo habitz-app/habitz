@@ -9,7 +9,11 @@ import axios from '@/apis/axios';
 import { useQuery } from '@tanstack/react-query';
 import { HStack, Stack } from 'styled-system/jsx';
 import { token, Token } from 'styled-system/tokens';
-
+import Header from '@/components/common/Header';
+import { IconButton } from '@/components/ui/icon-button';
+import { IonIcon } from '@ionic/react';
+import { addOutline } from 'ionicons/icons';
+import { useRouter } from 'next/navigation';
 // 날짜 별 전체 아이에 대한 미션 목록 인터페이스
 interface childMission {
   childInfo: {
@@ -40,6 +44,7 @@ interface childMission {
 }
 
 const Page = () => {
+  const router = useRouter();
   // 선택한 날짜 관리하는 State
   const [selectedDate, setSelectedDate] = useState(
     new Date().toISOString().slice(0, 10),
@@ -126,7 +131,7 @@ const Page = () => {
     };
 
     return (
-      <div className={css({ mb: '5px' })}>
+      <div className={css({ mb: '1.5rem' })}>
         <div className={hstack({ justify: 'space-between' })}>
           {/* 자녀 이름과 색상 */}
           <div className={hstack({ minW: '6rem', justify: 'space-between' })}>
@@ -144,12 +149,18 @@ const Page = () => {
             ></div>
           </div>
           {/* 자녀 페이지로 이동 */}
-          {/* <IconButton variant={'ghost'} size={'xs'}>
+          <IconButton
+            variant={'ghost'}
+            size={'xs'}
+            onClick={() => {
+              router.push(`mission/create/${childInfo.memberUUID}`);
+            }}
+          >
             <IonIcon
-              icon={chevronForwardOutline}
+              icon={addOutline}
               className={css({ fontSize: '1.5rem' })}
             ></IonIcon>
-          </IconButton> */}
+          </IconButton>
         </div>
         {/* 미션 목록 */}
         <ul>
@@ -204,6 +215,7 @@ const Page = () => {
 
   return (
     <div>
+      <Header isMission={true} />
       <Calendar
         data={calendarData}
         selectedDate={selectedDate}

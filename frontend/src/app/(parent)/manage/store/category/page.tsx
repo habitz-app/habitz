@@ -23,7 +23,7 @@ const Store = () => {
   const router = useRouter();
 
   const [category, setCategory] = useState<string>(
-    params.get('category') || '전체',
+    params.get('category') || '',
   );
   const [currBrand, setCurrBrand] = useState<string>(params.get('brand') || '');
 
