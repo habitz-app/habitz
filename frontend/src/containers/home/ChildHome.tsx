@@ -11,7 +11,8 @@ import { css } from 'styled-system/css';
 import { PointAmount } from '@/types/point';
 import Link from 'next/link';
 import MissionPreview from '@/components/mission/MissionPreview';
-const HomePage = () => {
+
+const ChildHome = () => {
   const date = new Date().toISOString().split('T')[0];
 
   const me = useMe();
@@ -158,4 +159,4 @@ const HomePage = () => {
   );
 };
 
-export default HomePage;
+export default ChildHome;

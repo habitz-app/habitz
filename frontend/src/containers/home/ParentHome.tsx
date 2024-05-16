@@ -16,7 +16,7 @@ import MonthlyPoint from '@/components/main/MonthlyPoint';
 import TodayMission from '@/components/main/TodayMission';
 import RecentHistory from '@/components/main/RecentHistory';
 
-const Page = () => {
+const ParentHome = () => {
   const [selectedChild, setSelectedChild] = useState<ChildList2Response>({
     memberRole: 'CHILD',
     memberId: -1,
@@ -152,4 +152,4 @@ const Page = () => {
   );
 };
 
-export default Page;
+export default ParentHome;
