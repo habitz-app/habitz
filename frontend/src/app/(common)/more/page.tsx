@@ -178,6 +178,27 @@ const More = () => {
                     textStyle: 'label1.normal.bold',
                   })}
                 >
+                  <Link
+                    href="/point"
+                    className={css({
+                      display: 'flex',
+                      w: 'full',
+                      h: 'full',
+                      justifyContent: 'start',
+                      alignItems: 'center',
+                    })}
+                  >
+                    내 포인트
+                  </Link>
+                </li>
+                <li
+                  className={css({
+                    display: 'flex',
+                    h: '2.5rem',
+                    w: 'full',
+                    textStyle: 'label1.normal.bold',
+                  })}
+                >
                   <Button
                     variant="link"
                     className={css({
