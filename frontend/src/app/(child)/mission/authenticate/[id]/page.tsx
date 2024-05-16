@@ -5,10 +5,9 @@ import { css } from 'styled-system/css';
 import Image from 'next/image';
 import { IonIcon } from '@ionic/react';
 import { chevronBackOutline, trashOutline } from 'ionicons/icons';
-import MissionDetail from '@/components/mission/MissionDetail';
 import axios from '@/apis/axios';
 import { MissionDetailResponse } from '@/types/api/response';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { z } from 'zod';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -16,6 +15,7 @@ import * as FileUpload from '@/components/ui/file-upload';
 import { IconButton } from '@/components/ui/icon-button';
 
 const AuthenticatePage = ({ params }: { params: { id: string } }) => {
+  const queryClient = useQueryClient();
   const router = useRouter();
   const mission = useQuery<MissionDetailResponse>({
     queryKey: ['mission-detail', params.id],
@@ -66,7 +66,10 @@ const AuthenticatePage = ({ params }: { params: { id: string } }) => {
         },
       })
       .then(() => {
-        // console.log(data);
+        queryClient.invalidateQueries({
+          queryKey: ['mission-detail', params.id],
+          exact: true,
+        });
         router.push(`/mission/detail/${params.id}`);
       })
       .catch((err) => {
