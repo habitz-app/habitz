@@ -100,6 +100,13 @@ export interface ArticleInfo {
   id: number;
   title: string;
   content: string;
+  previewImage: string;
+  writerName: string;
+  writerImage: string;
+  source: string;
+  url: string;
+  category: string;
+  publishDate: string;
 }
 export interface ArticleResponse {
   lifeCategory: ArticleInfo[];

@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import { IonIcon } from '@ionic/react';
 import { chevronBackOutline, heartOutline } from 'ionicons/icons';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 const Result = ({ params }: { params: { id: string } }) => {
   const article = useQuery<ArticleInfo>({
@@ -63,13 +64,17 @@ const Result = ({ params }: { params: { id: string } }) => {
       </header>
       <div
         className={css({
-          bg: 'accent.pink',
           h: '250px',
           display: 'flex',
           justifyContent: 'center',
         })}
       >
-        <Image src="/character.svg" alt="character" width="100" height="100" />
+        <Image
+          src={article.data?.previewImage ?? ''}
+          alt="previewImage"
+          width={430}
+          height={250}
+        />
       </div>
       <div
         className={css({
@@ -81,11 +86,25 @@ const Result = ({ params }: { params: { id: string } }) => {
           py: '20px',
         })}
       >
-        <Article
-          title={article.data?.title || ''}
-          date={new Date().toLocaleDateString()}
-          contents={article.data?.content || ''}
-        />
+        {article.data && (
+          <div>
+            <Article
+              title={article.data.title}
+              date={article.data.publishDate}
+              contents={article.data.content}
+            />
+            <Link
+              href={article.data.url}
+              className={css({
+                color: 'blue.500',
+                textDecoration: 'underline',
+                textStyle: 'caption.normal',
+              })}
+            >
+              원문 보러가기
+            </Link>
+          </div>
+        )}
       </div>
     </>
   );
