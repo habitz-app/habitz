@@ -233,7 +233,7 @@ const ParentHome = () => {
                             color: 'label.neutral',
                           })}
                         >
-                          {childHistory.data ? (
+                          {childHistory.data?.[0] ? (
                             <>
                               <span>{childHistory.data[0].emoji}</span>
                               {childHistory.data[0].historyInfo.content}
