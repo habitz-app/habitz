@@ -5,8 +5,7 @@ import ProfileCard from '@/components/common/ProfileCard';
 import axios from '@/apis/axios';
 import { useQuery } from '@tanstack/react-query';
 import {
-  ChildList2Response,
-  ChildRecentHistory,
+  ChildListResponse,
   ChildRecentHistoryResponse,
   Mission,
   PointHistoryResponse,
@@ -17,7 +16,7 @@ import TodayMission from '@/components/main/TodayMission';
 import RecentHistory from '@/components/main/RecentHistory';
 
 const ManageChildren = () => {
-  const [selectedChild, setSelectedChild] = useState<ChildList2Response>({
+  const [selectedChild, setSelectedChild] = useState<ChildListResponse>({
     memberRole: 'CHILD',
     memberId: -1,
     name: '',
@@ -29,7 +28,7 @@ const ManageChildren = () => {
   const today = date.toISOString().slice(0, 10);
 
   const getChildList = async () => {
-    const res = await axios.get<ChildList2Response[]>('/family/childList2');
+    const res = await axios.get<ChildListResponse[]>('/family/childList');
     console.log('Get ChildrenList Success! 😊');
     return res.data.data;
   };
@@ -63,7 +62,7 @@ const ManageChildren = () => {
 
   // useQuery
   const { data: childrenList, refetch: refetchChildrenList } = useQuery<
-    ChildList2Response[]
+    ChildListResponse[]
   >({
     queryKey: ['Children'],
     queryFn: () => getChildList(),

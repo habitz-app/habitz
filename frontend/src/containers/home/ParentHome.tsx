@@ -3,7 +3,7 @@
 import { Button } from '@/components/ui/button';
 import usePoint from '@/queries/usePoint';
 import {
-  ChildList2Response,
+  ChildListResponse,
   ChildRecentHistoryResponse,
 } from '@/types/api/response';
 import { IonIcon } from '@ionic/react';
@@ -25,7 +25,7 @@ const ParentHome = () => {
   const children = useQuery({
     queryKey: ['children'],
     queryFn: async () => {
-      const res = await axios.get<ChildList2Response[]>('/family/childList2');
+      const res = await axios.get<ChildListResponse[]>('/family/childList');
       return res.data.data ?? [];
     },
   });

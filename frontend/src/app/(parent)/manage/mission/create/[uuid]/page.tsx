@@ -90,6 +90,7 @@ const Page = () => {
     name: '',
     profileImage: '',
     uuid: '',
+    point: 0,
   });
 
   useEffect(() => {

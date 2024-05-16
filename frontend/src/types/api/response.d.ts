@@ -56,14 +56,6 @@ export interface ChildListResponse {
   name: string;
   uuid: string;
   profileImage: string;
-}
-
-export interface ChildList2Response {
-  memberRole: 'CHILD' | 'PARENT';
-  memberId: number;
-  name: string;
-  uuid: string;
-  profileImage: string;
   point: number;
 }
 
