@@ -164,7 +164,7 @@ const Point = () => {
                       color: 'label.alternative',
                     })}
                   >
-                    잔액{history.totalPoint}
+                    잔액{history.totalPoint.toLocaleString()}
                   </span>
                 </div>
               </div>
