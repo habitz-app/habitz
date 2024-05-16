@@ -9,12 +9,21 @@ import { useRouter } from 'next/navigation';
 const ChildTabBar = ({ menu }: { menu: MenuType }) => {
   const [currentMenu, setCurrentMenu] = useState(menu);
   const router = useRouter();
+
   useEffect(() => {
     setCurrentMenu(menu);
   }, [menu]);
 
   const handleClick = (menu: MenuType) => {
-    router.push(`/${menu}`);
+    const routes = {
+      home: '/',
+      quiz: '/quiz',
+      mission: '/mission',
+      store: '/store',
+      more: '/more',
+    };
+
+    router.push(routes[menu]);
     setCurrentMenu(menu);
   };
 
