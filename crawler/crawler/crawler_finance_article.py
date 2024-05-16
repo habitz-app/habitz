@@ -52,15 +52,15 @@ def bulk_insert(csv_file_name) :
 
     load_dotenv()
 
-    mysql_name="heecircle"
-    mysql_password="yonghee1Z!!"
-    mysql_host="habitz.space"
-    mysql_db_name="dev"
+    mysql_name = os.getenv("MYSQL_USERNAME")
+    mysql_password = os.getenv("MYSQL_PASSWORD")
+    mysql_host = os.getenv("MYSQL_HOST")
+    mysql_db_name = os.getenv("MYSQL_DB_NAME")
+
 
     df = pd.read_csv(csv_file_name)
 
     db_connection_string = f"mysql+pymysql://{mysql_name}:{mysql_password}@{mysql_host}:3306/{mysql_db_name}"
-    print(db_connection_string)
     engine = create_engine(db_connection_string)
 
     df.to_sql("article", con = engine, if_exists = "append", index = False)
@@ -85,8 +85,6 @@ def econoi_page_cralwer(page, category) -> list :
     url = f"https://www.econoi.com/news/articleList.html?page={page}&sc_sub_section_code={category[0]}&view_type=sm"
 
     response = requests.get(url)
-    print(url)
-
 
     if response.status_code == "400":
         return 
@@ -219,7 +217,7 @@ if __name__ == "__main__" :
     mylogger.info(len(total_article_list))
     
     # # CSV 저장
-    # mylogger.info("====================================")
+    mylogger.info("====================================")
     csv_file_path = f"../data/econoi_article_{today}.csv"
     save_to_csv(total_article_list, csv_file_path)
     mylogger.info("SAVED !!! ")    
