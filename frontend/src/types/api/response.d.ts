@@ -100,6 +100,13 @@ export interface ArticleInfo {
   id: number;
   title: string;
   content: string;
+  previewImage: string;
+  writerName: string;
+  writerImage: string;
+  source: string;
+  url: string;
+  category: string;
+  publishDate: string;
 }
 export interface ArticleResponse {
   lifeCategory: ArticleInfo[];
@@ -182,7 +189,6 @@ export interface BannedProductResponse {
   category: string;
   brand: string;
 }
-
 export interface BannedProductListResponse {
   content: BannedProductResponse[];
   totalPages: number;
@@ -250,3 +256,55 @@ export interface ChildRecentHistory {
 }
 
 export interface ChildRecentHistoryResponse extends Array<ChildRecentHistory> {}
+
+export interface ProductResponse {
+  productId: number;
+  productName: string;
+  price: number;
+  productImage: string;
+  description: string;
+  category: string;
+  brand: string;
+}
+
+export interface ProductListResponse {
+  totalPages: number;
+  totalElements: number;
+  pageable: {
+    paged: boolean;
+    unpaged: boolean;
+    pageNumber: number;
+    pageSize: number;
+    offset: number;
+    sort: {
+      unsorted: boolean;
+      sorted: boolean;
+      empty: boolean;
+    };
+  };
+  numberOfElements: number;
+  first: boolean;
+  last: boolean;
+  size: number;
+  content: ProductResponse[];
+  number: number;
+  sort: {
+    unsorted: boolean;
+    sorted: boolean;
+    empty: boolean;
+  };
+  empty: boolean;
+}
+
+export interface ProductBannedChildResponse {
+  isBanned: boolean;
+  name: string;
+  profileImageUrl: string;
+  childUuid: string;
+}
+export interface BanStatusReponse {
+  childUuid: string;
+  name: string;
+  profileImageUrl: string;
+  isBanned: boolean;
+}
