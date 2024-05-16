@@ -8,17 +8,35 @@ import { useAuthWithRoles, useMe } from '@/hooks/useAuth';
 import { Suspense, useEffect } from 'react';
 import ParentTabBar from '@/components/common/TabBar/ParentTabBar';
 
+const parentMenu: {
+  [key: string]: ParentMenuType;
+} = {
+  '/': 'home',
+  '/manage/children': 'child',
+  '/manage/mission': 'mission',
+  '/manage/store': 'store',
+  '/more': 'more',
+};
+
+const childMenu: {
+  [key: string]: ChildMenuType;
+} = {
+  '/': 'home',
+  '/quiz': 'quiz',
+  '/mission': 'mission',
+  '/store': 'store',
+  '/more': 'more',
+};
+
 const CommonLayout = ({ children }: { children: React.ReactNode }) => {
   useAuthWithRoles(['PARENT', 'CHILD']);
 
   const me = useMe();
 
   const path = usePathname();
-  const menu = path?.split('/')[1];
 
   useEffect(() => {
     console.log(path);
-    console.log(menu);
   });
 
   return (
@@ -32,9 +50,9 @@ const CommonLayout = ({ children }: { children: React.ReactNode }) => {
       >
         <main className={css({ minH: '100vh' })}>{children}</main>
         {me?.data?.role === 'CHILD' ? (
-          <ChildTabBar menu={menu as ChildMenuType} />
+          <ChildTabBar menu={childMenu[path] as ChildMenuType} />
         ) : (
-          <ParentTabBar menu={menu as ParentMenuType} />
+          <ParentTabBar menu={parentMenu[path] as ParentMenuType} />
         )}
       </div>
     </Suspense>
