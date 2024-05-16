@@ -9,7 +9,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.Setter;
 import space.habitz.api.domain.article.entity.Article;
@@ -29,7 +29,7 @@ public class Quiz {
 	private String commentary;
 	@Column(name = "recommended_age")
 	private int recommendedAge;
-	@OneToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "article_id")
 	Article article;
 	@Column(name = "date")
