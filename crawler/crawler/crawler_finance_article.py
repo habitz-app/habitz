@@ -19,7 +19,7 @@ class Article :
     title : str = None
     category : str = None
     content : str = None
-    publish_date : str = None
+    date : str = None
     writer_name : str = None
     writer_image : str = None
     source : str = None
@@ -51,10 +51,11 @@ def save_to_csv(articles, filename):
 def bulk_insert(csv_file_name) : 
 
     load_dotenv()
-    mysql_name = os.getenv("MYSQL_USERNAME")
-    mysql_password = os.getenv("MYSQL_PASSWORD")
-    mysql_host = os.getenv("MYSQL_HOST")
-    mysql_db_name = os.getenv("MYSQL_DB_NAME")
+
+    mysql_name="heecircle"
+    mysql_password="yonghee1Z!!"
+    mysql_host="habitz.space"
+    mysql_db_name="dev"
 
     df = pd.read_csv(csv_file_name)
 
@@ -214,15 +215,15 @@ if __name__ == "__main__" :
     mylogger.addHandler(stream_handler)
 
     # # 크롤러 실행 
-    # total_article_list = econoi_crawler()
-    # mylogger.info(len(total_article_list))
+    total_article_list = econoi_crawler()
+    mylogger.info(len(total_article_list))
     
     # # CSV 저장
     # mylogger.info("====================================")
     csv_file_path = f"../data/econoi_article_{today}.csv"
-    # save_to_csv(total_article_list, csv_file_path)
-    # mylogger.info("SAVED !!! ")    
-    # mylogger.info("====================================")
+    save_to_csv(total_article_list, csv_file_path)
+    mylogger.info("SAVED !!! ")    
+    mylogger.info("====================================")
 
     # CSV DB에 insert 
     bulk_insert(csv_file_path)
