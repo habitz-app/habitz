@@ -42,12 +42,12 @@ const Charge = () => {
     changeInputValue(numericValue);
   };
 
-  const changeInputValue = (value: number) => {
+  const changeInputValue = useCallback((value: number) => {
     if (!inputRef.current) {
       return;
     }
     inputRef.current.value = toFormattedNumber(value);
-  };
+  }, []);
 
   const toFormattedNumber = (value: number) => {
     return Intl.NumberFormat('ko-KR').format(value);
@@ -55,7 +55,8 @@ const Charge = () => {
 
   useEffect(() => {
     changeInputValue(chargeAmount);
-  }, [chargeAmount]);
+  }, [changeInputValue, chargeAmount]);
+
   const handleClick = async () => {
     if (chargeAmount < MIN_CHARGE_AMOUNT) {
       alert('최소 충전 금액은 1,000원 입니다.');
@@ -99,32 +100,32 @@ const Charge = () => {
       >
         <div
           className={css({
-            zIndex: '10',
-            display: 'flex',
-          })}
-        >
-          <Button
-            color="label.alternative"
-            variant="link"
-            onClick={() => router.back()}
-          >
-            <IonIcon
-              icon={chevronBackOutline}
-              className={css({
-                w: '24px',
-                h: '24px',
-              })}
-            />
-          </Button>
-        </div>
-        <div
-          className={css({
             position: 'relative',
             display: 'flex',
             w: 'full',
             h: 'full',
           })}
         >
+          <div
+            className={css({
+              zIndex: '10',
+              display: 'flex',
+            })}
+          >
+            <Button
+              color="label.alternative"
+              variant="link"
+              onClick={() => router.back()}
+            >
+              <IonIcon
+                icon={chevronBackOutline}
+                className={css({
+                  w: '24px',
+                  h: '24px',
+                })}
+              />
+            </Button>
+          </div>
           <section
             className={css({
               w: 'full',
