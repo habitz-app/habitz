@@ -1,9 +1,6 @@
 import { css } from 'styled-system/css';
 import { Container, HStack, Stack } from 'styled-system/jsx';
-import { Button } from '~/components/ui/button';
 import * as Card from '~/components/ui/card';
-import { FormLabel } from '~/components/ui/form-label';
-import { Input } from '~/components/ui/input';
 import Image from 'next/image';
 
 interface GoodsCardProps extends Card.RootProps {
@@ -48,8 +45,21 @@ const GoodsCard = ({ url, brand, name, price, ...props }: GoodsCardProps) => {
             h="full"
             justify="space-between"
           >
-            <p>{brand}</p>
-            <p>{name}</p>
+            <p
+              className={css({
+                textStyle: 'caption1.medium',
+                color: 'label.alternative',
+              })}
+            >
+              {brand}
+            </p>
+            <p
+              className={css({
+                textStyle: 'label2.medium',
+              })}
+            >
+              {name}
+            </p>
           </Stack>
         </HStack>
         <hr
@@ -62,16 +72,21 @@ const GoodsCard = ({ url, brand, name, price, ...props }: GoodsCardProps) => {
       </Card.Body>
       <Card.Footer gap="3" className={css({ fontSize: '1rem' })}>
         <HStack minW="full" justify="space-between">
-          <p>결제 금액</p>
+          <p
+            className={css({
+              textStyle: 'label2.medium',
+            })}
+          >
+            결제 금액
+          </p>
           <HStack textAlign="center" alignItems="center">
             <p
               className={css({
-                textAlign: 'center',
-                fontSize: '1.5rem',
-                fontWeight: 'bold',
+                textStyle: 'headline1.bold',
+                color: 'label.normal',
               })}
             >
-              {price}
+              {price.toLocaleString()}
             </p>
             <Image src="/coin.svg" width={25} height={25} alt="coin" />
           </HStack>

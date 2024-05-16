@@ -17,7 +17,13 @@ const Bill = ({ params }: { params: { id: number } }) => {
 
   return (
     <div>
-      <Stack w="full" justify="space-between" align="center" px="1rem">
+      <Stack
+        w="full"
+        justify="space-between"
+        align="center"
+        px="1rem"
+        py="0.75rem"
+      >
         {productInfo.data && (
           <GoodsCard
             url={productInfo.data?.productImage}
