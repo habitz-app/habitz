@@ -5,10 +5,9 @@ import { css } from 'styled-system/css';
 import Image from 'next/image';
 import { IonIcon } from '@ionic/react';
 import { chevronBackOutline, trashOutline } from 'ionicons/icons';
-import MissionDetail from '@/components/mission/MissionDetail';
 import axios from '@/apis/axios';
 import { MissionDetailResponse } from '@/types/api/response';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { z } from 'zod';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -16,6 +15,7 @@ import * as FileUpload from '@/components/ui/file-upload';
 import { IconButton } from '@/components/ui/icon-button';
 
 const AuthenticatePage = ({ params }: { params: { id: string } }) => {
+  const queryClient = useQueryClient();
   const router = useRouter();
   const mission = useQuery<MissionDetailResponse>({
     queryKey: ['mission-detail', params.id],
@@ -26,7 +26,6 @@ const AuthenticatePage = ({ params }: { params: { id: string } }) => {
       return res.data.data ?? {};
     },
   });
-
   interface MissionAuthenticateForm {
     content: string;
     image?: string;
@@ -59,20 +58,43 @@ const AuthenticatePage = ({ params }: { params: { id: string } }) => {
   const onSubmit: SubmitHandler<MissionAuthenticateForm> = async (data) => {
     const formData = new FormData();
 
-    const res = await axios
-      .post<string>(`/mission/${params.id}/perform`, data, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      })
-      .then(() => {
-        // console.log(data);
-        router.push(`/mission/detail/${params.id}`);
-      })
-      .catch((err) => {
-        alert(err.message);
-        return;
-      });
+    if (mission.data?.recognition) {
+      const res = await axios
+        .put<string>(`/mission/${params.id}/perform`, data, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        })
+        .then(() => {
+          queryClient.invalidateQueries({
+            queryKey: ['mission-detail', params.id],
+            exact: true,
+          });
+          router.push(`/mission/detail/${params.id}`);
+        })
+        .catch((err) => {
+          alert(err.message);
+          return;
+        });
+    } else {
+      const res = await axios
+        .post<string>(`/mission/${params.id}/perform`, data, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        })
+        .then(() => {
+          queryClient.invalidateQueries({
+            queryKey: ['mission-detail', params.id],
+            exact: true,
+          });
+          router.push(`/mission/detail/${params.id}`);
+        })
+        .catch((err) => {
+          alert(err.message);
+          return;
+        });
+    }
   };
 
   const {
@@ -83,6 +105,9 @@ const AuthenticatePage = ({ params }: { params: { id: string } }) => {
     formState: { errors },
   } = useForm<MissionAuthenticateForm>({
     resolver: zodResolver(schema),
+    defaultValues: {
+      content: mission.data?.recognition?.content || '',
+    },
   });
 
   return (
@@ -98,7 +123,7 @@ const AuthenticatePage = ({ params }: { params: { id: string } }) => {
         className={css({
           display: 'flex',
           position: 'sticky',
-          height: '2.5rem',
+          height: '3.75rem',
           top: 0,
           bg: 'transparent',
           backdropFilter: 'auto',
@@ -169,6 +194,46 @@ const AuthenticatePage = ({ params }: { params: { id: string } }) => {
         >
           {mission.data?.mission.title}
         </p>
+
+        {mission.data?.recognition && (
+          <div
+            className={css({
+              display: 'flex',
+              flexDir: 'column',
+              gap: '1rem',
+              mt: '2rem',
+            })}
+          >
+            <p
+              className={css({
+                textStyle: 'heading2.bold',
+                color: 'label.normal',
+              })}
+            >
+              미션 인증 내역
+            </p>
+            {mission.data.recognition.image && (
+              <Image
+                src={mission.data.recognition.image}
+                alt="recognition image"
+                width={300}
+                height={200}
+                style={{ alignSelf: 'center' }}
+              />
+            )}
+            <p
+              className={css({
+                textStyle: 'heading2.bold',
+                alignSelf: 'flex-start',
+                bg: 'background.normal.alternative',
+                w: 'full',
+                mt: '1rem',
+              })}
+            >
+              {mission.data?.recognition?.content}
+            </p>
+          </div>
+        )}
       </div>
       <form onSubmit={handleSubmit(onSubmit)} encType="multipart/form-data">
         <FileUpload.Root maxFiles={1} {...register('image')}>

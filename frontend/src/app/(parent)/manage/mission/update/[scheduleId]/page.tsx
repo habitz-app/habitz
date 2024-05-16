@@ -1,14 +1,15 @@
 'use client';
 import InputLabeled from '@/components/mission/InputLabeled';
 import DatePicker from '@/components/mission/DatePicker';
-import { useState, Dispatch, useEffect } from 'react';
+import { useState, Dispatch, useEffect, Suspense } from 'react';
 import { stack } from 'styled-system/patterns';
 import { css } from 'styled-system/css';
 import { Button } from '@/components/ui/button';
 import DayPicker from '@/components/mission/DayPicker';
 import axios from '@/apis/axios';
-import { ChildListResponse, SchedulePostResponse } from '@/types/api/response';
+import { ChildListResponse, ScheduleResponse } from '@/types/api/response';
 import { useRouter, useParams } from 'next/navigation';
+import { useMutation, useQuery } from '@tanstack/react-query';
 
 interface createSchedule {
   title: string;
@@ -22,57 +23,8 @@ interface createSchedule {
 }
 
 const Page = () => {
-  const searchChild = ({
-    uuid,
-    data,
-  }: {
-    uuid: string;
-    data: ChildListResponse[];
-  }) => {
-    let foundChild: ChildListResponse | null = null;
-    data.forEach((child) => {
-      if (child.uuid === uuid) {
-        foundChild = child;
-        return;
-      }
-    });
-    if (foundChild) {
-      setTargetChild(foundChild);
-    } else {
-      // console.log('잘못된 접근입니다.', uuid, data);
-      alert('잘못된 접근입니다.');
-      router.back();
-    }
-  };
   const router = useRouter();
-  const params = useParams<{ uuid: string }>();
-  const handleCreateSchedule = async () => {
-    if (!title || point <= 0) {
-      alert('필수 입력값을 입력해주세요.');
-      return;
-    }
-    const requestBody: createSchedule = {
-      title: title,
-      content: content,
-      emoji: emoji,
-      childUUID: targetChild ? targetChild.uuid : '',
-      startDate: date[0],
-      endDate: date[1],
-      weekDays: weekDays,
-      point: point,
-    };
-    console.table(requestBody);
-    const response = await axios.post<SchedulePostResponse>(
-      '/schedule',
-      requestBody,
-    );
-    if (response?.status === 200) {
-      console.log('success');
-      router.push('/manage/mission');
-    } else {
-      console.log('fail');
-    }
-  };
+  const params = useParams<{ scheduleId: string }>();
   const [title, setTitle] = useState<string>('');
   const [emoji, setEmoji] = useState<string>('😀');
   const [content, setContent] = useState<string>('');
@@ -81,25 +33,66 @@ const Page = () => {
     new Date().toISOString().slice(0, 10),
     new Date().toISOString().slice(0, 10),
   ]);
-  const [weekDays, setWeekDays] = useState<boolean[]>(
-    Array.from({ length: 7 }, (_, i) => i === (new Date().getDay() + 6) % 7),
-  );
-  const [targetChild, setTargetChild] = useState<ChildListResponse>({
-    memberId: -1,
-    memberRole: 'CHILD',
-    name: '',
-    profileImage: '',
-    uuid: '',
-    point: 0,
+  const [weekDays, setWeekDays] = useState<boolean[]>([
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+  ]);
+
+  const getScheduleData = async (id: string) => {
+    const res = await axios.get<ScheduleResponse>(`/schedule/${id}`);
+    console.log('Get ScheduleData Success! 😊');
+    return res.data.data;
+  };
+
+  const putSchedule = async () => {
+    const res = await axios.put<ScheduleResponse>(
+      `/schedule/${Number(params.scheduleId)}`,
+      {
+        title: title,
+        content: content,
+        emoji: emoji,
+        startDate: date[0],
+        endDate: date[1],
+        weekDays: weekDays,
+        point: point,
+      },
+    );
+    return res.data.data;
+  };
+
+  const { mutate } = useMutation<ScheduleResponse>({
+    mutationFn: putSchedule,
+    onSuccess: () => {
+      router.push('/manage/mission');
+    },
+    onError: (error) => {
+      console.log('Put Schedule Fail! 😢');
+      console.log(error);
+    },
   });
 
-  useEffect(() => {
-    axios.get<ChildListResponse[]>('/family/childList').then((response) => {
-      console.log('Request Success (ChildList):', response.data.data);
-      // 자식이 맞는지 확인
-      searchChild({ uuid: params.uuid, data: response.data.data });
+  const { data: scheduleData, refetch: refetchScheduleData } =
+    useQuery<ScheduleResponse>({
+      queryKey: ['schedule', params.scheduleId],
+      queryFn: () => getScheduleData(params.scheduleId),
     });
-  }, []);
+
+  useEffect(() => {
+    if (scheduleData) {
+      setTitle(scheduleData.title);
+      setEmoji(scheduleData.emoji);
+      setContent(scheduleData.content);
+      setPoint(scheduleData.point);
+      setDate([scheduleData.startDate, scheduleData.endDate]);
+      setWeekDays(scheduleData.weekDays);
+    }
+  }, [scheduleData]);
+
   return (
     <div
       className={stack({
@@ -110,7 +103,7 @@ const Page = () => {
       })}
     >
       <h1 className={css({ width: 'full', textStyle: 'title2.bold' })}>
-        미션 생성
+        미션 수정
       </h1>
       <InputLabeled
         id="미션"
@@ -143,7 +136,17 @@ const Page = () => {
         }
       ></InputLabeled>
       <DatePicker date={date} setDate={setDate} />
-      <DayPicker weekDays={weekDays} setWeekDays={setWeekDays} />
+      <Suspense>
+        <DayPicker
+          weekDays={
+            scheduleData
+              ? scheduleData.weekDays
+              : [false, false, false, false, false, false, false]
+          }
+          //   setWeekDays={setWeekDays}
+          setWeekDays={() => {}}
+        />
+      </Suspense>
       <Button
         width="full"
         h="3.75rem"
@@ -151,9 +154,11 @@ const Page = () => {
         bg="primary.normal"
         color="static.black"
         textStyle={'headline1.bold'}
-        onClick={handleCreateSchedule}
+        onClick={() => {
+          mutate();
+        }}
       >
-        생성하기
+        수정하기
       </Button>
       {/* {targetChild.uuid}
       <hr />

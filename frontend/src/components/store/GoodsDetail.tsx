@@ -23,11 +23,11 @@ const GoodsDetail = ({
         />
       </Container>
       <Stack justify="space-between" px={'1rem'} py={'1.25rem'}>
-        <p className={css({ fontSize: '1.75rem', fontWeight: 'bold' })}>
-          {name}
-        </p>
+        <p className={css({ textStyle: 'headline1.medium' })}>{name}</p>
         <HStack>
-          <p className={css({ fontSize: '1.75rem' })}>{price}</p>
+          <p className={css({ textStyle: 'heading1.bold' })}>
+            {price.toLocaleString()}
+          </p>
           <Image src="/coin.svg" width={20} height={20} alt="coin" />
         </HStack>
       </Stack>

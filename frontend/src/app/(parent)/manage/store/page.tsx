@@ -103,10 +103,15 @@ const Store = () => {
       <header
         className={css({
           display: 'flex',
-          alignItems: 'center',
-          gap: '1rem',
-          p: '1rem',
-          justifyContent: 'center',
+          position: 'sticky',
+          height: '2.5rem',
+          top: 0,
+          bg: 'background.normal.normal/80',
+          backdropFilter: 'auto',
+          backdropBlur: 'sm',
+          px: '1rem',
+          justifyContent: 'space-between',
+          alignItems: 'end',
         })}
       >
         <p

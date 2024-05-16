@@ -27,7 +27,7 @@ const Result = ({ params }: { params: { id: string } }) => {
         className={css({
           display: 'flex',
           position: 'sticky',
-          height: '2.5rem',
+          height: '3.75rem',
           top: 0,
           bg: 'transparent',
           backdropFilter: 'auto',
@@ -70,7 +70,7 @@ const Result = ({ params }: { params: { id: string } }) => {
         })}
       >
         <Image
-          src={article.data?.previewImage ?? ''}
+          src={article.data?.previewImage ?? '/character.svg'}
           alt="previewImage"
           width={430}
           height={250}
@@ -93,17 +93,19 @@ const Result = ({ params }: { params: { id: string } }) => {
               date={article.data.publishDate}
               contents={article.data.content}
             />
-            <Link
-              href={article.data.url}
-              className={css({
-                color: 'blue.500',
-                textDecoration: 'underline',
-                textStyle: 'caption.normal',
-              })}
-            >
-              원문 보러가기
-            </Link>
           </div>
+        )}
+        {article.data?.url && (
+          <Link
+            href={article.data.url}
+            className={css({
+              color: 'blue.500',
+              textDecoration: 'underline',
+              textStyle: 'caption.normal',
+            })}
+          >
+            원문 보러가기
+          </Link>
         )}
       </div>
     </>

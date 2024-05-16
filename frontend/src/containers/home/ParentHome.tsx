@@ -1,154 +1,294 @@
 'use client';
-import { useEffect, useState } from 'react';
-import { HStack, Stack } from 'styled-system/jsx';
-import ProfileCard from '@/components/common/ProfileCard';
-import axios from '@/apis/axios';
-import { useQuery } from '@tanstack/react-query';
+
+import { Button } from '@/components/ui/button';
+import usePoint from '@/queries/usePoint';
 import {
-  ChildList2Response,
-  ChildRecentHistory,
+  ChildListResponse,
   ChildRecentHistoryResponse,
-  Mission,
-  PointHistoryResponse,
 } from '@/types/api/response';
-import ProfileIcon from '@/components/common/ProfileIcon';
-import MonthlyPoint from '@/components/main/MonthlyPoint';
-import TodayMission from '@/components/main/TodayMission';
-import RecentHistory from '@/components/main/RecentHistory';
+import { IonIcon } from '@ionic/react';
+import { useQueries, useQuery } from '@tanstack/react-query';
+import axios from '@/apis/axios';
+import {
+  addCircleOutline,
+  addOutline,
+  chevronForwardOutline,
+  notifications,
+} from 'ionicons/icons';
+import Image from 'next/image';
+import Link from 'next/link';
+import { css } from 'styled-system/css';
 
 const ParentHome = () => {
-  const [selectedChild, setSelectedChild] = useState<ChildList2Response>({
-    memberRole: 'CHILD',
-    memberId: -1,
-    name: '',
-    profileImage: '',
-    uuid: '',
-    point: 0,
+  const point = usePoint();
+
+  const children = useQuery({
+    queryKey: ['children'],
+    queryFn: async () => {
+      const res = await axios.get<ChildListResponse[]>('/family/childList');
+      return res.data.data ?? [];
+    },
   });
-  const date = new Date();
-  const today = date.toISOString().slice(0, 10);
 
-  const getChildList = async () => {
-    const res = await axios.get<ChildList2Response[]>('/family/childList2');
-    console.log('Get ChildrenList Success! 😊');
-    return res.data.data;
-  };
-
-  const getPointHistory = async (uuid: string) => {
-    const res = await axios.get<PointHistoryResponse>('/point/history', {
-      params: {
-        start: `${date.getFullYear()}-${date.getMonth() + 1 < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1}-01`,
-        end: today,
+  const childHistoryQueries = children.data?.map((child) => {
+    return {
+      queryKey: ['child', 'history', child.uuid],
+      queryFn: async () => {
+        const res = await axios.get<ChildRecentHistoryResponse>(
+          `/point/recent/history/${child.uuid}`,
+        );
+        return res.data.data ?? [];
       },
-    });
-    console.log('Get PointHistory Success! 😊');
-    return res.data.data;
-  };
-
-  const getDateMissionData = async (date: string, uuid: string) => {
-    const res = await axios.get<Mission[]>('/mission/children/list', {
-      params: uuid ? { date: date, child: uuid } : { date: date },
-    });
-    console.log('Get Mission Success! 😊');
-    return res.data.data;
-  };
-
-  const getChildRecentHistory = async (uuid: string) => {
-    const res = await axios.get<ChildRecentHistoryResponse>(
-      `point/recent/history/${uuid}`,
-    );
-    console.log('Get ChildRecentHistory Success! 😊');
-    return res.data.data;
-  };
-
-  // useQuery
-  const { data: childrenList, refetch: refetchChildrenList } = useQuery<
-    ChildList2Response[]
-  >({
-    queryKey: ['Children'],
-    queryFn: () => getChildList(),
-    initialData: [],
+    };
   });
 
-  const { data: pointHistory, refetch: refetchPointHistory } =
-    useQuery<PointHistoryResponse>({
-      queryKey: ['pointHistory', selectedChild.uuid],
-      queryFn: () => getPointHistory(selectedChild.uuid),
-      // initialData: [],
-    });
-
-  const { data: dateMissionData, refetch: refetchMissionData } = useQuery<
-    Mission[]
-  >({
-    queryKey: ['dateMission', today, selectedChild.uuid],
-    queryFn: () => getDateMissionData(today, selectedChild.uuid),
-    initialData: [],
-  });
-
-  const { data: recentHistoryData, refetch: refetchRecentHistoryData } =
-    useQuery<ChildRecentHistoryResponse>({
-      queryKey: ['recentHistory', selectedChild.uuid],
-      queryFn: () => getChildRecentHistory(selectedChild.uuid),
-    });
-
-  // useEffect
-  useEffect(() => {
-    console.log('😎 childrenList set');
-    refetchChildrenList();
-    console.log('childrenList:', childrenList);
-
-    if (childrenList.length > 0) [setSelectedChild(childrenList[0])];
-  }, [childrenList, refetchChildrenList]);
-
-  useEffect(() => {
-    refetchPointHistory();
-    refetchMissionData();
-  }, [childrenList, refetchPointHistory, selectedChild, refetchMissionData]);
-
-  useEffect(() => {
-    refetchMissionData();
-  }, [selectedChild, refetchMissionData]);
+  const childHistories = useQueries({ queries: childHistoryQueries || [] });
 
   return (
-    <Stack px="1rem" py="1.25rem" gap="0.625rem">
-      {/*'프로필 아이콘'*/}
-      <HStack>
-        {childrenList.map((child, id) => (
-          <button
-            key={id}
-            onClick={() => {
-              setSelectedChild(child);
-            }}
+    <>
+      <header
+        className={css({
+          display: 'flex',
+          position: 'sticky',
+          height: '3.75rem',
+          top: 0,
+          bg: 'background.normal.normal/80',
+          backdropFilter: 'auto',
+          backdropBlur: 'sm',
+          px: '1rem',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        })}
+      >
+        <strong
+          className={css({
+            fontFamily: 'yeoljeong',
+            fontSize: '28px',
+            lineHeight: '38.02px',
+            color: 'primary.strong',
+          })}
+        >
+          habitz
+        </strong>
+        <Button color="label.alternative" variant="link">
+          <IonIcon
+            icon={notifications}
+            className={css({
+              w: '24px',
+              h: '24px',
+            })}
+          />
+        </Button>
+      </header>
+      <main
+        className={css({
+          display: 'flex',
+          w: 'full',
+          flexDir: 'column',
+          px: '1rem',
+          gap: '1.25rem',
+        })}
+      >
+        <section>
+          <div
+            className={css({
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              textStyle: 'headline1.bold',
+            })}
           >
-            <ProfileIcon
-              alt={'test'}
-              imageUrl={
-                child.profileImage ||
-                'https://th.bing.com/th/id/OIG3.XjJC_rWVtDY_8a5.T.ux?w=1024&h=1024&rs=1&pid=ImgDetMain'
-              }
-            />
-          </button>
-        ))}
-      </HStack>
+            <span>가족 해빗</span>
+            <Link
+              href="/manage/cash/charge"
+              className={css({
+                display: 'flex',
+                alignItems: 'center',
+                color: 'secondary.normal',
+                textStyle: 'label1.normal.medium',
+              })}
+            >
+              충전하기
+              <IonIcon icon={chevronForwardOutline} />
+            </Link>
+          </div>
+          <div
+            className={css({
+              display: 'flex',
+              justifyContent: 'flex-end',
+              textStyle: 'heading2.bold',
+              color: 'secondary.normal',
+              gap: '0.25rem',
+            })}
+          >
+            {Intl.NumberFormat('ko-kr').format(Number(point?.data ?? 0))}
+            <Image src="/coin.svg" alt="coin" width={20} height={20} />
+          </div>
+        </section>
+        <section
+          className={css({
+            display: 'flex',
+            flexDir: 'column',
+            gap: '1.25rem',
+          })}
+        >
+          <span
+            className={css({
+              textStyle: 'headline1.bold',
+            })}
+          >
+            내 가족
+          </span>
+          {children.data &&
+            children.data.map((child, index) => {
+              const childHistory = childHistories[index];
 
-      <ProfileCard name={selectedChild.name} point={selectedChild.point} />
-      <MonthlyPoint
-        month={date.getMonth() + 1}
-        // point={0}
-        point={(pointHistory && pointHistory[0].totalPoint) || 0}
-        clickHandler={() => {
-          console.log('내역');
-        }}
-      ></MonthlyPoint>
-      <TodayMission missions={dateMissionData} uuid={selectedChild.uuid} />
-      {recentHistoryData && (
-        <RecentHistory
-          uuid={selectedChild.uuid}
-          history={recentHistoryData}
-          name={selectedChild.name}
-        />
-      )}
-    </Stack>
+              return (
+                <div
+                  key={child.uuid}
+                  className={css({
+                    shadow: 'normal',
+                    w: 'full',
+                    bgColor: 'background.elevated.normal',
+                    display: 'flex',
+                    flexDir: 'column',
+                    borderRadius: '0.75rem',
+                    p: '1rem',
+                  })}
+                >
+                  <div
+                    className={css({
+                      display: 'flex',
+                      w: 'full',
+                      gap: '0.75rem',
+                    })}
+                  >
+                    <div
+                      className={css({
+                        w: '6.25rem',
+                        h: '6.25rem',
+                        position: 'relative',
+                      })}
+                    >
+                      <Image src={child.profileImage} alt={child.name} fill />
+                    </div>
+                    <div
+                      className={css({
+                        flex: 1,
+                        display: 'flex',
+                        flexDir: 'column',
+                      })}
+                    >
+                      <div
+                        className={css({
+                          display: 'flex',
+                          justifyContent: 'space-between',
+                        })}
+                      >
+                        <span
+                          className={css({
+                            textStyle: 'headline1.bold',
+                          })}
+                        >
+                          {child.name}
+                        </span>
+                        <span
+                          className={css({
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '0.25rem',
+                            textStyle: 'headline2.bold',
+                            color: 'secondary.strong',
+                          })}
+                        >
+                          {Intl.NumberFormat('ko-kr').format(
+                            Number(child.point),
+                          )}
+                          <Image
+                            src="/coin.svg"
+                            alt="coin"
+                            width={20}
+                            height={20}
+                          />
+                        </span>
+                      </div>
+                      <div
+                        className={css({
+                          display: 'flex',
+                          flexDir: 'column',
+                          justifyContent: 'flex-end',
+                          flex: 1,
+                        })}
+                      >
+                        <span
+                          className={css({
+                            textStyle: 'label1.normal.bold',
+                          })}
+                        >
+                          최근 활동
+                        </span>
+                        <span
+                          className={css({
+                            textStyle: 'label2.medium',
+                            color: 'label.neutral',
+                          })}
+                        >
+                          {childHistory.data?.[0] ? (
+                            <>
+                              <span>{childHistory.data[0].emoji}</span>
+                              {childHistory.data[0].historyInfo.content}
+                            </>
+                          ) : (
+                            <>
+                              <span>최근 활동이 없습니다.</span>
+                            </>
+                          )}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          <Link
+            href="/invite"
+            className={css({
+              shadow: 'normal',
+              w: 'full',
+              bgColor: 'background.elevated.normal',
+              display: 'flex',
+              flexDir: 'column',
+              borderRadius: '0.75rem',
+              justifyContent: 'center',
+              alignItems: 'center',
+              textStyle: 'label1.normal.bold',
+              gap: '0.5rem',
+              p: '1rem',
+            })}
+          >
+            <div
+              className={css({
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                w: '2.5rem',
+                h: '2.5rem',
+              })}
+            >
+              <IonIcon
+                icon={addCircleOutline}
+                className={css({
+                  w: '2.5rem',
+                  h: '2.5rem',
+                  color: 'label.neutral',
+                })}
+              />
+            </div>
+            가족 추가하기
+          </Link>
+        </section>
+      </main>
+    </>
   );
 };
 

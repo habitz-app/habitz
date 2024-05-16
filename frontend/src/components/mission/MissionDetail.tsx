@@ -5,6 +5,7 @@ import { Button } from '../ui/button';
 import { IonIcon } from '@ionic/react';
 import { personCircleOutline } from 'ionicons/icons';
 import { MissionDetailResponse } from '@/types/api/response';
+import { useRouter } from 'next/navigation';
 const MissionDetail = ({
   mission,
 }: {
@@ -50,6 +51,8 @@ const MissionDetail = ({
       },
     },
   });
+
+  const router = useRouter();
 
   return (
     <>
@@ -203,7 +206,7 @@ const MissionDetail = ({
                   color="label.neutral"
                   w="full"
                 >
-                  재인증하기
+                  다시 인증하기
                 </Button>
               </div>
             </Collapsible.Content>
@@ -215,8 +218,13 @@ const MissionDetail = ({
             textStyle="label1.normal.bold"
             color="label.neutral"
             w="full"
+            onClick={() => {
+              router.push(
+                `/mission/authenticate/${mission?.mission.missionId}`,
+              );
+            }}
           >
-            재인증하기
+            다시 인증하기
           </Button>
         ) : (
           ''
