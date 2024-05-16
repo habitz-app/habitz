@@ -26,7 +26,7 @@ public record ScheduleRequestDto(
 	@Size(min = 7, max = 7, message = "요일은 7개여야 합니다.")
 	Boolean[] weekDays, // size 7
 	Integer point
-) {
+) implements ScheduleRequest {
 	public Schedule toEntity(Member parent, Member child) {
 
 		boolean isRepeatable = !startDate.equals(endDate); // 반복 여부

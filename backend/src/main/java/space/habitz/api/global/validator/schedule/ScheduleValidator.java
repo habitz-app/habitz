@@ -7,17 +7,17 @@ import org.springframework.stereotype.Component;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-import space.habitz.api.domain.schedule.dto.ScheduleRequestDto;
+import space.habitz.api.domain.schedule.dto.ScheduleRequest;
 
 @Component
-public class ScheduleValidator implements ConstraintValidator<ValidSchedule, ScheduleRequestDto> {
+public class ScheduleValidator implements ConstraintValidator<ValidSchedule, ScheduleRequest> {
 
 	@Override
-	public boolean isValid(ScheduleRequestDto requestDto, ConstraintValidatorContext constraintValidatorContext) {
+	public boolean isValid(ScheduleRequest request, ConstraintValidatorContext constraintValidatorContext) {
 
-		LocalDate startDate = requestDto.startDate();
-		LocalDate endDate = requestDto.endDate();
-		Boolean[] repeatDays = requestDto.weekDays();
+		LocalDate startDate = request.startDate();
+		LocalDate endDate = request.endDate();
+		Boolean[] repeatDays = request.weekDays();
 
 		if (startDate == null || endDate == null || repeatDays == null) {
 			return false;
@@ -40,6 +40,7 @@ public class ScheduleValidator implements ConstraintValidator<ValidSchedule, Sch
 			}
 			date = date.plusDays(1);
 		}
+
 		return false;
 	}
 }
