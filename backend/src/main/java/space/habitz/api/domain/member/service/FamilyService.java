@@ -11,7 +11,5 @@ public interface FamilyService {
 
 	List<FamilyListResponseDto> getFamilyList();
 
-	List<FamilyListResponseDto> getChildList();
-
 	List<FamilyChildListResponseDto> getFamilyChildList();
 }

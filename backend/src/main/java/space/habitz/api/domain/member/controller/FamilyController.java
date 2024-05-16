@@ -35,13 +35,6 @@ public class FamilyController {
 
 	@PreAuthorize("hasAnyRole('PARENT', 'ADMIN')")
 	@GetMapping("/childList")
-	public ResponseEntity<?> childList() {
-		List<FamilyListResponseDto> familyList = familyService.getChildList();
-		return ApiResponseData.success(familyList);
-	}
-
-	@PreAuthorize("hasAnyRole('PARENT', 'ADMIN')")
-	@GetMapping("/childList2")
 	public ResponseEntity<?> childPointList() {
 		List<FamilyChildListResponseDto> familyChildList = familyService.getFamilyChildList();
 		return ApiResponseData.success(familyChildList);
