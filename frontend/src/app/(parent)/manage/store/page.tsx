@@ -3,176 +3,239 @@ import { css, cva } from 'styled-system/css';
 import Image from 'next/image';
 import { useQuery } from '@tanstack/react-query';
 import axios from '@/apis/axios';
-import {
-  PointAmountResponse,
-  PointHistoryResponse,
-} from '@/types/api/response';
-import DatePicker from '@/components/common/DatePicker';
+import { ChildListResponse, ProductListResponse } from '@/types/api/response';
+import { useRouter } from 'next/navigation';
+import { Button } from '@/components/ui/button';
+import Link from 'next/link';
+import { IonIcon } from '@ionic/react';
+import { storefrontOutline } from 'ionicons/icons';
 import { useState } from 'react';
-
-const Point = () => {
-  const point = useQuery<number>({
-    queryKey: ['me', 'point'],
+import { HStack, Stack } from 'styled-system/jsx';
+const Store = () => {
+  const router = useRouter();
+  const [showStatus, setShowStatus] = useState(false);
+  const children = useQuery({
+    queryKey: ['ChildList'],
     queryFn: async () => {
-      const res = await axios.get<PointAmountResponse>('/point/amount');
-      return res.data.data.point ?? 0;
+      const res = await axios.get<ChildListResponse[]>(`/family/childList`);
+      console.log(res.data?.data);
+
+      return res.data?.data ?? [];
     },
   });
 
-  const today = new Date();
-  const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
-
-  const [date, setDate] = useState<string[]>([
-    startOfMonth.toLocaleDateString('fr-CA'),
-    today.toLocaleDateString('fr-CA'),
-  ]);
-
-  const getPointHistory = async () => {
-    return await axios
-      .get<PointHistoryResponse>(
-        `/point/history?start=${date[0]}&end=${date[1]}`,
-      )
-      .then((res) => {
-        return res.data.data;
-      });
-  };
-
-  const pointHistory = useQuery({
-    queryKey: [date[0], date[1]],
-    queryFn: getPointHistory,
-  });
-  const item = cva({
-    base: {
-      textStyle: 'headline1.bold',
-    },
-    variants: {
-      status: {
-        gain: {
-          color: 'status.positive',
-        },
-        loss: {
-          color: 'status.negative',
+  const [bannedProductList, setBannedProductList] =
+    useState<ProductListResponse>({
+      content: [],
+      totalPages: 0,
+      totalElements: 0,
+      pageable: {
+        pageNumber: 0,
+        pageSize: 0,
+        paged: false,
+        unpaged: false,
+        offset: 0,
+        sort: {
+          sorted: false,
+          unsorted: false,
+          empty: false,
         },
       },
-    },
-  });
+      size: 0,
+      number: 0,
+      sort: {
+        sorted: false,
+        unsorted: false,
+        empty: false,
+      },
+      first: false,
+      last: false,
+      numberOfElements: 0,
+      empty: false,
+    });
+
+  const getBannedProduct = async (childUuid: string) => {
+    const res = await axios.get<ProductListResponse>(
+      `/store/banned-product/list/${childUuid}`,
+    );
+    setBannedProductList(res.data?.data ?? []);
+    setShowStatus(true);
+    setChildUuid(childUuid);
+  };
+
+  const removeBan = async (childUuid: string, productId: number) => {
+    const res = await axios.delete<string>(
+      `store/banned-product/restrict/${childUuid}/${productId}`,
+    );
+    getBannedProduct(childUuid);
+    console.log(res.data.message);
+  };
+
+  const [childUuid, setChildUuid] = useState<string>('');
 
   return (
     <div>
       <header
         className={css({
-          textStyle: 'title3.bold',
-          color: 'label.normal',
           display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
+          position: 'sticky',
+          height: '2.5rem',
+          top: 0,
+          bg: 'background.normal.normal/80',
+          backdropFilter: 'auto',
+          backdropBlur: 'sm',
+          px: '1rem',
+          justifyContent: 'space-between',
+          alignItems: 'end',
         })}
       >
-        내 포인트
+        <Link
+          className={css({
+            fontFamily: 'yeoljeong',
+            fontSize: '28px',
+            lineHeight: '38.02px',
+            color: 'label.alternative',
+          })}
+          href={'/'}
+        >
+          habitz
+        </Link>
+        <span
+          className={css({
+            display: 'flex',
+            textStyle: 'headline1.bold',
+            gap: '0.125rem',
+            py: '0.25rem',
+          })}
+        ></span>
       </header>
       <div
         className={css({
           display: 'flex',
+          w: 'full',
           flexDir: 'column',
-          justifyContent: 'flex-start',
-          alignItems: 'center',
-          px: '1rem',
-          py: '1.25rem',
+          gap: '1rem',
+          p: '1rem',
         })}
       >
-        <span
+        <div
+          onClick={() => {
+            router.push('/manage/store/menu');
+          }}
           className={css({
             display: 'flex',
-            justifyContent: 'center',
+            gap: '0.5rem',
             alignItems: 'center',
-            bg: 'primary.normal',
-            w: 'full',
-            h: '5rem',
-            textStyle: 'title3.bold',
-            borderRadius: '0.625rem',
+            justifyContent: 'flex-end',
+            textStyle: 'headline3.bold',
           })}
         >
-          {point.data?.toLocaleString() ?? 0}
-          <Image
-            src="/coin.svg"
-            width={24}
-            height={24}
-            alt="coin"
-            style={{ marginLeft: '0.3rem' }}
+          <IonIcon
+            icon={storefrontOutline}
+            className={css({ fontSize: '24px', color: 'label.alternative' })}
           />
-        </span>
-
-        <div className={css({ my: '1rem' })}>
-          <DatePicker date={date} setDate={setDate} />
+          상점으로 가기
         </div>
-        {Array.isArray(pointHistory?.data) &&
-          pointHistory?.data.map((history, index) => {
-            return (
-              <div
-                key={index}
+
+        <HStack>
+          {children.data?.map((child) => (
+            <Stack
+              key={child.memberId}
+              alignItems={'center'}
+              onClick={() => getBannedProduct(child.uuid)}
+            >
+              <Image
+                src={child.profileImage}
+                width={100}
+                height={100}
+                alt={child.name + '의 프로필'}
                 className={css({
-                  display: 'flex',
-                  w: 'full',
-                  justifyContent: 'space-between',
-                  mb: '0.625rem',
+                  borderRadius: '50%',
+                  border: '1px solid',
                 })}
-              >
+              />
+              <p>{child.name}</p>
+            </Stack>
+          ))}
+        </HStack>
+
+        {showStatus ? (
+          <div>
+            <p
+              className={css({
+                textStyle: 'title3.bold',
+                mb: '1rem',
+              })}
+            >
+              금지상품 목록
+            </p>
+            {bannedProductList.content.map((bannedProduct) => (
+              <div key={bannedProduct.productId}>
                 <div
                   className={css({
                     display: 'flex',
-                    flexDirection: 'column',
                   })}
                 >
-                  <span
+                  <Image
+                    src={bannedProduct.productImage}
+                    width={100}
+                    height={100}
                     className={css({
-                      textStyle: 'body1.reading.regular',
+                      mx: '1rem',
+                      mb: '1rem',
                     })}
-                  >
-                    {history.content}
-                  </span>
-                  <span
+                    alt="상품 이미지"
+                  />
+                  <div
                     className={css({
-                      textStyle: 'label1.reading.medium',
+                      w: '17rem',
+                      pr: '1rem',
                     })}
                   >
-                    {history.date.split('.')[0].replace('T', ' ')}
-                  </span>
-                </div>
-                <div
-                  className={css({
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'flex-end',
-                  })}
-                >
-                  <span
-                    className={item({
-                      status:
-                        history.point > 0
-                          ? 'gain'
-                          : history.point < 0
-                            ? 'loss'
-                            : undefined,
-                    })}
-                  >
-                    {history.point > 0 ? '+' : ''}
-                    {history.point.toLocaleString()}
-                  </span>
-                  <span
-                    className={css({
-                      textStyle: 'label1.reading.regular',
-                      color: 'label.alternative',
-                    })}
-                  >
-                    잔액{history.totalPoint.toLocaleString()}
-                  </span>
+                    <div
+                      className={css({
+                        h: 10,
+                      })}
+                    >
+                      <p
+                        className={css({
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          whiteSpace: 'nowrap',
+                        })}
+                      >
+                        {bannedProduct.productName}
+                      </p>
+                    </div>
+                    <div
+                      className={css({
+                        display: 'flex',
+
+                        justifyContent: 'end',
+                      })}
+                    >
+                      <Button
+                        onClick={() =>
+                          removeBan(childUuid, bannedProduct.productId)
+                        }
+                        className={css({
+                          bg: 'status.negative',
+                        })}
+                      >
+                        해제
+                      </Button>
+                    </div>
+                  </div>
                 </div>
               </div>
-            );
-          })}
+            ))}
+          </div>
+        ) : (
+          <div></div>
+        )}
       </div>
     </div>
   );
 };
 
-export default Point;
+export default Store;
