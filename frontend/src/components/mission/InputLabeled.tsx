@@ -3,7 +3,7 @@ import { Dispatch } from 'react';
 import { HStack, Stack } from 'styled-system/jsx';
 import { FormLabel } from '~/components/ui/form-label';
 import { Input, type InputProps as IP } from '~/components/ui/input';
-import EmojiPopover from './emojiPopover';
+import EmojiPopover from './EmojiPopover';
 import { css } from 'styled-system/css';
 
 interface InputProps extends IP {

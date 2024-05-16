@@ -1,3 +1,4 @@
+import { ChildListResponse, pointHistory } from './response.d';
 export interface CommonResponse<T> {
   data: T;
   message: string;
@@ -63,6 +64,15 @@ export interface ChildListResponse {
   profileImage: string;
 }
 
+export interface ChildList2Response {
+  memberRole: 'CHILD' | 'PARENT';
+  memberId: number;
+  name: string;
+  uuid: string;
+  profileImage: string;
+  point: number;
+}
+
 export interface TestCreateChildResponse {
   userId: number;
   name: string;
@@ -108,7 +118,7 @@ export interface QuizResponse {
     articleId: number;
     chosenAnswer: string;
     createdAt: string;
-    correct: true;
+    correct: boolean;
   };
 }
 
@@ -153,7 +163,17 @@ export interface MissionDetailResponse {
   };
 }
 
-export interface BannedProductReponse {
+export interface PointHistory {
+  date: string;
+  point: number;
+  totalPoint: number;
+  content: string;
+  nickname: string;
+}
+
+export interface PointHistoryResponse extends Array<PointHistory> {}
+
+export interface BannedProductResponse {
   productId: number;
   productName: string;
   price: number;
@@ -162,3 +182,71 @@ export interface BannedProductReponse {
   category: string;
   brand: string;
 }
+
+export interface BannedProductListResponse {
+  content: BannedProductResponse[];
+  totalPages: number;
+  totalElements: number;
+  pageable: {
+    pageNumber: number;
+    pageSize: number;
+    paged: boolean;
+    unpaged: boolean;
+    offset: number;
+    sort: {
+      sorted: boolean;
+      unsorted: boolean;
+      empty: boolean;
+    };
+  };
+  size: number;
+  number: number;
+  sort: {
+    sorted: boolean;
+    unsorted: boolean;
+    empty: boolean;
+  };
+  first: boolean;
+  last: boolean;
+  numberOfElements: number;
+  empty: boolean;
+}
+
+export interface PointAmountResponse {
+  point: number;
+  familyPoint: boolean;
+}
+
+export interface PointHistory {
+  date: string;
+  point: number;
+  totalPoint: number;
+  content: string;
+  nickname: string;
+}
+
+export interface PointHistoryResponse {
+  data: PointHistory[];
+}
+
+export interface MissionApproveResponse {
+  status: 'success' | 'error' | 'expired' | 'unauthorized' | 'failure';
+  message: string;
+  data: string;
+}
+
+export interface ChildRecentHistory {
+  status: string;
+  emoji: string;
+  historyInfo: {
+    date: string;
+    point: number;
+    totalPoint: number;
+    content: string;
+    emoji: string;
+    missionId: number;
+    productPaymentId: number;
+  };
+}
+
+export interface ChildRecentHistoryResponse extends Array<ChildRecentHistory> {}

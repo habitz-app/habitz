@@ -1,1 +1,1 @@
-export type MenuType = 'home'  | 'child' | 'mission' | 'store' | 'menu'
+export type MenuType = 'home' | 'child' | 'mission' | 'store' | 'more';

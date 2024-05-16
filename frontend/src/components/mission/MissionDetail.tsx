@@ -3,33 +3,15 @@ import { css, cva } from 'styled-system/css';
 import * as Collapsible from '@/components/ui/collapsible';
 import { Button } from '../ui/button';
 import { IonIcon } from '@ionic/react';
-import { chevronBackOutline, personCircleOutline } from 'ionicons/icons';
-import { useRouter } from 'next/navigation';
+import { personCircleOutline } from 'ionicons/icons';
+import { MissionDetailResponse } from '@/types/api/response';
 const MissionDetail = ({
-  emoji,
-  title,
-  date,
-  contents,
-  status,
-  point,
-  image,
-  recognitionContent,
-  approvalName,
-  approvalComment,
+  mission,
 }: {
-  emoji: string;
-  title: string;
-  date: string;
-  contents: string;
-  status: 'ACCEPT' | 'DECLINE' | 'EMPTY' | 'PENDING';
-  point: number;
-  image?: string;
-  recognitionContent?: string;
-  approvalName?: string;
-  approvalComment?: string;
+  mission: MissionDetailResponse | undefined;
 }) => {
   let statusText;
-  switch (status) {
+  switch (mission?.mission.status) {
     case 'EMPTY':
       statusText = '진행중';
       break;
@@ -69,48 +51,8 @@ const MissionDetail = ({
     },
   });
 
-  const router = useRouter();
-
   return (
     <>
-      <header
-        className={css({
-          display: 'flex',
-          position: 'sticky',
-          height: '2.5rem',
-          top: 0,
-          bg: 'transparent',
-          backdropFilter: 'auto',
-          backdropBlur: 'sm',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-        })}
-      >
-        <Button
-          color="label.alternative"
-          variant="link"
-          onClick={() => {
-            router.back();
-          }}
-        >
-          <IonIcon
-            icon={chevronBackOutline}
-            className={css({
-              w: '24px',
-              h: '24px',
-            })}
-          />
-        </Button>
-        <Button color="label.alternative" variant="link">
-          <Image
-            key="history"
-            src="/history.svg"
-            alt="history"
-            width="19"
-            height="19"
-          ></Image>
-        </Button>
-      </header>
       <div
         className={css({
           display: 'flex',
@@ -127,7 +69,7 @@ const MissionDetail = ({
             fontSize: '4.6875rem',
           })}
         >
-          {emoji}
+          {mission?.mission.emoji || ''}
         </span>
         <span>
           <p
@@ -136,7 +78,7 @@ const MissionDetail = ({
               color: 'label.alternative',
             })}
           >
-            {date}
+            {new Date().toISOString().split('T')[0]}
           </p>
           <div
             className={css({
@@ -148,20 +90,21 @@ const MissionDetail = ({
             <p
               className={css({
                 display: 'flex',
-                textStyle: 'title2.bold',
+                textStyle: 'title3.bold',
                 color: 'label.normal',
               })}
             >
-              {title}
+              {mission?.mission.title}
             </p>
             <p
               className={item({
-                visual: status,
+                visual: mission?.mission?.status,
               })}
             >
               {statusText}
             </p>
-            {status === 'ACCEPT' || status === 'DECLINE' ? (
+            {mission?.mission.status === 'ACCEPT' ||
+            mission?.mission.status === 'DECLINE' ? (
               <span
                 className={css({
                   display: 'flex',
@@ -176,7 +119,7 @@ const MissionDetail = ({
                     textStyle: 'label1.normal.bold',
                   })}
                 >
-                  {approvalName}
+                  {mission?.approval?.name || ''}
                 </p>
               </span>
             ) : (
@@ -191,7 +134,8 @@ const MissionDetail = ({
               gap: '0.1rem',
             })}
           >
-            +{point} <Image src="/coin.svg" alt="coin" width={16} height={16} />
+            +{mission?.mission.point || 0}
+            <Image src="/coin.svg" alt="coin" width={16} height={16} />
           </span>
         </span>
       </div>
@@ -202,7 +146,7 @@ const MissionDetail = ({
           px: '1rem',
         })}
       >
-        {contents}
+        {mission?.mission.content || ''}
       </p>
       <div
         className={css({
@@ -213,7 +157,7 @@ const MissionDetail = ({
           px: '1rem',
         })}
       >
-        {approvalComment ? (
+        {mission?.approval?.comment ? (
           <Collapsible.Root>
             <Collapsible.Trigger asChild>
               <Button
@@ -242,7 +186,7 @@ const MissionDetail = ({
                     color: 'label.normal',
                   })}
                 >
-                  {approvalName}님의 거절 사유
+                  {mission?.approval?.name}님의 거절 사유
                 </p>
                 <p
                   className={css({
@@ -250,7 +194,7 @@ const MissionDetail = ({
                     color: 'label.neutral',
                   })}
                 >
-                  {approvalComment}
+                  {mission?.approval?.comment}
                 </p>
                 <Button
                   variant="solid"
@@ -264,7 +208,7 @@ const MissionDetail = ({
               </div>
             </Collapsible.Content>
           </Collapsible.Root>
-        ) : status === 'DECLINE' ? (
+        ) : mission?.mission.status === 'DECLINE' ? (
           <Button
             variant="solid"
             bgColor="primary.normal"
@@ -290,14 +234,24 @@ const MissionDetail = ({
             gap: '1rem',
           })}
         >
-          <Image
-            src={`${image}`}
-            alt="image"
-            width={150}
-            height={150}
-            style={{ alignSelf: 'center' }}
-          />
-          {recognitionContent ? (
+          {mission?.recognition && mission?.recognition?.image ? (
+            <Image
+              src={`${mission?.recognition?.image}`}
+              alt="image"
+              width={300}
+              height={200}
+              style={{ alignSelf: 'center' }}
+            />
+          ) : (
+            <Image
+              src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Smilies/Dotted%20Line%20Face.png"
+              alt="image"
+              width={150}
+              height={150}
+              style={{ alignSelf: 'center' }}
+            />
+          )}
+          {mission?.recognition?.content ? (
             <div>
               <p
                 className={css({
@@ -306,7 +260,7 @@ const MissionDetail = ({
                   bg: 'background.normal.alternative',
                 })}
               >
-                {recognitionContent}
+                {mission?.recognition?.content}
               </p>
             </div>
           ) : (

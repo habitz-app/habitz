@@ -5,10 +5,12 @@ const MissionPreview = ({
   missionId,
   title,
   status,
+  isParent,
 }: {
   missionId: number;
   title: string;
   status: 'EMPTY' | 'ACCEPT' | 'DECLINE' | 'PENDING';
+  isParent?: boolean;
 }) => {
   const router = useRouter();
   let statusText;
@@ -59,7 +61,9 @@ const MissionPreview = ({
         alignItems: 'flex-end',
         w: 'full',
       })}
-      onClick={() => router.push(`/mission/detail/${missionId}`)}
+      onClick={() => {
+        router.push(`${isParent ? '/manage' : ''}/mission/detail/${missionId}`);
+      }}
     >
       <p
         className={css({

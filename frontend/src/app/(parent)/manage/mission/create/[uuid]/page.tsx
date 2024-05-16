@@ -1,19 +1,14 @@
 'use client';
-import InputLabeled from '@/components/mission/inputLabeled';
-import DatePicker from '@/components/mission/datePicker';
+import InputLabeled from '@/components/mission/InputLabeled';
+import DatePicker from '@/components/mission/DatePicker';
 import { useState, Dispatch, useEffect } from 'react';
 import { stack } from 'styled-system/patterns';
 import { css } from 'styled-system/css';
 import { Button } from '@/components/ui/button';
-import DayPicker from '@/components/mission/dayPicker';
+import DayPicker from '@/components/mission/DayPicker';
 import axios from '@/apis/axios';
-import {
-  ChildListResponse,
-  ScheduleResponse,
-  TestCreateChildResponse,
-} from '@/types/api/response';
+import { ChildListResponse, ScheduleResponse } from '@/types/api/response';
 import { useRouter, useParams } from 'next/navigation';
-import { set } from 'react-hook-form';
 
 interface createSchedule {
   title: string;
@@ -42,7 +37,7 @@ const Page = () => {
       }
     });
     if (foundChild) {
-      settargetChild(foundChild);
+      setTargetChild(foundChild);
     } else {
       // console.log('잘못된 접근입니다.', uuid, data);
       alert('잘못된 접근입니다.');
@@ -51,7 +46,7 @@ const Page = () => {
   };
   const router = useRouter();
   const params = useParams<{ uuid: string }>();
-  const handleCraeteSchedule = async () => {
+  const handleCreateSchedule = async () => {
     const requestBody: createSchedule = {
       title: title,
       content: content,
@@ -92,7 +87,7 @@ const Page = () => {
     false,
     false,
   ]);
-  const [targetChild, settargetChild] = useState<ChildListResponse>({
+  const [targetChild, setTargetChild] = useState<ChildListResponse>({
     memberId: -1,
     memberRole: 'CHILD',
     name: '',
@@ -149,12 +144,12 @@ const Page = () => {
       ></InputLabeled>
       <DatePicker date={date} setDate={setDate} />
       <DayPicker weekDays={weekDays} setWeekDays={setWeekDays} />
-      <Button width="full" onClick={handleCraeteSchedule}>
+      <Button width="full" onClick={handleCreateSchedule}>
         생성하기
       </Button>
-      {targetChild.uuid}
+      {/* {targetChild.uuid}
       <hr />
-      {params.uuid}
+      {params.uuid} */}
     </div>
   );
 };
