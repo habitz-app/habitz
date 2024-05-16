@@ -18,7 +18,7 @@ const ParentTabBar = ({ menu }: { menu: MenuType }) => {
   const handleClick = (menu: MenuType) => {
     const routes = {
       home: '/',
-      child: '/manage/child',
+      child: '/manage/children',
       mission: '/manage/mission',
       store: '/manage/store',
       more: '/more',
