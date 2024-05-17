@@ -38,8 +38,9 @@ const Store = () => {
     queryKey: ['ProductList', currBrand],
     queryFn: async () => {
       const parsedCategory = category.replace('/', ',');
+      const parsedBrand = currBrand.replace('/', ',');
       const res = await axios.get<ProductListResponse>(
-        `/store/list/${parsedCategory}/${currBrand}`,
+        `/store/list/${parsedCategory}/${parsedBrand}`,
       );
       console.log(res.data?.data.content);
 
