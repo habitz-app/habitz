@@ -181,6 +181,7 @@ const ParentMissionDetail = ({ params }: { params: { id: number } }) => {
                 bg="blue.500"
                 textStyle="headline1.bold"
                 onClick={() => postMissionApprove(params.id, 'ACCEPT')}
+                disabled={isModalVisible}
               >
                 승인
               </Button>
@@ -191,6 +192,7 @@ const ParentMissionDetail = ({ params }: { params: { id: number } }) => {
                 bg="red.500"
                 textStyle="headline1.bold"
                 onClick={() => setIsModalVisible(!isModalVisible)}
+                disabled={isModalVisible}
               >
                 거절
               </Button>

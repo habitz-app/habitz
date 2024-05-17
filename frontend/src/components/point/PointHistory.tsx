@@ -4,7 +4,7 @@ import * as RadioButtonGroup from '~/components/ui/radio-button-group';
 import { caretDown } from 'ionicons/icons';
 import { IonIcon } from '@ionic/react';
 import { css } from 'styled-system/css';
-import { HabitzHistoryResponse, PointHistory } from '@/types/api/response';
+import { HabitzHistoryResponse, HabitzHistory } from '@/types/api/response';
 import Image from 'next/image';
 import { useState } from 'react';
 
@@ -48,8 +48,8 @@ export const Category = ({
 const PointHistory = ({ history }: { history: HabitzHistoryResponse }) => {
   const [category, setCategory] = useState<string>('전체');
 
-  const groupedData: { [key: string]: PointHistory[] } = history.reduce(
-    (acc: { [key: string]: PointHistory[] }, curr) => {
+  const groupedData: { [key: string]: HabitzHistory[] } = history.reduce(
+    (acc: { [key: string]: HabitzHistory[] }, curr) => {
       const date = curr.date.split('T')[0]; // 날짜에서 시간 부분을 제거합니다.
       if (!acc[date]) {
         acc[date] = []; // 해당 날짜의 배열이 없으면 새로 만듭니다.
