@@ -60,6 +60,7 @@ public class ProductServiceImpl implements ProductService {
 			.productImage(get.getImage())
 			.description(get.getDescription())
 			.category(get.getCategory())
+			.brand(get.getBrand())
 			.build();
 
 	}
@@ -135,7 +136,7 @@ public class ProductServiceImpl implements ProductService {
 			.orElseThrow(() -> new CustomNotFoundException(childUuid));
 
 		bannedProductRepository.insertBannedProduct(product.getId(), child.getId());
-		
+
 	}
 
 	@Override
