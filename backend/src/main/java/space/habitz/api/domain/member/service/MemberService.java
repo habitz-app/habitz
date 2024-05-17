@@ -1,7 +1,15 @@
 package space.habitz.api.domain.member.service;
 
-import space.habitz.api.domain.member.dto.*;
-import space.habitz.api.domain.member.entity.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import space.habitz.api.domain.member.dto.JwtTokenDto;
+import space.habitz.api.domain.member.dto.MemberFindResponseDto;
+import space.habitz.api.domain.member.dto.MemberLoginRequestDto;
+import space.habitz.api.domain.member.dto.MemberLoginResultDto;
+import space.habitz.api.domain.member.dto.MemberMypageResponseDto;
+import space.habitz.api.domain.member.dto.MemberRegisterRequestDto;
+import space.habitz.api.domain.member.dto.MemberUpdateRequestDto;
+import space.habitz.api.domain.member.entity.Member;
 
 public interface MemberService {
 	MemberLoginResultDto login(MemberLoginRequestDto requestDto) throws Exception;
@@ -19,4 +27,6 @@ public interface MemberService {
 	void exit();
 
 	void updateMemberInfo(MemberUpdateRequestDto requestDto);
+
+	void updateUserInfo(Member member, String newNickname, MultipartFile image) throws Exception;
 }
