@@ -249,4 +249,18 @@ public class ProductServiceImpl implements ProductService {
 		throw new CustomAccessDeniedException("권한이 없습니다.");
 	}
 
+	@Override
+	public List<ChildPurchaseInfo> getChildPurchaseInfoList(Member member, String childUuid) {
+		Member childMem = memberRepository.findByUuid(childUuid)
+			.orElseThrow(() -> new CustomNotFoundException(childUuid));
+
+		if (!childMem.getFamily().getId().equals(member.getFamily().getId())) {
+			throw new CustomAccessDeniedException("권한이 없습니다.");
+		}
+
+		Child child = childRepository.findByMember_Id(childMem.getId());
+		return childProductPaymentHistoryRepository.listChildProductPaymentHistoryByChildId(child.getId());
+
+	}
+
 }

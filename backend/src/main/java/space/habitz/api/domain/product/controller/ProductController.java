@@ -127,4 +127,15 @@ public class ProductController {
 		return new ResponseData<>("success", "구매 이력 단건 조회 성공",
 			productService.getChildPurchaseInfo(member, purchaseId));
 	}
+
+	@ApiResponse(description = "아이별 구매 이력 조회")
+	@GetMapping("/child-purchase-history/{childUuid}")
+	@PreAuthorize("hasAnyRole('PARENT', 'ADMIN')")
+	public ResponseData<List<ChildPurchaseInfo>> getChildPurchaseHistoryInfo(
+		@AuthenticationPrincipal Member member,
+		@Parameter(description = "Child UUID", required = true) @PathVariable("childUuid") String childUuid
+	) {
+		return new ResponseData<>("success", "아이별 구매 이력 조회 성공",
+			productService.getChildPurchaseInfoList(member, childUuid));
+	}
 }
