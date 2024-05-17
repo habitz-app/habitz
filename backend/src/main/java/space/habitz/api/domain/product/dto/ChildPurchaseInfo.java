@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Getter
 public class ChildPurchaseInfo {
+	String memberUuid;
 	Long purchaseId;
 	int price;
 	Timestamp purchaseDate;
@@ -19,8 +20,9 @@ public class ChildPurchaseInfo {
 	ProductInfoDto productInfo;
 
 	@QueryProjection
-	public ChildPurchaseInfo(Long purchaseId, int price, Timestamp purchaseDate, int totalPoint,
+	public ChildPurchaseInfo(String memberUuid, Long purchaseId, int price, Timestamp purchaseDate, int totalPoint,
 		ProductInfoDto productInfo) {
+		this.memberUuid = memberUuid;
 		this.purchaseId = purchaseId;
 		this.price = price;
 		this.purchaseDate = purchaseDate;
