@@ -233,9 +233,20 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public ChildPurchaseInfo getChildPurchaseInfo(Member member, Long productPaymentId) {
-		Child child = childRepository.findByMember_Id(member.getId());
-		return childProductPaymentHistoryRepository.getChildProductPaymentHistoryByChildId(child.getId(),
+
+		ChildPurchaseInfo childPurchaseInfo = childProductPaymentHistoryRepository.getChildProductPaymentHistoryById(
 			productPaymentId);
+		if (childPurchaseInfo.getMemberUuid().equals(member.getUuid())) {
+			return childPurchaseInfo;
+		}
+		Member childMem = memberRepository.findByUuid(childPurchaseInfo.getMemberUuid()).orElseThrow(
+			() -> new CustomNotFoundException(childPurchaseInfo.getMemberUuid()));
+		if (member.getFamily()
+			.getId()
+			.equals(childMem.getFamily().getId())) {
+			return childPurchaseInfo;
+		}
+		throw new CustomAccessDeniedException("권한이 없습니다.");
 	}
 
 }
