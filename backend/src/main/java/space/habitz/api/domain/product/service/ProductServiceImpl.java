@@ -19,6 +19,7 @@ import space.habitz.api.domain.product.dto.BrandDto;
 import space.habitz.api.domain.product.dto.ChildBannedProductInfo;
 import space.habitz.api.domain.product.dto.ChildPurchaseInfo;
 import space.habitz.api.domain.product.dto.ProductInfoDto;
+import space.habitz.api.domain.product.dto.PurchaseResultInfo;
 import space.habitz.api.domain.product.entity.ChildProductPaymentHistory;
 import space.habitz.api.domain.product.entity.Product;
 import space.habitz.api.domain.product.repository.BannedProductRepository;
@@ -173,7 +174,7 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	@Transactional
-	public Long purchaseProduct(Member member, Long productId) {
+	public PurchaseResultInfo purchaseProduct(Member member, Long productId) {
 		if (member.getRole() != Role.CHILD) {
 			throw new CustomAccessDeniedException("상품은 아이만 구매 가능합니다.");
 		}
@@ -205,7 +206,7 @@ public class ProductServiceImpl implements ProductService {
 				.content(productInfoDto.getProductName() + " 구매")
 				.build();
 		childPointHistoryRepository.save(childPointHistory);
-		return childPointHistory.getId();
+		return PurchaseResultInfo.builder().purchaseId(childPointHistory.getId()).build();
 
 	}
 
