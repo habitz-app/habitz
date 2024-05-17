@@ -21,6 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 import space.habitz.api.domain.member.entity.Member;
 import space.habitz.api.domain.product.dto.BrandDto;
 import space.habitz.api.domain.product.dto.ChildBannedProductInfo;
+import space.habitz.api.domain.product.dto.ChildPurchaseInfo;
 import space.habitz.api.domain.product.dto.ProductBanDto;
 import space.habitz.api.domain.product.dto.ProductInfoDto;
 import space.habitz.api.domain.product.dto.ProductPurchaseRequestDto;
@@ -83,10 +84,10 @@ public class ProductController {
 
 	@ApiResponse(description = "상품 구매")
 	@PostMapping("/purchase")
-	public ResponseData<String> purchaseProduct(@AuthenticationPrincipal Member member,
+	public ResponseData<Long> purchaseProduct(@AuthenticationPrincipal Member member,
 		@RequestBody ProductPurchaseRequestDto productPurchaseRequestDto) {
-		productService.purchaseProduct(member, productPurchaseRequestDto.getProductId());
-		return new ResponseData<>("success", "상품 구매 성공", "상품 구매 성공");
+		return new ResponseData<>("success", "상품 구매 성공",
+			productService.purchaseProduct(member, productPurchaseRequestDto.getProductId()));
 	}
 
 	@ApiResponse(description = "브랜드 리스트")
@@ -107,4 +108,23 @@ public class ProductController {
 			productService.getBannedProductInfo(member, productId));
 	}
 
+	@ApiResponse(description = "구매 이력 조회")
+	@GetMapping("/purchase-history")
+	@PreAuthorize("hasAnyRole('CHILD', 'ADMIN')")
+	public ResponseData<List<ChildPurchaseInfo>> getChildPurchaseHistoryInfo(
+		@AuthenticationPrincipal Member member
+	) {
+		return new ResponseData<>("success", "구매 이력 조회 성공",
+			productService.getChildPurchaseInfoList(member));
+	}
+
+	@ApiResponse(description = "구매 이력 조회")
+	@GetMapping("/purchase-history/{purchaseId}")
+	public ResponseData<ChildPurchaseInfo> getChildPurchaseHistoryInfo(
+		@AuthenticationPrincipal Member member,
+		@Parameter(description = "구매 ID", required = true) @PathVariable("purchaseId") long purchaseId
+	) {
+		return new ResponseData<>("success", "구매 이력 단건 조회 성공",
+			productService.getChildPurchaseInfo(member, purchaseId));
+	}
 }
