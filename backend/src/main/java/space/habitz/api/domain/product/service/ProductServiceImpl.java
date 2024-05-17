@@ -78,6 +78,7 @@ public class ProductServiceImpl implements ProductService {
 					.price(product.getPrice())
 					.productImage(product.getImage())
 					.description(product.getDescription())
+					.brand(product.getBrand())
 					.category(product.getCategory())
 					.build()
 				);
@@ -88,6 +89,20 @@ public class ProductServiceImpl implements ProductService {
 				bannedProduct -> bannedProduct.getBannedProductID().getProduct().getId())
 			.toList();
 
+		if (productIdList.isEmpty()) {
+			return productRepository.findProductsByBrandAndCategory(
+					brand, category, pageable)
+				.map(product -> ProductInfoDto.builder()
+					.productId(product.getId())
+					.productName(product.getName())
+					.price(product.getPrice())
+					.productImage(product.getImage())
+					.description(product.getDescription())
+					.brand(product.getBrand())
+					.category(product.getCategory())
+					.build()
+				);
+		}
 		return productRepository.findProductsByBrandAndCategoryAndIdIsNotIn(brand, category, productIdList, pageable)
 			.map(product -> ProductInfoDto.builder()
 				.productId(product.getId())
@@ -95,6 +110,7 @@ public class ProductServiceImpl implements ProductService {
 				.price(product.getPrice())
 				.productImage(product.getImage())
 				.description(product.getDescription())
+				.brand(product.getBrand())
 				.category(product.getCategory())
 				.build());
 	}
