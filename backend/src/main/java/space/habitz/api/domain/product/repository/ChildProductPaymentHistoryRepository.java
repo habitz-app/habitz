@@ -6,5 +6,6 @@ import org.springframework.stereotype.Repository;
 import space.habitz.api.domain.product.entity.ChildProductPaymentHistory;
 
 @Repository
-public interface ChildProductPaymentHistoryRepository extends JpaRepository<ChildProductPaymentHistory, Long> {
+public interface ChildProductPaymentHistoryRepository
+	extends JpaRepository<ChildProductPaymentHistory, Long>, ChildProductPaymentHistoryCustomRepository {
 }

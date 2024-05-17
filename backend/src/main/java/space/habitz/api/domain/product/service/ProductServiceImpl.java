@@ -17,6 +17,7 @@ import space.habitz.api.domain.point.entity.ChildPointHistory;
 import space.habitz.api.domain.point.repository.ChildPointHistoryRepository;
 import space.habitz.api.domain.product.dto.BrandDto;
 import space.habitz.api.domain.product.dto.ChildBannedProductInfo;
+import space.habitz.api.domain.product.dto.ChildPurchaseInfo;
 import space.habitz.api.domain.product.dto.ProductInfoDto;
 import space.habitz.api.domain.product.entity.ChildProductPaymentHistory;
 import space.habitz.api.domain.product.entity.Product;
@@ -172,7 +173,7 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	@Transactional
-	public void purchaseProduct(Member member, Long productId) {
+	public Long purchaseProduct(Member member, Long productId) {
 		if (member.getRole() != Role.CHILD) {
 			throw new CustomAccessDeniedException("상품은 아이만 구매 가능합니다.");
 		}
@@ -204,6 +205,7 @@ public class ProductServiceImpl implements ProductService {
 				.content(productInfoDto.getProductName() + " 구매")
 				.build();
 		childPointHistoryRepository.save(childPointHistory);
+		return childPointHistory.getId();
 
 	}
 
@@ -220,6 +222,20 @@ public class ProductServiceImpl implements ProductService {
 	public List<ChildBannedProductInfo> getBannedProductInfo(Member parent, Long productId) {
 		return bannedProductRepository.findBannedProductInfo(parent,
 			productId);
+	}
+
+	@Override
+	public List<ChildPurchaseInfo> getChildPurchaseInfoList(Member member) {
+		Child child = childRepository.findByMember_Id(member.getId());
+		return childProductPaymentHistoryRepository.listChildProductPaymentHistoryByChildId(child.getId());
+
+	}
+
+	@Override
+	public ChildPurchaseInfo getChildPurchaseInfo(Member member, Long productPaymentId) {
+		Child child = childRepository.findByMember_Id(member.getId());
+		return childProductPaymentHistoryRepository.getChildProductPaymentHistoryByChildId(child.getId(),
+			productPaymentId);
 	}
 
 }
