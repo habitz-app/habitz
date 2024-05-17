@@ -10,6 +10,7 @@ import space.habitz.api.domain.product.dto.BrandDto;
 import space.habitz.api.domain.product.dto.ChildBannedProductInfo;
 import space.habitz.api.domain.product.dto.ChildPurchaseInfo;
 import space.habitz.api.domain.product.dto.ProductInfoDto;
+import space.habitz.api.domain.product.dto.PurchaseResultInfo;
 
 public interface ProductService {
 	ProductInfoDto getProductDetail(Member member, Long id);
@@ -22,7 +23,7 @@ public interface ProductService {
 
 	void deleteBanProduct(Member parent, Long productId, String childId);
 
-	Long purchaseProduct(Member member, Long productId);
+	PurchaseResultInfo purchaseProduct(Member member, Long productId);
 
 	List<BrandDto> getBrandList(String category);
 

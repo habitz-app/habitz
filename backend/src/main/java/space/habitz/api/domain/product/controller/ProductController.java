@@ -25,6 +25,7 @@ import space.habitz.api.domain.product.dto.ChildPurchaseInfo;
 import space.habitz.api.domain.product.dto.ProductBanDto;
 import space.habitz.api.domain.product.dto.ProductInfoDto;
 import space.habitz.api.domain.product.dto.ProductPurchaseRequestDto;
+import space.habitz.api.domain.product.dto.PurchaseResultInfo;
 import space.habitz.api.domain.product.service.ProductService;
 import space.habitz.api.global.response.ResponseData;
 
@@ -84,8 +85,9 @@ public class ProductController {
 
 	@ApiResponse(description = "상품 구매")
 	@PostMapping("/purchase")
-	public ResponseData<Long> purchaseProduct(@AuthenticationPrincipal Member member,
+	public ResponseData<PurchaseResultInfo> purchaseProduct(@AuthenticationPrincipal Member member,
 		@RequestBody ProductPurchaseRequestDto productPurchaseRequestDto) {
+		
 		return new ResponseData<>("success", "상품 구매 성공",
 			productService.purchaseProduct(member, productPurchaseRequestDto.getProductId()));
 	}
