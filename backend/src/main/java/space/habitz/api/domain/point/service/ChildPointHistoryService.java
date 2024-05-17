@@ -13,5 +13,5 @@ public interface ChildPointHistoryService {
 	List<PointHistory> getMonthlyChildPointHistory(Member member, String childUuid, LocalDate startDate,
 		LocalDate endDate);
 
-	List<PointRecentHistoryDto> getRecentPointHistory(Member member, String childUuid);
+	List<PointRecentHistoryDto> getRecentPointHistory(Member member, String childUuid, int size);
 }

@@ -19,7 +19,7 @@ public class ChildPointHistoryCustomRepositoryImpl implements ChildPointHistoryC
 
 	@Override
 	public List<PointRecentHistoryInfoDto> findChildPointHistoriesByChild_Id(
-		Long childId) {
+		Long childId, int size) {
 		JPAQuery<Product> query = new JPAQuery<>(em);
 
 		QChildPointHistory childPointHistory = QChildPointHistory.childPointHistory;
@@ -42,7 +42,7 @@ public class ChildPointHistoryCustomRepositoryImpl implements ChildPointHistoryC
 				.and(childPointHistory.mission.id.isNull()
 					.or(childPointHistory.mission.id.eq(mission.id))))
 			.orderBy(childPointHistory.createdAt.desc())
-			.limit(10)
+			.limit(size)
 			.fetch();
 	}
 }

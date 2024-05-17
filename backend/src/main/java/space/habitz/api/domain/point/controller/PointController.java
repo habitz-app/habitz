@@ -71,8 +71,11 @@ public class PointController {
 	@GetMapping("recent/history/{childUuid}")
 	@PreAuthorize("hasAnyRole('PARENT', 'ADMIN')")
 	public ResponseData<List<PointRecentHistoryDto>> getRecentPointHistory(@AuthenticationPrincipal Member member,
-		@PathVariable("childUuid") String childUuid) {
+		@PathVariable("childUuid") String childUuid,
+		@RequestParam("limit") int limit
+	) {
 		return new ResponseData<>("success", "최근 포인트 내역 조회 성공",
-			childPointHistoryService.getRecentPointHistory(member, childUuid));
+			childPointHistoryService.getRecentPointHistory(member, childUuid, limit));
 	}
+
 }

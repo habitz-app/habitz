@@ -7,5 +7,5 @@ import space.habitz.api.domain.point.dto.PointRecentHistoryInfoDto;
 public interface ChildPointHistoryCustomRepository {
 
 	List<PointRecentHistoryInfoDto> findChildPointHistoriesByChild_Id(
-		Long childId);
+		Long childId, int size);
 }
