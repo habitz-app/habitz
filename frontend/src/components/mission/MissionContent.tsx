@@ -105,7 +105,7 @@ const MissionContent = ({
             color: 'label.alternative',
           })}
         >
-          +{point}
+          +{point.toLocaleString()}
           <Image
             key="image"
             src="/coin.svg"
@@ -151,7 +151,7 @@ const MissionContent = ({
               display: 'flex',
             })}
           >
-            {point}
+            {point.toLocaleString()}
             <Image
               key="image"
               src="/coin.svg"

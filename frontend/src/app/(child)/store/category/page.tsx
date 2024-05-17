@@ -120,6 +120,9 @@ const Store = () => {
                 gap: '0.75rem',
                 overflowX: 'scroll',
                 h: '7rem',
+                '&::-webkit-scrollbar': {
+                  display: 'none',
+                },
               })}
             >
               {brandList.data?.map((brand, id) => (

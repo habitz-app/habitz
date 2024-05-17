@@ -97,6 +97,10 @@ const MissionPage = () => {
               display: 'flex',
               gap: '0.75rem',
               overflowX: 'auto',
+              '&::-webkit-scrollbar': {
+                display: 'none',
+              },
+              pb: '0.5rem',
             })}
           >
             {Array.isArray(missionList.data) &&
