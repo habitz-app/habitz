@@ -74,32 +74,20 @@ public class MissionService {
 	 *
 	 * @param missionId 미션 ID
 	 */
-	@Transactional
+	@Transactional(readOnly = true)
 	public MissionResponseDto getMissionDetail(Long missionId) {
 		Mission mission = missionRepository.findById(missionId)
 			.orElseThrow(() -> new CustomErrorException(ErrorCode.MISSION_NOT_FOUND));
 		MissionRecognition missionRecognition = mission.getMissionRecognition();
 		Long scheduleId = mission.getSchedule().getId();
-		if (missionRecognition != null) {
-			// 인증 내용이 존재하면 함께 return
-			return getMissionRecognition(scheduleId, mission, MissionRecognitionDto.of(missionRecognition));
-		}
-		return MissionResponseDto.of(scheduleId, MissionDto.of(mission), null, null);
-	}
 
-	/**
-	 * 미션에 인증 정보가 존재할 경우
-	 * */
-	private MissionResponseDto getMissionRecognition(Long scheduleId, Mission mission,
-		MissionRecognitionDto missionRecognition) {
-		// 인증 내용이 존재하면 함께 return
-		if (mission.getStatus().equals(StatusCode.ACCEPT) || mission.getStatus().equals(StatusCode.DECLINE)) {
-			return MissionResponseDto.of(scheduleId, MissionDto.of(mission),
-				missionRecognition,
-				MissionApprovalDto.of(mission.getApproveParent().getName(), mission.getComment()));
-		}
-		// 승인 내역이 없고, 인증 상태만 있는 경우
-		return MissionResponseDto.of(scheduleId, MissionDto.of(mission), missionRecognition, null);
+		// 각 Dto 가 없다면, null 로 리턴
+		return MissionResponseDto.of(
+			scheduleId,
+			MissionDto.of(mission),
+			MissionRecognitionDto.of(missionRecognition),
+			MissionApprovalDto.of(mission.getApproveParent(), mission.getComment())
+		);
 	}
 
 	/**
