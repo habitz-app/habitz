@@ -29,7 +29,7 @@ const MobileLayout = ({ children }: { children: React.ReactNode }) => {
         },
       })}
       maxW="430px"
-      minH="100vh"
+      minH="calc(100vh - 5rem)"
       bgColor="background.normal.normal"
       position="relative"
     >

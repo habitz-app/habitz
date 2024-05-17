@@ -33,7 +33,7 @@ const ParentLayout = ({ children }: { children: React.ReactNode }) => {
       >
         <main
           className={css({
-            minH: '100vh',
+            minH: 'calc(100vh - 5rem)',
             display: 'flex',
             flexDirection: 'column',
           })}

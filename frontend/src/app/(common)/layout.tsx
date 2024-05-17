@@ -48,7 +48,7 @@ const CommonLayout = ({ children }: { children: React.ReactNode }) => {
           w: 'full',
         })}
       >
-        <main className={css({ minH: '100vh' })}>{children}</main>
+        <main className={css({ minH: 'calc(100vh - 5rem)' })}>{children}</main>
         {me?.data?.role === 'CHILD' ? (
           <ChildTabBar menu={childMenu[path] as ChildMenuType} />
         ) : (
