@@ -9,6 +9,8 @@ import { useSearchParams } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
 import axios from '@/apis/axios';
 import type { ProductListResponse } from '@/types/api/response';
+import { PointAmount } from '@/types/point';
+import Image from 'next/image';
 
 interface brand {
   id: number;
@@ -48,6 +50,17 @@ const Store = () => {
     enabled: brand !== '',
   });
 
+  const getPoint = async () => {
+    return await axios.get<PointAmount>('/point/amount').then((res) => {
+      return res.data.data;
+    });
+  };
+
+  const amount = useQuery({
+    queryKey: ['point'],
+    queryFn: getPoint,
+  });
+
   return (
     <div>
       <header
@@ -62,6 +75,7 @@ const Store = () => {
           px: '1rem',
           justifyContent: 'space-between',
           alignItems: 'end',
+          zIndex: 1,
         })}
       >
         <Link
@@ -82,7 +96,10 @@ const Store = () => {
             gap: '0.125rem',
             py: '0.25rem',
           })}
-        ></span>
+        >
+          {amount.data?.point.toLocaleString() || 0}
+          <Image src="/coin.svg" alt="coin" width={18} height={18} />
+        </span>
       </header>
       <div
         className={css({

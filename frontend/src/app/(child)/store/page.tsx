@@ -7,7 +7,6 @@ import { useQuery } from '@tanstack/react-query';
 import Image from 'next/image';
 import Link from 'next/link';
 import { css } from 'styled-system/css';
-import { Stack } from 'styled-system/jsx';
 
 const Category = () => {
   const categories: {
@@ -48,6 +47,7 @@ const Category = () => {
           px: '1rem',
           justifyContent: 'space-between',
           alignItems: 'end',
+          zIndex: 1,
         })}
       >
         <Link
@@ -57,7 +57,7 @@ const Category = () => {
             lineHeight: '38.02px',
             color: 'label.alternative',
           })}
-          href={'/home'}
+          href={'/'}
         >
           habitz
         </Link>
@@ -69,7 +69,7 @@ const Category = () => {
             py: '0.25rem',
           })}
         >
-          {amount.data?.point || 0}
+          {amount.data?.point.toLocaleString() || 0}
           <Image src="/coin.svg" alt="coin" width={18} height={18} />
         </span>
       </header>
@@ -79,15 +79,16 @@ const Category = () => {
           w: 'full',
           flexDir: 'column',
           gap: '1rem',
-          p: '1rem',
+          px: '1rem',
         })}
       >
-        <Stack
-          h={'100%'}
-          justify={'space-between'}
-          display="flex"
-          flexDir="column"
-          gap="1.25rem"
+        <div
+          className={css({
+            display: 'flex',
+            w: 'full',
+            flexDir: 'column',
+            gap: '1rem',
+          })}
         >
           {categories.map((category, id) => (
             <Link
@@ -103,7 +104,7 @@ const Category = () => {
               ></StoreCategory>
             </Link>
           ))}
-        </Stack>
+        </div>
       </div>
     </>
   );
