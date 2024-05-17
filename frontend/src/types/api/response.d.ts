@@ -314,3 +314,24 @@ export interface SchedulePostResponse {
   scheduleId: number;
   missionId?: number;
 }
+
+export interface PurchaseHistory {
+  memberUuid: string;
+  purchaseId: number;
+  price: number;
+  purchaseDate: string;
+  totalPoint: number;
+  productInfo: {
+    producTId: number;
+    productName: string;
+    price: number;
+    productImage: string;
+    description: string;
+    category: string;
+    brand: string;
+  };
+}
+
+export interface PurchaseHistoryResponse {
+  data: PurchaseHistory[];
+}
