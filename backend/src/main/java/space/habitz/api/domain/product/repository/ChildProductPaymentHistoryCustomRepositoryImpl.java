@@ -7,6 +7,8 @@ import com.querydsl.jpa.impl.JPAQuery;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
+import space.habitz.api.domain.member.entity.QChild;
+import space.habitz.api.domain.member.entity.QMember;
 import space.habitz.api.domain.point.entity.QChildPointHistory;
 import space.habitz.api.domain.product.dto.ChildPurchaseInfo;
 import space.habitz.api.domain.product.dto.QChildPurchaseInfo;
@@ -26,9 +28,11 @@ public class ChildProductPaymentHistoryCustomRepositoryImpl implements ChildProd
 		QChildProductPaymentHistory childProductPaymentHistory = QChildProductPaymentHistory.childProductPaymentHistory;
 		QProduct product = QProduct.product;
 		QChildPointHistory childPointHistory = QChildPointHistory.childPointHistory;
-
+		QChild child = QChild.child;
+		QMember member = QMember.member;
 		return query
 			.select(new QChildPurchaseInfo(
+				member.uuid,
 				childProductPaymentHistory.id,
 				childProductPaymentHistory.price,
 				childProductPaymentHistory.purchasedAt,
@@ -47,20 +51,24 @@ public class ChildProductPaymentHistoryCustomRepositoryImpl implements ChildProd
 			.join(childProductPaymentHistory.product, product)
 			.leftJoin(childPointHistory)
 			.on(childPointHistory.childProductPaymentHistory.id.eq(childProductPaymentHistory.id))
+			.join(childProductPaymentHistory.child, child)
+			.join(child.member, member)
 			.where(childProductPaymentHistory.child.id.eq(childId))
 			.orderBy(childProductPaymentHistory.purchasedAt.desc())
 			.fetch();
 	}
 
 	@Override
-	public ChildPurchaseInfo getChildProductPaymentHistoryByChildId(Long childId, Long productPaymentId) {
+	public ChildPurchaseInfo getChildProductPaymentHistoryById(Long productPaymentId) {
 		JPAQuery<ChildPurchaseInfo> query = new JPAQuery<>(em);
 		QChildProductPaymentHistory childProductPaymentHistory = QChildProductPaymentHistory.childProductPaymentHistory;
 		QProduct product = QProduct.product;
 		QChildPointHistory childPointHistory = QChildPointHistory.childPointHistory;
-
+		QChild child = QChild.child;
+		QMember member = QMember.member;
 		List<ChildPurchaseInfo> childPurchaseInfos = query
 			.select(new QChildPurchaseInfo(
+				member.uuid,
 				childProductPaymentHistory.id,
 				childProductPaymentHistory.price,
 				childProductPaymentHistory.purchasedAt,
@@ -79,8 +87,10 @@ public class ChildProductPaymentHistoryCustomRepositoryImpl implements ChildProd
 			.join(childProductPaymentHistory.product, product)
 			.leftJoin(childPointHistory)
 			.on(childPointHistory.childProductPaymentHistory.id.eq(childProductPaymentHistory.id))
+			.join(childProductPaymentHistory.child, child)
+			.join(child.member, member)
 			.where(
-				childProductPaymentHistory.child.id.eq(childId).and(childProductPaymentHistory.id.eq(productPaymentId)))
+				childProductPaymentHistory.id.eq(productPaymentId))
 			.orderBy(childProductPaymentHistory.purchasedAt.desc())
 			.fetch();
 		if (childPurchaseInfos.isEmpty()) {
