@@ -69,12 +69,14 @@ const Result = ({ params }: { params: { id: string } }) => {
           justifyContent: 'center',
         })}
       >
-        <Image
-          src={article.data?.previewImage ?? '/character.svg'}
-          alt="previewImage"
-          width={430}
-          height={250}
-        />
+        {article.data?.previewImage && (
+          <Image
+            src={article.data?.previewImage}
+            alt="previewImage"
+            width={430}
+            height={250}
+          />
+        )}
       </div>
       <div
         className={css({

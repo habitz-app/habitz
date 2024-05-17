@@ -9,6 +9,7 @@ import { heart } from 'ionicons/icons';
 import { css } from 'styled-system/css';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
+import { Skeleton } from '@/components/ui/skeleton';
 
 const Quiz = () => {
   const router = useRouter();
@@ -83,36 +84,40 @@ const Quiz = () => {
         >
           오늘의 생활 지식
         </span>
-        <QuizQuestion
-          correct={todayQuiz.data?.quizHistoryInfo?.correct || false}
-          isSolved={todayQuiz.data?.isSolved || false}
-          content={todayQuiz.data?.quizInfo.content || ''}
-          handleClick={() => {
-            router.push(
-              `/quiz/knowledge/${todayQuiz.data?.quizHistoryInfo?.articleId || 0}`,
-            );
-          }}
-          solveQuiz={solve}
-        />
-        <KnowledgeTab
-          options={[
-            {
-              id: 'lifeCategory',
-              label: '생활/습관',
-              items: article.data?.lifeCategory || [],
-            },
-            {
-              id: 'financeCategory',
-              label: '금융/재테크',
-              items: article.data?.financeCategory || [],
-            },
-            {
-              id: 'defaultCategory',
-              label: '기타',
-              items: article.data?.defaultCategory || [],
-            },
-          ]}
-        />
+        <Skeleton isLoaded={!todayQuiz.isLoading}>
+          <QuizQuestion
+            correct={todayQuiz.data?.quizHistoryInfo?.correct || false}
+            isSolved={todayQuiz.data?.isSolved || false}
+            content={todayQuiz.data?.quizInfo.content || ''}
+            handleClick={() => {
+              router.push(
+                `/quiz/knowledge/${todayQuiz.data?.quizHistoryInfo?.articleId || 0}`,
+              );
+            }}
+            solveQuiz={solve}
+          />
+        </Skeleton>
+        <Skeleton isLoaded={!article.isLoading}>
+          <KnowledgeTab
+            options={[
+              {
+                id: 'lifeCategory',
+                label: '생활/습관',
+                items: article.data?.lifeCategory || [],
+              },
+              {
+                id: 'financeCategory',
+                label: '금융/재테크',
+                items: article.data?.financeCategory || [],
+              },
+              {
+                id: 'defaultCategory',
+                label: '기타',
+                items: article.data?.defaultCategory || [],
+              },
+            ]}
+          />
+        </Skeleton>
       </div>
     </>
   );
