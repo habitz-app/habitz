@@ -144,7 +144,7 @@ const ParentMissionDetail = ({ params }: { params: { id: number } }) => {
                 </p>
                 <Image src="/coin.svg" alt="coin" width="30" height="30" />
               </HStack>
-              {missionDetail?.approval ? (
+              {missionDetail && missionDetail.approval ? (
                 <ApprovalProfile name={missionDetail?.approval?.name} />
               ) : null}
             </HStack>
@@ -171,28 +171,32 @@ const ParentMissionDetail = ({ params }: { params: { id: number } }) => {
           </p>
         </Stack>
         <Stack w="full" gap="1.25rem">
-          <HStack w="full" justify="space-around" gap="1.125rem">
-            <Button
-              w="50%"
-              h="3rem"
-              rounded="0.875rem"
-              bg="blue.500"
-              textStyle="headline1.bold"
-              onClick={() => postMissionApprove(params.id, 'ACCEPT')}
-            >
-              승인
-            </Button>
-            <Button
-              w="50%"
-              h="3rem"
-              rounded="0.875rem"
-              bg="red.500"
-              textStyle="headline1.bold"
-              onClick={() => setIsModalVisible(!isModalVisible)}
-            >
-              거절
-            </Button>
-          </HStack>
+          {missionDetail?.mission.status === 'EMPTY' ||
+          missionDetail?.mission.status === 'PENDING' ? (
+            <HStack w="full" justify="space-around" gap="1.125rem">
+              <Button
+                w="50%"
+                h="3rem"
+                rounded="0.875rem"
+                bg="blue.500"
+                textStyle="headline1.bold"
+                onClick={() => postMissionApprove(params.id, 'ACCEPT')}
+              >
+                승인
+              </Button>
+              <Button
+                w="50%"
+                h="3rem"
+                rounded="0.875rem"
+                bg="red.500"
+                textStyle="headline1.bold"
+                onClick={() => setIsModalVisible(!isModalVisible)}
+              >
+                거절
+              </Button>
+            </HStack>
+          ) : null}
+
           {missionDetail?.mission.status !== 'ACCEPT' ? (
             <div
               className={css({
