@@ -12,6 +12,7 @@ import { HStack, Stack } from 'styled-system/jsx';
 import Image from 'next/image';
 import { IconButton } from '@/components/ui/icon-button';
 import { useRouter, useSearchParams } from 'next/navigation';
+import Header from '@/components/common/Header';
 const RecentHistory = ({ params }: { params: { uuid: string } }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -43,62 +44,67 @@ const RecentHistory = ({ params }: { params: { uuid: string } }) => {
       queryFn: () => getChildRecentHistory(params.uuid),
     });
   return (
-    <Stack px="1rem" py="1.25rem">
-      <p className={css({ textStyle: 'title2.bold' })}>최근 활동</p>
-      <p className={css({ textStyle: 'title3.bold' })}>
-        {searchParams.get('name')}
-      </p>
-      <Stack gap="0.625rem" textStyle={'headline1.bold'}>
-        {recentHistoryData?.map((history, id) => {
-          return (
-            <HStack
-              key={id}
-              shadow={'normal'}
-              h={'6rem'}
-              rounded={'20px'}
-              px={'0.75rem'}
-              py={'0.5rem'}
-              gap="0.5rem"
-            >
+    <>
+      <Header isBack />
+      <Stack px="1rem" py="1.25rem">
+        <p className={css({ textStyle: 'title2.bold' })}>최근 활동</p>
+        <p className={css({ textStyle: 'title3.bold' })}>
+          {searchParams.get('name')}
+        </p>
+        <Stack gap="0.625rem" textStyle={'headline1.bold'}>
+          {recentHistoryData?.map((history, id) => {
+            return (
               <HStack
-                w="full"
-                flexFlow={'wrap'}
-                alignItems="center"
-                alignContent={'center'}
-                alignSelf={'center'}
-                py="0.75rem"
+                key={id}
+                shadow={'normal'}
+                h={'6rem'}
+                rounded={'20px'}
+                px={'0.75rem'}
+                py={'0.5rem'}
+                gap="0.5rem"
               >
-                <HStack maxH="2rem">
-                  <p>{history.emoji}</p>
-                  <p>{history.historyInfo.content}</p>
-                </HStack>
-                <HStack ps="2.25rem" gap="0.25rem" flexShrink={1}>
-                  <p
-                    className={css({
-                      textStyle: 'caption1.bold',
-                      color: 'label.alternative',
-                    })}
-                  >
-                    {history.historyInfo.point}
-                  </p>
-                  <Image src="/coin.svg" alt="coin" width={16} height={16} />
-                </HStack>
-              </HStack>
-              <HStack w="full" justify={'end'} flexShrink={2}>
-                <IconButton
-                  variant={'ghost'}
-                  onClick={() => {
-                    clickHandler(history);
-                  }}
+                <Stack
+                  w="full"
+                  // alignItems="center"
+                  // alignContent={'center'}
+                  // alignSelf={'center'}
+                  py="0.75rem"
                 >
-                  <IonIcon icon={chevronForwardOutline}></IonIcon>
-                </IconButton>
+                  <HStack maxH="2rem">
+                    <p>{history.emoji}</p>
+                    <p>{history.historyInfo.content}</p>
+                  </HStack>
+                  {/* 포인트 */}
+                  <HStack ps="2.25rem" gap="0.25rem" flexShrink={1}>
+                    <p
+                      className={css({
+                        textStyle: 'caption1.bold',
+                        color: 'label.alternative',
+                      })}
+                    >
+                      {history.historyInfo.point}
+                    </p>
+                    <Image src="/coin.svg" alt="coin" width={16} height={16} />
+                  </HStack>
+                </Stack>
+                {history.status === 'MISSION' ? (
+                  <HStack w="full" justify={'end'} flexShrink={2}>
+                    <IconButton
+                      variant={'ghost'}
+                      onClick={() => {
+                        clickHandler(history);
+                      }}
+                    >
+                      <IonIcon icon={chevronForwardOutline}></IonIcon>
+                    </IconButton>
+                  </HStack>
+                ) : null}
               </HStack>
-            </HStack>
-          );
-        })}
+            );
+          })}
+        </Stack>
       </Stack>
-    </Stack>
+    </>
   );
 };
 export default RecentHistory;
