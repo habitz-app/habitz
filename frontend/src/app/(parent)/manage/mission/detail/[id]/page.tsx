@@ -145,7 +145,10 @@ const ParentMissionDetail = ({ params }: { params: { id: number } }) => {
                 <Image src="/coin.svg" alt="coin" width="30" height="30" />
               </HStack>
               {missionDetail && missionDetail.approval ? (
-                <ApprovalProfile name={missionDetail?.approval?.name} />
+                <ApprovalProfile
+                  src={missionDetail?.approval?.approver.image}
+                  name={missionDetail?.approval?.approver.nickname}
+                />
               ) : null}
             </HStack>
           </Stack>
@@ -208,7 +211,8 @@ const ParentMissionDetail = ({ params }: { params: { id: number } }) => {
               })}
             >
               <ApprovalProfile
-                name={missionDetail?.mission.createdBy}
+                src={missionDetail?.mission.createdBy.image}
+                name={missionDetail?.mission.createdBy.nickname}
               ></ApprovalProfile>
             </div>
           ) : null}

@@ -104,11 +104,13 @@ const ManageChildren = () => {
   }, [childrenList, refetchChildrenList]);
 
   useEffect(() => {
+    console.log('😎 pointHistory set');
     refetchPointHistory();
     refetchMissionData();
   }, [childrenList, refetchPointHistory, selectedChild, refetchMissionData]);
 
   useEffect(() => {
+    console.log('😎 selectedChild set');
     refetchMissionData();
   }, [selectedChild, refetchMissionData]);
 

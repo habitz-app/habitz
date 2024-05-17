@@ -2,7 +2,11 @@ import { Mission } from '@/types/api/response';
 import MissionPreview from '../mission/MissionPreview';
 import { HStack, Stack } from 'styled-system/jsx';
 import { IonIcon } from '@ionic/react';
-import { alertCircleOutline, chevronForwardOutline } from 'ionicons/icons';
+import {
+  addOutline,
+  alertCircleOutline,
+  chevronForwardOutline,
+} from 'ionicons/icons';
 import { css } from 'styled-system/css';
 import { IconButton } from '../ui/icon-button';
 import { useRouter } from 'next/navigation';
@@ -22,11 +26,11 @@ const TodayMission = ({
         <IconButton
           variant={'ghost'}
           onClick={() => {
-            router.push(`/manage/mission/create/${uuid}`);
+            router.push('/manage/mission/create');
           }}
         >
           <IonIcon
-            icon={chevronForwardOutline}
+            icon={addOutline}
             className={css({ fontSize: '1.5rem' })}
           ></IonIcon>
         </IconButton>

@@ -8,14 +8,17 @@ import { Button } from '@/components/ui/button';
 import DayPicker from '@/components/mission/DayPicker';
 import axios from '@/apis/axios';
 import { ChildListResponse, SchedulePostResponse } from '@/types/api/response';
-import { useRouter, useParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import Header from '@/components/common/Header';
+import { useQuery } from '@tanstack/react-query';
+import { Stack } from 'styled-system/jsx';
+import ChildProfileBox from '@/components/mission/ChildProfileBox';
 
 interface createSchedule {
   title: string;
   content: string;
   emoji: string;
-  childUUID: string;
+  childrenUUID: string[];
   startDate: string;
   endDate: string;
   weekDays: boolean[];
@@ -23,40 +26,24 @@ interface createSchedule {
 }
 
 const Page = () => {
-  const searchChild = ({
-    uuid,
-    data,
-  }: {
-    uuid: string;
-    data: ChildListResponse[];
-  }) => {
-    let foundChild: ChildListResponse | null = null;
-    data.forEach((child) => {
-      if (child.uuid === uuid) {
-        foundChild = child;
-        return;
-      }
-    });
-    if (foundChild) {
-      setTargetChild(foundChild);
-    } else {
-      // console.log('잘못된 접근입니다.', uuid, data);
-      alert('잘못된 접근입니다.');
-      router.back();
-    }
-  };
   const router = useRouter();
-  const params = useParams<{ uuid: string }>();
+
+  // post 요청
   const handleCreateSchedule = async () => {
-    if (!title || point <= 0) {
+    if (!title || point < 0) {
       alert('필수 입력값을 입력해주세요.');
+      return;
+    }
+    const targetChildren = getSelectedChildren();
+    if (targetChildren.length === 0) {
+      alert('자녀를 선택해주세요.');
       return;
     }
     const requestBody: createSchedule = {
       title: title,
       content: content,
       emoji: emoji,
-      childUUID: targetChild ? targetChild.uuid : '',
+      childrenUUID: targetChildren,
       startDate: date[0],
       endDate: date[1],
       weekDays: weekDays,
@@ -74,6 +61,8 @@ const Page = () => {
       console.log('fail');
     }
   };
+
+  // State
   const [title, setTitle] = useState<string>('');
   const [emoji, setEmoji] = useState<string>('😀');
   const [content, setContent] = useState<string>('');
@@ -85,22 +74,42 @@ const Page = () => {
   const [weekDays, setWeekDays] = useState<boolean[]>(
     Array.from({ length: 7 }, (_, i) => i === (new Date().getDay() + 6) % 7),
   );
-  const [targetChild, setTargetChild] = useState<ChildListResponse>({
-    memberId: -1,
-    memberRole: 'CHILD',
-    name: '',
-    profileImage: '',
-    uuid: '',
-    point: 0,
+
+  const [selectedChildren, setSelectedChildren] = useState<{
+    [key: string]: boolean;
+  }>({});
+
+  const selectChildren = (uuid: string, selected: boolean) => {
+    setSelectedChildren({ ...selectedChildren, [uuid]: selected });
+  };
+
+  const getSelectedChildren = () => {
+    return Object.keys(selectedChildren).filter(
+      (uuid) => selectedChildren[uuid],
+    );
+  };
+
+  // get
+  const getChildList = async () => {
+    const res = await axios.get<ChildListResponse[]>('/family/childList');
+    console.log('Get ChildrenList Success! 😊');
+    return res.data.data;
+  };
+
+  // useQuery
+  const { data: childrenList, refetch: refetchChildrenList } = useQuery<
+    ChildListResponse[]
+  >({
+    queryKey: ['Children'],
+    queryFn: () => getChildList(),
+    initialData: [],
   });
 
   useEffect(() => {
-    axios.get<ChildListResponse[]>('/family/childList').then((response) => {
-      console.log('Request Success (ChildList):', response.data.data);
-      // 자식이 맞는지 확인
-      searchChild({ uuid: params.uuid, data: response.data.data });
-    });
-  }, []);
+    refetchChildrenList();
+    console.log('refetch');
+  }, [refetchChildrenList]);
+
   return (
     <>
       <Header isBack />
@@ -145,6 +154,32 @@ const Page = () => {
             setPoint as Dispatch<React.SetStateAction<string | number>>
           }
         ></InputLabeled>
+        <Stack gap="1.5" width="full">
+          <label
+            className={css({ fontSize: '2 rem', textStyle: 'title3.bold' })}
+          >
+            자녀
+          </label>
+          <div
+            className={css({
+              display: 'flex',
+              flexDirection: 'row',
+              flexWrap: 'wrap',
+              gap: '0.5rem',
+            })}
+          >
+            {childrenList?.map((child) => (
+              <ChildProfileBox
+                key={child.uuid}
+                child={child}
+                selected={selectedChildren[child.uuid]}
+                selectHandler={(selected: boolean) => {
+                  selectChildren(child.uuid, selected);
+                }}
+              ></ChildProfileBox>
+            ))}
+          </div>
+        </Stack>
         <DatePicker date={date} setDate={setDate} />
         <DayPicker weekDays={weekDays} setWeekDays={setWeekDays} />
         <Button
@@ -158,9 +193,6 @@ const Page = () => {
         >
           생성하기
         </Button>
-        {/* {targetChild.uuid}
-      <hr />
-      {params.uuid} */}
       </div>
     </>
   );
