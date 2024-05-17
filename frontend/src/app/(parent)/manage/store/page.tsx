@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 
 import { IonIcon } from '@ionic/react';
-import { chevronBack, storefrontOutline } from 'ionicons/icons';
+import { chevronBack, storefront } from 'ionicons/icons';
 import { useState } from 'react';
 import { HStack, Stack } from 'styled-system/jsx';
 
@@ -107,6 +107,8 @@ const Store = () => {
           gap: '1rem',
           p: '1rem',
           justifyContent: 'center',
+          position: 'relative',
+          h: '3.75rem',
         })}
       >
         <p
@@ -116,6 +118,26 @@ const Store = () => {
         >
           상점 관리
         </p>
+        <div>
+          <IonIcon
+            icon={storefront}
+            className={css({
+              fontSize: '24px',
+              // color: 'label.alternative',
+              display: 'flex',
+              gap: '0.5rem',
+              alignItems: 'center',
+              justifyContent: 'flex-end',
+              textStyle: 'headline3.bold',
+              position: 'absolute',
+              right: '1rem',
+              top: '1.2rem',
+            })}
+            onClick={() => {
+              router.push('/manage/store/menu');
+            }}
+          />
+        </div>
       </header>
       <div
         className={css({
@@ -126,25 +148,6 @@ const Store = () => {
           p: '1rem',
         })}
       >
-        <div
-          onClick={() => {
-            router.push('/manage/store/menu');
-          }}
-          className={css({
-            display: 'flex',
-            gap: '0.5rem',
-            alignItems: 'center',
-            justifyContent: 'flex-end',
-            textStyle: 'headline3.bold',
-          })}
-        >
-          <IonIcon
-            icon={storefrontOutline}
-            className={css({ fontSize: '24px', color: 'label.alternative' })}
-          />
-          상점으로 가기
-        </div>
-
         <HStack>
           {children.data?.map((child) => (
             <Stack
@@ -154,8 +157,8 @@ const Store = () => {
             >
               <Image
                 src={child.profileImage}
-                width={100}
-                height={100}
+                width={70}
+                height={70}
                 alt={child.name + '의 프로필'}
                 className={item({
                   visual: childUuid == child.uuid ? 'noSelect' : 'isSelect',
