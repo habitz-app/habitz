@@ -3,6 +3,7 @@ package space.habitz.api.domain.mission.dto;
 import java.time.LocalDateTime;
 
 import lombok.Builder;
+import space.habitz.api.domain.member.dto.MemberProfileDto;
 import space.habitz.api.domain.mission.entity.Mission;
 import space.habitz.api.domain.mission.entity.StatusCode;
 
@@ -16,8 +17,7 @@ public record MissionDto(
 	int point,
 	boolean repeat,
 	LocalDateTime createdAt,
-	String createdBy
-
+	MemberProfileDto createdBy
 ) {
 
 	public static MissionDto of(Mission mission) {
@@ -30,7 +30,7 @@ public record MissionDto(
 			.point(mission.getPoint())
 			.repeat(mission.isRepeatable())
 			.createdAt(mission.getCreatedAt())
-			.createdBy(mission.getParent().getName())
+			.createdBy(MemberProfileDto.of(mission.getParent()))
 			.build();
 	}
 }
