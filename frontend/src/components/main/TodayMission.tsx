@@ -42,6 +42,7 @@ const TodayMission = ({
                   title={mission.title}
                   status={mission.status}
                   isParent={true}
+                  emoji={mission.emoji}
                 />
               </HStack>
             </li>
