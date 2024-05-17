@@ -164,7 +164,7 @@ export interface PointHistory {
   nickname: string;
 }
 
-export interface PointHistoryResponse extends Array<PointHistory> {}
+export interface HabitzHistoryResponse extends Array<PointHistory> {}
 
 export interface BannedProductResponse {
   productId: number;

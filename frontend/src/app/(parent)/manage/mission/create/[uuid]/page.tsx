@@ -9,6 +9,7 @@ import DayPicker from '@/components/mission/DayPicker';
 import axios from '@/apis/axios';
 import { ChildListResponse, SchedulePostResponse } from '@/types/api/response';
 import { useRouter, useParams } from 'next/navigation';
+import Header from '@/components/common/Header';
 
 interface createSchedule {
   title: string;
@@ -101,64 +102,67 @@ const Page = () => {
     });
   }, []);
   return (
-    <div
-      className={stack({
-        px: '16px',
-        py: '20px',
-        justify: 'between',
-        align: 'center',
-      })}
-    >
-      <h1 className={css({ width: 'full', textStyle: 'title2.bold' })}>
-        미션 생성
-      </h1>
-      <InputLabeled
-        id="미션"
-        label="미션"
-        placeholder="미션을 입력하세요"
-        inputValue={title}
-        setInputValue={
-          setTitle as Dispatch<React.SetStateAction<string | number>>
-        }
-        emoji={emoji}
-        setEmoji={setEmoji}
-      ></InputLabeled>
-      <InputLabeled
-        id="내용"
-        label="내용"
-        placeholder="내용을 입력하세요"
-        inputValue={content}
-        setInputValue={
-          setContent as Dispatch<React.SetStateAction<string | number>>
-        }
-      ></InputLabeled>
-      <InputLabeled
-        id="포인트"
-        label="포인트"
-        placeholder="포인트를 입력하세요"
-        type="number"
-        inputValue={point}
-        setInputValue={
-          setPoint as Dispatch<React.SetStateAction<string | number>>
-        }
-      ></InputLabeled>
-      <DatePicker date={date} setDate={setDate} />
-      <DayPicker weekDays={weekDays} setWeekDays={setWeekDays} />
-      <Button
-        width="full"
-        h="3.75rem"
-        rounded={'0.875rem'}
-        bg="primary.normal"
-        color="static.black"
-        textStyle={'headline1.bold'}
-        onClick={handleCreateSchedule}
+    <>
+      <Header isBack />
+      <div
+        className={stack({
+          px: '16px',
+          py: '20px',
+          justify: 'between',
+          align: 'center',
+        })}
       >
-        생성하기
-      </Button>
-      {/* {targetChild.uuid}
+        <h1 className={css({ width: 'full', textStyle: 'title2.bold' })}>
+          미션 생성
+        </h1>
+        <InputLabeled
+          id="미션"
+          label="미션"
+          placeholder="미션을 입력하세요"
+          inputValue={title}
+          setInputValue={
+            setTitle as Dispatch<React.SetStateAction<string | number>>
+          }
+          emoji={emoji}
+          setEmoji={setEmoji}
+        ></InputLabeled>
+        <InputLabeled
+          id="내용"
+          label="내용"
+          placeholder="내용을 입력하세요"
+          inputValue={content}
+          setInputValue={
+            setContent as Dispatch<React.SetStateAction<string | number>>
+          }
+        ></InputLabeled>
+        <InputLabeled
+          id="포인트"
+          label="포인트"
+          placeholder="포인트를 입력하세요"
+          type="number"
+          inputValue={point}
+          setInputValue={
+            setPoint as Dispatch<React.SetStateAction<string | number>>
+          }
+        ></InputLabeled>
+        <DatePicker date={date} setDate={setDate} />
+        <DayPicker weekDays={weekDays} setWeekDays={setWeekDays} />
+        <Button
+          width="full"
+          h="3.75rem"
+          rounded={'0.875rem'}
+          bg="primary.normal"
+          color="static.black"
+          textStyle={'headline1.bold'}
+          onClick={handleCreateSchedule}
+        >
+          생성하기
+        </Button>
+        {/* {targetChild.uuid}
       <hr />
       {params.uuid} */}
-    </div>
+      </div>
+    </>
   );
 };
 export default Page;

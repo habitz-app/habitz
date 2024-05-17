@@ -8,8 +8,9 @@ const PointCard = ({ point }: { point: number }) => {
   return (
     <div
       className={css({
-        w: '20rem',
-        h: '8rem',
+        w: 'full',
+        // h: '8rem',
+        aspectRatio: '2.5',
         rounded: '1rem',
         backgroundColor: 'primary.normal',
         shadow: 'strong',
