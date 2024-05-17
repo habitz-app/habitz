@@ -54,12 +54,14 @@ const Join = () => {
     }
     const res = await axios
       .post<MemberResponse>('/member/join', data)
+      .then((res) => {
+        queryClient.invalidateQueries({ queryKey: ['me'] });
+        router.push('/invite');
+      })
       .catch((err) => {
         alert(err.response.data.message);
         return;
       });
-
-    router.push('/invite');
   };
 
   const handleClickType = (type: z.infer<typeof MEMBER_ROLE>) => {
