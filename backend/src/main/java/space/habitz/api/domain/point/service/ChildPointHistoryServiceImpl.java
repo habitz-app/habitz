@@ -88,7 +88,7 @@ public class ChildPointHistoryServiceImpl implements ChildPointHistoryService {
 	}
 
 	@Override
-	public List<PointRecentHistoryDto> getRecentPointHistory(Member member, String childUuid) {
+	public List<PointRecentHistoryDto> getRecentPointHistory(Member member, String childUuid, int size) {
 		Member memChild = memberRepository.findByUuid(childUuid)
 			.orElseThrow(() -> new IllegalArgumentException("child not found"));
 
@@ -97,7 +97,7 @@ public class ChildPointHistoryServiceImpl implements ChildPointHistoryService {
 		}
 		Child child = childRepository.findByMember_Id(memChild.getId());
 		List<PointRecentHistoryInfoDto> list = childPointHistoryRepository
-			.findChildPointHistoriesByChild_Id(child.getId());
+			.findChildPointHistoriesByChild_Id(child.getId(), size);
 
 		return list
 			.stream()
