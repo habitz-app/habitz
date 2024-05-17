@@ -4,6 +4,7 @@ import java.time.Duration;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -14,7 +15,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import lombok.RequiredArgsConstructor;
 import space.habitz.api.domain.member.dto.JwtResponseDto;
@@ -25,7 +28,6 @@ import space.habitz.api.domain.member.dto.MemberLoginResponseDto;
 import space.habitz.api.domain.member.dto.MemberLoginResultDto;
 import space.habitz.api.domain.member.dto.MemberMypageResponseDto;
 import space.habitz.api.domain.member.dto.MemberRegisterRequestDto;
-import space.habitz.api.domain.member.dto.MemberUpdateRequestDto;
 import space.habitz.api.domain.member.entity.Member;
 import space.habitz.api.domain.member.service.MemberService;
 import space.habitz.api.global.response.ResponseData;
@@ -140,11 +142,18 @@ public class MemberController {
 		memberService.exit();
 		return ResponseEntity.status(HttpStatus.OK).body(ResponseData.success("회원 탈퇴 성공"));
 	}
+	//
+	// @PutMapping("/edit")
+	// public ResponseEntity<?> edit(@RequestBody MemberUpdateRequestDto dto) throws Exception {
+	// 	memberService.updateMemberInfo(dto);
+	// 	return ResponseEntity.status(HttpStatus.OK).body(ResponseData.success("회원 수정 성공"));
+	// }
 
-	@PutMapping("/edit")
-	public ResponseEntity<?> edit(@RequestBody MemberUpdateRequestDto dto) throws Exception {
-		memberService.updateMemberInfo(dto);
-		return ResponseEntity.status(HttpStatus.OK).body(ResponseData.success("회원 수정 성공"));
+	@PutMapping(value = "/edit", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseData<?> editUserData(@AuthenticationPrincipal Member member,
+		String nickName,
+		@RequestPart(name = "image", required = false) MultipartFile image) throws Exception {
+		memberService.updateUserInfo(member, nickName, image);
+		return ResponseData.success("회원 정보 수정 성공");
 	}
-
 }
