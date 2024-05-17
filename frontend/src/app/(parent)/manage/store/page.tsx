@@ -105,8 +105,6 @@ const Store = () => {
           gap: '1rem',
           p: '1rem',
           justifyContent: 'center',
-          position: 'relative',
-          h: '3.75rem',
         })}
       >
         <p
@@ -116,27 +114,21 @@ const Store = () => {
         >
           상점 관리
         </p>
-        <div>
-          <IonIcon
-            icon={storefront}
-            className={css({
-              fontSize: '24px',
-              // color: 'label.alternative',
-              display: 'flex',
-              gap: '0.5rem',
-              alignItems: 'center',
-              justifyContent: 'flex-end',
-              textStyle: 'headline3.bold',
-              position: 'absolute',
-              right: '1rem',
-              top: '1.2rem',
-            })}
-            onClick={() => {
-              router.push('/manage/store/menu');
-            }}
-          />
-        </div>
+        <IonIcon
+          icon={storefront}
+          className={css({
+            fontSize: '30px',
+            display: 'flex',
+            textStyle: 'headline3.bold',
+            position: 'absolute',
+            right: '1rem',
+          })}
+          onClick={() => {
+            router.push('/manage/store/menu');
+          }}
+        />
       </header>
+
       <div
         className={css({
           display: 'flex',
