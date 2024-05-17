@@ -1,6 +1,7 @@
 package space.habitz.api.domain.schedule.service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -30,6 +31,8 @@ import space.habitz.api.domain.schedule.util.ScheduleDateUtil;
 import space.habitz.api.global.exception.CustomErrorException;
 import space.habitz.api.global.exception.ErrorCode;
 
+import static space.habitz.api.domain.schedule.entity.QSchedule.schedule;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -48,23 +51,28 @@ public class ScheduleService {
 	 * @param scheduleRequestDto 일정 생성 요청 DTO
 	 */
 	@Transactional
-	public Map<String, Long> createSchedule(Member member, ScheduleRequestDto scheduleRequestDto) {
+	public Map<String, List<Map<String, Object>>> createSchedule(Member member, ScheduleRequestDto scheduleRequestDto) {
+		List<Map<String, Object>> scheduleIdList = new ArrayList<>();
+		// 두명 이상인 경우
+		for (String childUUID : scheduleRequestDto.childrenUUID()) {
 
-		Member child = memberRepository.findByUuid(scheduleRequestDto.childUUID())
-			.orElseThrow(() -> new CustomErrorException(ErrorCode.CHILD_NOT_FOUND));
+			Member child = memberRepository.findByUuid(childUUID)
+				.orElseThrow(() -> new CustomErrorException(ErrorCode.CHILD_NOT_FOUND));
 
-		validateFamily(member.getFamily().getId(), child.getFamily().getId());    // 가족 관계 확인
+			validateFamily(member.getFamily().getId(), child.getFamily().getId());    // 가족 관계 확인
 
-		Schedule schedule = scheduleRequestDto.toEntity(member, child);
-		scheduleRepository.save(schedule);
+			Schedule schedule = scheduleRequestDto.toEntity(member, child);
+			scheduleRepository.save(schedule);
 
-		// 오늘 날짜가 스케줄 시작일과 같은 경우, 즉시 미션 생성
-		LocalDate today = LocalDate.now();
-		if (today.isEqual(schedule.getStartDate()) && ScheduleDateUtil.isActiveDay(schedule, today)) {
-			createMissionBySchedule(schedule);        // 미션 생성
+			// 오늘 날짜가 스케줄 시작일과 같은 경우, 즉시 미션 생성
+			LocalDate today = LocalDate.now();
+			if (today.isEqual(schedule.getStartDate()) && ScheduleDateUtil.isActiveDay(schedule, today)) {
+				createMissionBySchedule(schedule);        // 미션 생성
+			}
+			// 아이별 스케줄 ID 추가
+			scheduleIdList.add(Map.of("childUUID", childUUID,"scheduleId", schedule.getId()) );
 		}
-
-		return Map.of("scheduleId", schedule.getId());
+		return Map.of("schedule", scheduleIdList);
 	}
 
 	/**
