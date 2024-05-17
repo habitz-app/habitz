@@ -36,7 +36,6 @@ const TodayMission = ({
           missions.map((mission, id) => (
             <li key={id}>
               <HStack>
-                {mission.emoji}
                 <MissionPreview
                   missionId={mission.missionId}
                   title={mission.title}

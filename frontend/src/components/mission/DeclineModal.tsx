@@ -18,7 +18,8 @@ const DeclineModal = ({
         w: 'full',
         px: '1rem',
         position: 'absolute',
-        bottom: 0,
+        bottom: '40%',
+        left: 0,
       })}
     >
       <Stack

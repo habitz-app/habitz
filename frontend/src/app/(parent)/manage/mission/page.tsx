@@ -131,8 +131,8 @@ const Page = () => {
     };
 
     return (
-      <div className={css({ mb: '1.5rem' })}>
-        <div className={hstack({ justify: 'space-between' })}>
+      <div className={css({ mb: '2rem' })}>
+        <div className={hstack({ justify: 'space-between', mb: '0.75rem' })}>
           {/* 자녀 이름과 색상 */}
           <div className={hstack({ minW: '6rem', justify: 'space-between' })}>
             <p className={css({ textStyle: 'title3.bold' })}>
@@ -148,7 +148,7 @@ const Page = () => {
               style={{ background: personalColors[childInfo.memberUUID] }}
             ></div>
           </div>
-          {/* 자녀 페이지로 이동 */}
+          {/* 생성 페이지로 이동 */}
           <IconButton
             variant={'ghost'}
             size={'xs'}
@@ -166,7 +166,17 @@ const Page = () => {
         <ul>
           {missions &&
             missions.map((mission, id) => (
-              <li key={id} className={hstack({ justify: 'space-between' })}>
+              <li
+                key={id}
+                className={hstack({
+                  justify: 'space-between',
+                  mb: '0.5rem',
+                  cursor: 'pointer',
+                })}
+                onClick={() => {
+                  router.push(`mission/detail/${mission.missionId}`);
+                }}
+              >
                 <HStack>
                   <span>
                     {mission.emoji} {mission.title}

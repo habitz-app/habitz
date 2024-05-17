@@ -156,7 +156,7 @@ export interface MissionDetailResponse {
   };
 }
 
-export interface PointHistory {
+export interface HabitzHistory {
   date: string;
   point: number;
   totalPoint: number;
@@ -164,7 +164,7 @@ export interface PointHistory {
   nickname: string;
 }
 
-export interface HabitzHistoryResponse extends Array<PointHistory> {}
+export interface HabitzHistoryResponse extends Array<HabitzHistory> {}
 
 export interface BannedProductResponse {
   productId: number;
