@@ -3,7 +3,9 @@ package space.habitz.api.domain.schedule.dto;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.List;
 
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import space.habitz.api.domain.member.entity.Member;
@@ -20,7 +22,9 @@ public record ScheduleRequestDto(
 	String content,
 	@Emoji
 	String emoji,
-	String childUUID,
+	@NotNull(message = "최소 한명 이상의 아이를 선택해야 합니다.")
+	@Size(min = 1, message = "최소 한명 이상의 아이를 선택해야 합니다.")
+	List<String> childrenUUID,
 	LocalDate startDate,
 	LocalDate endDate,
 	@Size(min = 7, max = 7, message = "요일은 7개여야 합니다.")
