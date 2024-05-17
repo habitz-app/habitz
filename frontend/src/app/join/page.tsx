@@ -7,11 +7,9 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@/components/ui/button';
 import { IonIcon } from '@ionic/react';
 import { chevronBackOutline } from 'ionicons/icons';
-import { useAuthWithRoles } from '@/hooks/useAuth';
-import { useQueryClient } from '@tanstack/react-query';
+import { useAuthWithRoles, useMe } from '@/hooks/useAuth';
 import { MemberResponse } from '@/types/api/response';
 import axios from '@/apis/axios';
-import { useRouter } from 'next/navigation';
 
 const MEMBER_ROLE = z.enum(['PARENT', 'CHILD']);
 
@@ -32,9 +30,7 @@ const schema = z.object({
 
 const Join = () => {
   useAuthWithRoles(['GUEST']);
-  const queryClient = useQueryClient();
-  const data = queryClient.getQueryData<MemberResponse>(['me']);
-  const router = useRouter();
+  const me = useMe();
 
   const [step, setStep] = useState(1);
 
@@ -52,11 +48,10 @@ const Join = () => {
     if (step !== 3) {
       return;
     }
-    const res = await axios
+    await axios
       .post<MemberResponse>('/member/join', data)
       .then((res) => {
-        queryClient.invalidateQueries({ queryKey: ['me'] });
-        router.push('/invite');
+        window.location.href = '/invite';
       })
       .catch((err) => {
         alert(err.response.data.message);
@@ -243,7 +238,7 @@ const Join = () => {
                     <input
                       type="text"
                       id="nickname"
-                      defaultValue={data?.nickName}
+                      defaultValue={me.data?.nickName}
                       className={css({
                         h: '2.5rem',
                         borderRadius: '0.5rem',

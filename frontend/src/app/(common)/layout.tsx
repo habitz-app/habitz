@@ -5,7 +5,7 @@ import { usePathname } from 'next/navigation';
 import { MenuType as ChildMenuType } from '@/types/tabBar/childTabBar';
 import { MenuType as ParentMenuType } from '@/types/tabBar/parentTabBar';
 import { useAuthWithRoles, useMe } from '@/hooks/useAuth';
-import { Suspense, useEffect } from 'react';
+import { Suspense } from 'react';
 import ParentTabBar from '@/components/common/TabBar/ParentTabBar';
 
 const parentMenu: {
@@ -34,10 +34,6 @@ const CommonLayout = ({ children }: { children: React.ReactNode }) => {
   const me = useMe();
 
   const path = usePathname();
-
-  useEffect(() => {
-    console.log(path);
-  });
 
   return (
     <Suspense>
