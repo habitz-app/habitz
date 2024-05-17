@@ -21,7 +21,6 @@ const Store = () => {
     queryKey: ['ChildList'],
     queryFn: async () => {
       const res = await axios.get<ChildListResponse[]>(`/family/childList`);
-      console.log(res.data?.data);
       if (res.data?.data) {
         setChildUuid(res.data?.data[0].uuid);
         getBannedProduct(res.data?.data[0].uuid);
@@ -74,7 +73,6 @@ const Store = () => {
       `store/banned-product/restrict/${childUuid}/${productId}`,
     );
     getBannedProduct(childUuid);
-    console.log(res.data.message);
   };
   const item = cva({
     base: {

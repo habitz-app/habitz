@@ -21,7 +21,11 @@ const Category = () => {
     { type: 'convenienceStore', name: '편의점' },
     { type: 'iceCream', name: '음료/아이스크림' },
   ];
+
+  const defaultBrand = ['드림아트', '', '', 'GS25', ''];
+
   const router = useRouter();
+
   const getPoint = async () => {
     return await axios.get<PointAmount>('/point/amount').then((res) => {
       return res.data.data;
@@ -33,7 +37,6 @@ const Category = () => {
     queryFn: getPoint,
   });
 
-  const defaultBrand = ['드림아트', '', '', 'GS25', ''];
   return (
     <>
       <header

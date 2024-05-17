@@ -17,7 +17,27 @@ import { cva, css } from 'styled-system/css';
 const Product = ({ params }: { params: { productId: number } }) => {
   const router = useRouter();
 
+  const queryClient = useQueryClient();
+
   const [showStatus, setShowStatus] = useState(false);
+
+  const item = cva({
+    base: {
+      display: 'flex',
+    },
+    variants: {
+      isBanned: {
+        true: {
+          color: 'status.negative',
+          ml: '0.5rem',
+        },
+        false: {
+          color: 'status.positive',
+          ml: '0.5rem',
+        },
+      },
+    },
+  });
   const productInfo = useQuery({
     queryKey: ['productInfo', params.productId],
     queryFn: async () => {
@@ -28,7 +48,7 @@ const Product = ({ params }: { params: { productId: number } }) => {
       return res.data?.data ?? {};
     },
   });
-  const queryClient = useQueryClient();
+
   const onClickBan = (childUuid: string, banStatus: boolean) => {
     if (banStatus) {
       axios
@@ -36,7 +56,6 @@ const Product = ({ params }: { params: { productId: number } }) => {
           `/store/banned-product/restrict/${childUuid}/${params.productId}`,
         )
         .then((res) => {
-          console.log(res.data.message);
           queryClient.invalidateQueries({
             queryKey: ['bannedProduct', params.productId],
             exact: true,
@@ -52,7 +71,6 @@ const Product = ({ params }: { params: { productId: number } }) => {
           childId: childUuid,
         })
         .then((res) => {
-          console.log(res.data.message);
           queryClient.invalidateQueries({
             queryKey: ['bannedProduct', params.productId],
             exact: true,
@@ -71,24 +89,6 @@ const Product = ({ params }: { params: { productId: number } }) => {
         `/store/banned-product/${params.productId}`,
       );
       return res.data?.data ?? {};
-    },
-  });
-
-  const item = cva({
-    base: {
-      display: 'flex',
-    },
-    variants: {
-      isBanned: {
-        true: {
-          color: 'status.negative',
-          ml: '0.5rem',
-        },
-        false: {
-          color: 'status.positive',
-          ml: '0.5rem',
-        },
-      },
     },
   });
 

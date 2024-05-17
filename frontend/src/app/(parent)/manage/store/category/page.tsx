@@ -19,7 +19,9 @@ interface brand {
 }
 const Store = () => {
   const params = useSearchParams();
+
   const router = useRouter();
+
   const [category, setCategory] = useState<string>(
     params.get('category') || '전체',
   );
@@ -46,7 +48,6 @@ const Store = () => {
       const res = await axios.get<ProductListResponse>(
         `/store/list/${parsedCategory}/${parsedBrand}`,
       );
-      console.log(res.data?.data.content);
 
       return res.data?.data.content ?? [];
     },
