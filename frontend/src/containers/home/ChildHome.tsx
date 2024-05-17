@@ -149,6 +149,7 @@ const ChildHome = () => {
                   missionId={m.missionId}
                   status={m.status}
                   title={m.title}
+                  emoji={m.emoji}
                   key={m.missionId}
                 />
               );

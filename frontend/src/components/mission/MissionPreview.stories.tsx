@@ -15,6 +15,12 @@ export default {
       control: { type: 'radio' },
       options: ['ACCEPT', 'DECLINE', 'EMPTY', 'PENDING'],
     },
+    isParent: {
+      type: 'boolean',
+    },
+    emoji: {
+      type: 'string',
+    },
   },
   parameters: {
     nextjs: {
@@ -30,6 +36,7 @@ export const EMPTY: Story = {
     missionId: 1,
     title: '일어나서 이불 개기',
     status: 'EMPTY',
+    emoji: '🛌',
   },
 };
 
@@ -38,6 +45,7 @@ export const ACCEPT: Story = {
     missionId: 2,
     title: '일어나서 이불 개기',
     status: 'ACCEPT',
+    emoji: '🛌',
   },
 };
 
@@ -46,6 +54,7 @@ export const DECLINE: Story = {
     missionId: 3,
     title: '일어나서 이불 개기',
     status: 'DECLINE',
+    emoji: '🛌',
   },
 };
 
@@ -54,5 +63,6 @@ export const PENDING: Story = {
     missionId: 4,
     title: '일어나서 이불 개기',
     status: 'PENDING',
+    emoji: '🛌',
   },
 };

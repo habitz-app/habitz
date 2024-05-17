@@ -6,11 +6,13 @@ const MissionPreview = ({
   title,
   status,
   isParent,
+  emoji,
 }: {
   missionId: number;
   title: string;
   status: 'EMPTY' | 'ACCEPT' | 'DECLINE' | 'PENDING';
   isParent?: boolean;
+  emoji: string;
 }) => {
   const router = useRouter();
   let statusText;
@@ -60,6 +62,7 @@ const MissionPreview = ({
         justifyContent: 'space-between',
         alignItems: 'flex-end',
         w: 'full',
+        cursor: 'pointer',
       })}
       onClick={() => {
         router.push(`${isParent ? '/manage' : ''}/mission/detail/${missionId}`);
@@ -67,11 +70,14 @@ const MissionPreview = ({
     >
       <p
         className={css({
+          display: 'flex',
+          justifyContent: 'flex-start',
+          alignItems: 'center',
           textStyle: 'headline1.bold',
           color: 'label.normal',
         })}
       >
-        {title}
+        {emoji} {title}
       </p>
       <p className={item({ visual: status })}>{statusText}</p>
     </div>
