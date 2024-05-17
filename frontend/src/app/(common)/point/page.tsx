@@ -132,7 +132,8 @@ const Point = () => {
                   </span>
                   <span
                     className={css({
-                      textStyle: 'label1.reading.medium',
+                      textStyle: 'label1.reading.regular',
+                      color: 'label.alternative',
                     })}
                   >
                     {history.date.split('.')[0].replace('T', ' ')}
