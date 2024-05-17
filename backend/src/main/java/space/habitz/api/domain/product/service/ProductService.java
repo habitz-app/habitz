@@ -32,5 +32,7 @@ public interface ProductService {
 
 	ChildPurchaseInfo getChildPurchaseInfo(Member member, Long productPaymentId);
 
+	List<ChildPurchaseInfo> getChildPurchaseInfoList(Member member, String childUuid);
+
 }
 
