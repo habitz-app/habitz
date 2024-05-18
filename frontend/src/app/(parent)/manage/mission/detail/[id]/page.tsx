@@ -146,6 +146,7 @@ const ParentMissionDetail = ({ params }: { params: { id: number } }) => {
               </HStack>
               {missionDetail && missionDetail.approval ? (
                 <ApprovalProfile
+                  src={missionDetail?.approval?.approver.image}
                   name={missionDetail?.approval?.approver.name}
                 />
               ) : null}
@@ -210,6 +211,7 @@ const ParentMissionDetail = ({ params }: { params: { id: number } }) => {
               })}
             >
               <ApprovalProfile
+                src={missionDetail?.mission.createdBy.image}
                 name={missionDetail?.mission.createdBy.name}
               ></ApprovalProfile>
             </div>

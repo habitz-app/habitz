@@ -5,7 +5,11 @@ import { css } from 'styled-system/css';
 const ApprovalProfile = (props: AvatarProps) => {
   return (
     <HStack justify="flex-end">
-      <Avatar src={props.src} name={props.name} size="xs"></Avatar>
+      <Avatar
+        src={props.src ? props.src : ''}
+        name={props.name ? props.name : ''}
+        size="xs"
+      ></Avatar>
       <p className={css({ textStyle: 'headline1.bold' })}>{props.name}</p>
     </HStack>
   );
