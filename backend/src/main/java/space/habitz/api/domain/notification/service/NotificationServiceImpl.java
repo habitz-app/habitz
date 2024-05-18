@@ -74,7 +74,7 @@ public class NotificationServiceImpl implements NotificationService {
 	@Override
 	public List<NotificationResponseDto> getNotification() {
 		Member authenticatedMember = AuthUtils.getAuthenticatedMember();
-		List<Notification> notifications = notificationRepository.findAllByMemberAndDeletedAtIsNull(
+		List<Notification> notifications = notificationRepository.findAllByMemberAndDeletedAtIsNullOrderByCreatedAtDesc(
 			authenticatedMember);
 
 		return notifications.stream().map(NotificationResponseDto::convertTo).toList();
