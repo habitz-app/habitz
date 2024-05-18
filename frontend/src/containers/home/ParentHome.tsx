@@ -58,6 +58,7 @@ const ParentHome = () => {
           px: '1rem',
           justifyContent: 'space-between',
           alignItems: 'center',
+          zIndex: 9999,
         })}
       >
         <strong
