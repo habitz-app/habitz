@@ -95,7 +95,7 @@ export default function Home() {
         >
           <div
             className={css({
-              padding: '1rem',
+              p: '1rem',
               position: 'relative',
             })}
           >
@@ -112,9 +112,12 @@ export default function Home() {
             {!isEditing && (
               <IconButton
                 aria-label="Next Page"
-                variant="ghost"
+                variant="solid"
+                bg="primary.normal"
+                color="label.normal"
                 position="absolute"
                 right="0"
+                top="6rem"
                 onClick={() => {
                   setIsEditing(!isEditing);
                 }}
@@ -130,24 +133,40 @@ export default function Home() {
             )}
           </div>
           {isEditing && (
-            <Button
+            <div
               className={css({
-                bg: 'primary.heavy',
+                display: 'flex',
+                gap: '1rem',
+                alignItems: 'center',
               })}
-              size="sm"
-              onClick={() => {
-                document.getElementById('file-input')?.click();
-              }}
             >
-              이미지 업로드
-              <input
-                id="file-input"
-                type="file"
-                accept="image/*"
-                onChange={handleImageChange}
-                style={{ display: 'none' }}
-              />
-            </Button>
+              <Button
+                className={css({
+                  bg: 'primary.heavy',
+                })}
+                size="sm"
+                onClick={() => {
+                  document.getElementById('file-input')?.click();
+                }}
+              >
+                이미지 업로드
+                <input
+                  id="file-input"
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageChange}
+                  style={{ display: 'none' }}
+                />
+              </Button>
+              <Button
+                size="sm"
+                onClick={() => {
+                  setIsEditing(false);
+                }}
+              >
+                취소
+              </Button>
+            </div>
           )}
         </div>
         <div
