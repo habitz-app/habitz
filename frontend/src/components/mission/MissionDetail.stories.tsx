@@ -28,7 +28,12 @@ const mission: MissionDetailResponse = {
     missionId: 1,
     repeat: false,
     createdAt: '2024-05-13',
-    createdBy: '2024-05-13',
+    createdBy: {
+      name: '정필모',
+      memberUUID: '1234',
+      image: 'https://via.placeholder.com/150',
+      nickname: '정필모',
+    },
   },
   recognition: {
     image: 'https://via.placeholder.com/150',
@@ -36,7 +41,12 @@ const mission: MissionDetailResponse = {
     updatedAt: '',
   },
   approval: {
-    name: '',
+    approver: {
+      name: '정필모',
+      memberUUID: '1234',
+      image: 'https://via.placeholder.com/150',
+      nickname: '정필모',
+    },
     comment: '',
   },
 };
@@ -78,7 +88,12 @@ export const ACCEPT: Story = {
         updatedAt: '2024-05-13',
       },
       approval: {
-        name: '정필모',
+        approver: {
+          name: '정필모',
+          memberUUID: '1234',
+          image: 'https://via.placeholder.com/150',
+          nickname: '정필모',
+        },
         comment: '',
       },
     },
@@ -99,7 +114,12 @@ export const DECLINE: Story = {
         updatedAt: '2024-05-13',
       },
       approval: {
-        name: '정필모',
+        approver: {
+          name: '정필모',
+          memberUUID: '1234',
+          image: 'https://via.placeholder.com/150',
+          nickname: '정필모',
+        },
         comment: '엄마한테만 했어요.',
       },
     },

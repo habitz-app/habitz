@@ -116,13 +116,18 @@ const MissionDetail = ({
                   justifyContent: 'flex-end',
                 })}
               >
-                <IonIcon icon={personCircleOutline} size="18" />
+                <Image
+                  src={mission.approval?.approver.image}
+                  alt="profile"
+                  width={16}
+                  height={16}
+                />
                 <p
                   className={css({
                     textStyle: 'label1.normal.bold',
                   })}
                 >
-                  {mission?.approval?.name || ''}
+                  {mission?.approval?.approver.name || ''}
                 </p>
               </span>
             ) : (
@@ -189,7 +194,7 @@ const MissionDetail = ({
                     color: 'label.normal',
                   })}
                 >
-                  {mission?.approval?.name}님의 거절 사유
+                  {mission?.approval?.approver.name}님의 거절 사유
                 </p>
                 <p
                   className={css({
@@ -296,7 +301,6 @@ const MissionDetail = ({
               </span>
             </div>
           )}
-          {/* approvalName이 존재할 때만 Collapsible 컴포넌트 렌더링 */}
         </div>
       </div>
     </>
