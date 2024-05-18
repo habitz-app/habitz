@@ -59,6 +59,8 @@ const ChildTabBar = ({ menu }: { menu: MenuType }) => {
             alignSelf: 'center',
             flexDir: 'column',
             flexGrow: 1,
+            cursor: 'pointer',
+            userSelect: 'none',
             color:
               currentMenu === 'home' ? 'label.normal' : 'label.alternative',
           })}
@@ -82,6 +84,8 @@ const ChildTabBar = ({ menu }: { menu: MenuType }) => {
             alignSelf: 'center',
             flexDir: 'column',
             flexGrow: 1,
+            cursor: 'pointer',
+            userSelect: 'none',
             color:
               currentMenu === 'quiz' ? 'label.normal' : 'label.alternative',
           })}
@@ -105,6 +109,8 @@ const ChildTabBar = ({ menu }: { menu: MenuType }) => {
             alignSelf: 'center',
             flexDir: 'column',
             flexGrow: 1,
+            cursor: 'pointer',
+            userSelect: 'none',
             color:
               currentMenu === 'mission' ? 'label.normal' : 'label.alternative',
           })}
@@ -128,6 +134,8 @@ const ChildTabBar = ({ menu }: { menu: MenuType }) => {
             alignSelf: 'center',
             flexDir: 'column',
             flexGrow: 1,
+            cursor: 'pointer',
+            userSelect: 'none',
             color:
               currentMenu === 'store' ? 'label.normal' : 'label.alternative',
           })}
@@ -151,6 +159,8 @@ const ChildTabBar = ({ menu }: { menu: MenuType }) => {
             alignSelf: 'center',
             flexDir: 'column',
             flexGrow: 1,
+            cursor: 'pointer',
+            userSelect: 'none',
             color:
               currentMenu === 'more' ? 'label.normal' : 'label.alternative',
           })}
