@@ -1,15 +1,12 @@
 'use client';
 
 import axios from '@/apis/axios';
-import Header from '@/components/common/Header';
 import { Button } from '@/components/ui/button';
-import { useMe } from '@/hooks/useAuth';
 import { PurchaseHistoryResponse } from '@/types/api/response';
 import { IonIcon } from '@ionic/react';
 import { useQuery } from '@tanstack/react-query';
 import { chevronBackOutline } from 'ionicons/icons';
 import Image from 'next/image';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { css } from 'styled-system/css';
 
@@ -27,8 +24,6 @@ const StoreHistory = () => {
     queryKey: ['purchase-history'],
     queryFn: getHistory,
   });
-
-  const me = useMe();
 
   const router = useRouter();
 
