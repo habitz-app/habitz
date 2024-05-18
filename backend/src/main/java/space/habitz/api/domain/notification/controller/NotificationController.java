@@ -3,6 +3,7 @@ package space.habitz.api.domain.notification.controller;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
+import space.habitz.api.domain.member.entity.Member;
 import space.habitz.api.domain.notification.dto.NotificationRequestDto;
 import space.habitz.api.domain.notification.dto.NotificationResponseDto;
 import space.habitz.api.domain.notification.service.NotificationService;
@@ -37,6 +39,14 @@ public class NotificationController {
 	@DeleteMapping("")
 	public ResponseEntity<?> deleteNotifications(@RequestBody NotificationRequestDto requestDto) {
 		notificationService.delete(requestDto.getNotificationId());
+		return ApiResponseData.success();
+	}
+
+	@PutMapping("/read-all")
+	public ResponseEntity<?> readAllNotifications(
+		@AuthenticationPrincipal Member member
+	) {
+		notificationService.updateAllRead(member);
 		return ApiResponseData.success();
 	}
 }
