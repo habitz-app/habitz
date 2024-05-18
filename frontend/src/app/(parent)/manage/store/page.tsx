@@ -117,11 +117,12 @@ const Store = () => {
         <IonIcon
           icon={storefront}
           className={css({
-            fontSize: '30px',
+            fontSize: '24px',
             display: 'flex',
             textStyle: 'headline3.bold',
             position: 'absolute',
             right: '1rem',
+            color: 'label.alternative',
           })}
           onClick={() => {
             router.push('/manage/store/menu');
