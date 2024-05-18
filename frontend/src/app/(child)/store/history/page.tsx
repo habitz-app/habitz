@@ -40,29 +40,59 @@ const StoreHistory = () => {
           position: 'sticky',
           height: '3.75rem',
           top: 0,
-          bg: 'transparent',
+          bg: 'background.normal.normal/80',
           backdropFilter: 'auto',
           backdropBlur: 'sm',
           px: '1rem',
-          justifyContent: 'space-between',
+          justifyContent: 'flex-start',
           alignItems: 'center',
         })}
       >
-        <Button
-          color="label.alternative"
-          variant="link"
-          onClick={() => {
-            router.back();
-          }}
+        <div
+          className={css({
+            position: 'relative',
+            display: 'flex',
+            w: 'full',
+            h: 'full',
+          })}
         >
-          <IonIcon
-            icon={chevronBackOutline}
+          <div
             className={css({
-              w: '24px',
-              h: '24px',
+              zIndex: '10',
+              display: 'flex',
             })}
-          />
-        </Button>
+          >
+            <Button
+              color="label.alternative"
+              variant="link"
+              onClick={() => {
+                router.back();
+              }}
+            >
+              <IonIcon
+                icon={chevronBackOutline}
+                className={css({
+                  w: '24px',
+                  h: '24px',
+                })}
+              />
+            </Button>
+          </div>
+          <section
+            className={css({
+              width: 'full',
+              height: 'full',
+              left: 0,
+              textStyle: 'title3.bold',
+              position: 'absolute',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            })}
+          >
+            구매 내역
+          </section>
+        </div>
       </header>
       <div
         className={css({

@@ -216,6 +216,30 @@ const More = () => {
                     내 포인트
                   </Link>
                 </li>
+                {me.data.role === 'CHILD' && (
+                  <li
+                    className={css({
+                      display: 'flex',
+                      h: '2.5rem',
+                      w: 'full',
+                      textStyle: 'label1.normal.bold',
+                    })}
+                  >
+                    <Link
+                      href="/store/history"
+                      className={css({
+                        display: 'flex',
+                        w: 'full',
+                        h: 'full',
+                        justifyContent: 'start',
+                        alignItems: 'center',
+                      })}
+                      scroll={false}
+                    >
+                      구매 내역
+                    </Link>
+                  </li>
+                )}
                 <li
                   className={css({
                     display: 'flex',
