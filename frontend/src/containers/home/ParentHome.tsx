@@ -71,15 +71,16 @@ const ParentHome = () => {
         >
           habitz
         </span>
-        <Button color="label.alternative" variant="link">
+        <Link href="/notification" scroll={false}>
           <IonIcon
             icon={notifications}
             className={css({
               w: '24px',
               h: '24px',
+              color: 'label.alternative',
             })}
           />
-        </Button>
+        </Link>
       </header>
       <main
         className={css({

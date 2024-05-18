@@ -363,3 +363,24 @@ export interface PurchaseHistory {
 export interface PurchaseHistoryResponse {
   data: PurchaseHistory[];
 }
+
+export interface UserNotification {
+  notificationId: number;
+  memberId: number;
+  type: NotificationType;
+  title: string;
+  content: string;
+  memberUuid: string;
+  createdAt: string;
+  read: boolean;
+}
+
+export type NotificationType =
+  | 'MISSION_SUBMIT'
+  | 'MISSION_CONFIRM'
+  | 'MISSION_DECLINE'
+  | 'MISSION_ACCEPT'
+  | 'MISSION_ARRIVED'
+  | 'ITEM_BUYING'
+  | 'POINT_CHARGE'
+  | 'SYSTEM';
