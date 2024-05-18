@@ -29,16 +29,22 @@ const Day = ({
   day,
   isSelected,
   handleClick,
+  isDisabled,
 }: {
   day: string;
   isSelected: boolean;
   handleClick: () => void;
+  isDisabled: boolean;
 }) => {
   return (
-    <HStack textStyle={'heading1.bold'}>
+    <HStack
+      textStyle={'heading1.bold'}
+      color={isDisabled ? 'label.alternative' : 'initial'}
+    >
       <button
         onClick={handleClick}
         className={button({ selected: isSelected })}
+        disabled={isDisabled}
       >
         {day}
       </button>
@@ -49,16 +55,17 @@ const Day = ({
 const DayPicker = ({
   weekDays,
   setWeekDays,
+  dayFilter,
 }: {
   weekDays: boolean[];
   setWeekDays: Dispatch<React.SetStateAction<boolean[]>>;
+  dayFilter: boolean[];
 }) => {
   const daysString = ['월', '화', '수', '목', '금', '토', '일'];
   const handleClick = (index: number) => {
     const newDays = [...weekDays];
     newDays[index] = !newDays[index];
     setWeekDays(newDays);
-    console.log(index, 'to', newDays[index]);
   };
   return (
     <HStack
@@ -76,6 +83,7 @@ const DayPicker = ({
           day={daysString[index]}
           isSelected={weekDay}
           handleClick={() => handleClick(index)}
+          isDisabled={!dayFilter[index]}
         />
       ))}
     </HStack>

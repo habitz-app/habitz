@@ -9,7 +9,6 @@ import { Button } from '~/components/ui/button';
 import * as DP from '~/components/ui/date-picker';
 import { IconButton } from '~/components/ui/icon-button';
 import { Input } from '~/components/ui/input';
-import { Dispatch } from 'react';
 import { css } from 'styled-system/css';
 
 export const DatePicker = ({
@@ -18,9 +17,15 @@ export const DatePicker = ({
   ...props
 }: {
   date: string[];
-  setDate: Dispatch<React.SetStateAction<string[]>>;
+  setDate: (date: string[]) => void;
   props?: DP.RootProps;
 }) => {
+  const isPast = (date: string) => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const selectedDate = new Date(date);
+    return selectedDate < today;
+  };
   return (
     <DP.Root
       positioning={{ sameWidth: true }}
@@ -84,7 +89,13 @@ export const DatePicker = ({
                     {api.weeks.map((week, id) => (
                       <DP.TableRow key={id}>
                         {week.map((day, id) => (
-                          <DP.TableCell key={id} value={day}>
+                          <DP.TableCell
+                            key={id}
+                            value={day}
+                            disabled={isPast(
+                              `${day.year}-${day.month}-${day.day}`,
+                            )}
+                          >
                             <DP.TableCellTrigger asChild>
                               <IconButton variant="ghost">{day.day}</IconButton>
                             </DP.TableCellTrigger>

@@ -74,7 +74,11 @@ const Page = () => {
   const [weekDays, setWeekDays] = useState<boolean[]>(
     Array.from({ length: 7 }, (_, i) => i === (new Date().getDay() + 6) % 7),
   );
+  const [dayFilter, setDayFilter] = useState<boolean[]>(
+    Array.from({ length: 7 }, (_, i) => i === (new Date().getDay() + 6) % 7),
+  );
 
+  // 아이 선택 관련
   const [selectedChildren, setSelectedChildren] = useState<{
     [key: string]: boolean;
   }>({});
@@ -87,6 +91,28 @@ const Page = () => {
     return Object.keys(selectedChildren).filter(
       (uuid) => selectedChildren[uuid],
     );
+  };
+
+  // 선택 가능한 요일 필터링
+  const filterDay = ([startDate, endDate]: string[]) => {
+    const currentDate = new Date(startDate);
+    const endDateDate = new Date(endDate);
+    const dayFilter = [false, false, false, false, false, false, false];
+    let count = 0;
+    while (currentDate <= endDateDate && count < 7) {
+      dayFilter[(currentDate.getDay() + 6) % 7] = true;
+      currentDate.setDate(currentDate.getDate() + 1);
+      count++;
+    }
+    console.log('test filter day', dayFilter);
+    return dayFilter;
+  };
+
+  // 날짜 선택 시 요일 필터링
+  const handleDate = (date: string[]) => {
+    setDate(date);
+    setDayFilter(filterDay(date));
+    setWeekDays([...weekDays].map((day, index) => day && dayFilter[index]));
   };
 
   // get
@@ -105,6 +131,7 @@ const Page = () => {
     initialData: [],
   });
 
+  // useEffect
   useEffect(() => {
     refetchChildrenList();
     console.log('refetch');
@@ -180,8 +207,12 @@ const Page = () => {
             ))}
           </div>
         </Stack>
-        <DatePicker date={date} setDate={setDate} />
-        <DayPicker weekDays={weekDays} setWeekDays={setWeekDays} />
+        <DatePicker date={date} setDate={handleDate} />
+        <DayPicker
+          weekDays={weekDays}
+          setWeekDays={setWeekDays}
+          dayFilter={dayFilter}
+        />
         <Button
           width="full"
           h="3.75rem"
