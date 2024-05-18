@@ -253,7 +253,7 @@ const ParentHome = () => {
               );
             })}
           <Link
-            href="/invite"
+            href="/family"
             className={css({
               shadow: 'normal',
               w: 'full',

@@ -51,7 +51,7 @@ const Join = () => {
     await axios
       .post<MemberResponse>('/member/join', data)
       .then((res) => {
-        window.location.href = '/invite';
+        window.location.href = '/family';
       })
       .catch((err) => {
         alert(err.response.data.message);

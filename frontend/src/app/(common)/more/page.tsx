@@ -181,6 +181,28 @@ const More = () => {
                   })}
                 >
                   <Link
+                    href="/family"
+                    className={css({
+                      display: 'flex',
+                      w: 'full',
+                      h: 'full',
+                      justifyContent: 'start',
+                      alignItems: 'center',
+                    })}
+                    scroll={false}
+                  >
+                    우리 가족
+                  </Link>
+                </li>
+                <li
+                  className={css({
+                    display: 'flex',
+                    h: '2.5rem',
+                    w: 'full',
+                    textStyle: 'label1.normal.bold',
+                  })}
+                >
+                  <Link
                     href="/point"
                     className={css({
                       display: 'flex',

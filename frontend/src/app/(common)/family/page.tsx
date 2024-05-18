@@ -26,7 +26,7 @@ interface InviteCode {
   inviteCode: string;
 }
 
-const Invite = () => {
+const Family = () => {
   const [icon, setIcon] = useState(copyOutline);
   const [isCopied, setIsCopied] = useState(false);
 
@@ -297,4 +297,4 @@ const Invite = () => {
   );
 };
 
-export default Invite;
+export default Family;
