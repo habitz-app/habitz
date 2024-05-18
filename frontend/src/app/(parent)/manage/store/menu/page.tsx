@@ -92,6 +92,7 @@ const Category = () => {
                 pathname: '/manage/store/category',
                 query: { category: category.name, brand: defaultBrand[id] },
               }}
+              scroll={false}
             >
               <StoreCategory
                 type={category.type}

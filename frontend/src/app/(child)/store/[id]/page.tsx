@@ -63,6 +63,7 @@ const Product = ({ params }: { params: { id: number } }) => {
             color: 'label.alternative',
           })}
           href={'/'}
+          scroll={false}
         >
           habitz
         </Link>

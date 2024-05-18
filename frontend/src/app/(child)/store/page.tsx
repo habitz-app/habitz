@@ -58,6 +58,7 @@ const Category = () => {
             color: 'label.alternative',
           })}
           href={'/'}
+          scroll={false}
         >
           habitz
         </Link>
@@ -97,6 +98,7 @@ const Category = () => {
                 pathname: '/store/category',
                 query: { category: category.name, brand: defaultBrand[id] },
               }}
+              scroll={false}
             >
               <StoreCategory
                 type={category.type}

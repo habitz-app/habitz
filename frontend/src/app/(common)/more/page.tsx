@@ -137,6 +137,7 @@ const More = () => {
                       borderColor: 'label.disable',
                       bgColor: 'primary.strong',
                     })}
+                    scroll={false}
                   >
                     충전하기
                   </Link>
@@ -166,6 +167,7 @@ const More = () => {
                       justifyContent: 'start',
                       alignItems: 'center',
                     })}
+                    scroll={false}
                   >
                     내정보
                   </Link>
@@ -187,6 +189,7 @@ const More = () => {
                       justifyContent: 'start',
                       alignItems: 'center',
                     })}
+                    scroll={false}
                   >
                     내 포인트
                   </Link>

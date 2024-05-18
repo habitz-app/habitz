@@ -105,6 +105,7 @@ const Result = ({ params }: { params: { id: string } }) => {
               textDecoration: 'underline',
               textStyle: 'caption.normal',
             })}
+            scroll={false}
           >
             원문 보러가기
           </Link>

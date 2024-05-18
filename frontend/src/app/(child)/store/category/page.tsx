@@ -87,6 +87,7 @@ const Store = () => {
             color: 'label.alternative',
           })}
           href={'/'}
+          scroll={false}
         >
           habitz
         </Link>
@@ -144,6 +145,7 @@ const Store = () => {
               <Link
                 key={product.productId}
                 href={`/store/${product.productId}`}
+                scroll={false}
               >
                 <GoodsItem
                   key={product.productId}

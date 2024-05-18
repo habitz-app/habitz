@@ -127,6 +127,7 @@ const Store = () => {
               <Link
                 key={product.productId}
                 href={`/manage/store/${product.productId}`}
+                scroll={false}
               >
                 <GoodsItem
                   key={product.productId}

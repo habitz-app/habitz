@@ -138,7 +138,7 @@ const ChildHome = () => {
             >
               오늘의 미션
             </p>
-            <Link href={'/mission'}>
+            <Link href={'/mission'} scroll={false}>
               <IonIcon icon={chevronForwardOutline} />
             </Link>
           </div>

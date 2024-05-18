@@ -108,6 +108,7 @@ const ParentHome = () => {
                 color: 'secondary.normal',
                 textStyle: 'label1.normal.medium',
               })}
+              scroll={false}
             >
               충전하기
               <IonIcon icon={chevronForwardOutline} />
@@ -266,6 +267,7 @@ const ParentHome = () => {
               gap: '0.5rem',
               p: '1rem',
             })}
+            scroll={false}
           >
             <div
               className={css({

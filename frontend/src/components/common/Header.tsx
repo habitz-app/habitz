@@ -76,6 +76,7 @@ const Header = ({
           color: 'label.alternative',
         })}
         href={'/'}
+        scroll={false}
       >
         habitz
       </Link>
