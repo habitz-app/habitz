@@ -206,7 +206,7 @@ public class ProductServiceImpl implements ProductService {
 				.content(productInfoDto.getProductName() + " 구매")
 				.build();
 		childPointHistoryRepository.save(childPointHistory);
-		return PurchaseResultInfo.builder().purchaseId(childPointHistory.getId()).build();
+		return PurchaseResultInfo.builder().purchaseId(childProductPaymentHistory.getId()).build();
 
 	}
 
