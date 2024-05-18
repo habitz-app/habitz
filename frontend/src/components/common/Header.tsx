@@ -31,6 +31,7 @@ const Header = ({
           px: '1rem',
           justifyContent: 'space-between',
           alignItems: 'end',
+          zIndex: 10000,
         })}
       >
         <HStack h="2.5rem">
@@ -89,7 +90,7 @@ const Header = ({
           variant="link"
           h="3.75rem"
           onClick={() => {
-            // router.push('/manage/mission/create/');
+            router.push('/manage/mission/create/');
           }}
         >
           {isMission ? (

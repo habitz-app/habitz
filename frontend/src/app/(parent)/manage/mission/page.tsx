@@ -148,19 +148,6 @@ const Page = () => {
               style={{ background: personalColors[childInfo.memberUUID] }}
             ></div>
           </div>
-          {/* 생성 페이지로 이동 */}
-          <IconButton
-            variant={'ghost'}
-            size={'xs'}
-            onClick={() => {
-              router.push(`mission/create/${childInfo.memberUUID}`);
-            }}
-          >
-            <IonIcon
-              icon={addOutline}
-              className={css({ fontSize: '1.5rem' })}
-            ></IonIcon>
-          </IconButton>
         </div>
         {/* 미션 목록 */}
         <ul>
@@ -194,7 +181,14 @@ const Page = () => {
             ))}
           {schedules &&
             schedules.map((schedule, id) => (
-              <li key={id} className={hstack({ justify: 'space-between' })}>
+              <li
+                key={id}
+                className={hstack({
+                  justify: 'space-between',
+                  mb: '0.5rem',
+                  cursor: 'pointer',
+                })}
+              >
                 <div>
                   <span>
                     {schedule.emoji} {schedule.title}
@@ -209,6 +203,7 @@ const Page = () => {
 
   // 마운트 시, 월 변경 시 달력 조회 API 호출
   useEffect(() => {
+    console.log('📅 Calendar Data Refetch');
     async function fetchData() {
       await refetchCalendarData();
       setPersonalColors(personalColorHandler(calendarData));
@@ -217,9 +212,10 @@ const Page = () => {
   }, [month, year, refetchCalendarData, calendarData]);
 
   useEffect(() => {
+    console.log('💻 Mission Data Refetch');
     const givenDate = new Date(selectedDate);
     const currentDate = new Date();
-    console.log('is future?', `${givenDate > currentDate}`);
+    // console.log('is future?', `${givenDate > currentDate}`);
     refetchMissionData();
   }, [selectedDate, refetchMissionData]);
 

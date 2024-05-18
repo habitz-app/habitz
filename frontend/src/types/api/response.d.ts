@@ -124,7 +124,12 @@ export interface Mission {
   content: string;
   repeat: boolean;
   createdAt: string;
-  createdBy: string;
+  createdBy: {
+    name: string;
+    memberUUID: string;
+    image: string;
+    nickname: string;
+  };
 }
 export interface MissionResponse {
   data: Mission[];
@@ -143,7 +148,12 @@ export interface MissionDetailResponse {
     point: number;
     repeat: boolean;
     createdAt: string;
-    createdBy: string;
+    createdBy: {
+      name: string;
+      memberUUID: string;
+      image: string;
+      nickname: string;
+    };
   };
   recognition: {
     image: string;
@@ -151,7 +161,12 @@ export interface MissionDetailResponse {
     updatedAt: string;
   };
   approval: {
-    name: string;
+    approver: {
+      name: string;
+      memberUUID: string;
+      image: string;
+      nickname: string;
+    };
     comment: string;
   };
 }
