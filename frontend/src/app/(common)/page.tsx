@@ -6,7 +6,16 @@ import { useMe } from '@/hooks/useAuth';
 import { css } from 'styled-system/css';
 
 export default function Home() {
-  const me = useMe();
+  const { data: me } = useMe();
 
-  return <>{me.data?.role === 'PARENT' ? <ParentHome /> : <ChildHome />}</>;
+  if (me?.role === 'PARENT') {
+    return <ParentHome />;
+  }
+
+  if (me?.role === 'CHILD') {
+    return <ChildHome />;
+  }
+
+  // 기본적으로 null을 반환하거나, 다른 기본 컴포넌트를 반환할 수 있습니다.
+  return null;
 }

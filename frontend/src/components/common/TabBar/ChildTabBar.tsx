@@ -23,7 +23,7 @@ const ChildTabBar = ({ menu }: { menu: MenuType }) => {
       more: '/more',
     };
 
-    router.push(routes[menu]);
+    router.push(routes[menu], { scroll: false });
     setCurrentMenu(menu);
   };
 
