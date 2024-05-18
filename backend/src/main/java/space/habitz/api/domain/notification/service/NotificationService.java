@@ -2,6 +2,7 @@ package space.habitz.api.domain.notification.service;
 
 import java.util.List;
 
+import space.habitz.api.domain.member.entity.Member;
 import space.habitz.api.domain.notification.dto.FamilyNotificationEvent;
 import space.habitz.api.domain.notification.dto.NotificationResponseDto;
 import space.habitz.api.domain.notification.dto.ParentNotificationEvent;
@@ -20,4 +21,6 @@ public interface NotificationService {
 	void updateRead(Long id);
 
 	void delete(Long id);
+
+	void updateAllRead(Member member);
 }
