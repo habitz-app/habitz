@@ -137,7 +137,7 @@ const Invite = () => {
           <section
             className={css({
               width: 'full',
-              height: '2.5rem',
+              height: 'full',
               left: 0,
               textStyle: 'title3.bold',
               position: 'absolute',
