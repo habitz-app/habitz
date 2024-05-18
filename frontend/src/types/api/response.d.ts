@@ -330,6 +330,23 @@ export interface SchedulePostResponse {
   missionId?: number;
 }
 
+export interface SchedulePutResponse {
+  scheduleId: number;
+  title: string;
+  content: string;
+  emoji: string;
+  child: {
+    name: string;
+    memberUUID: string;
+    image: string;
+    nickname: string;
+  };
+  startDate: string;
+  endDate: string;
+  weekDays: boolean[];
+  point: number;
+}
+
 export interface PurchaseResponse {
   purchaseId: number;
 }
