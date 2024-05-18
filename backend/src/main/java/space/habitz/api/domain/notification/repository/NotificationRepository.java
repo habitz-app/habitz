@@ -11,7 +11,7 @@ import space.habitz.api.domain.notification.entity.Notification;
 
 public interface NotificationRepository extends JpaRepository<Notification, Long> {
 	@EntityGraph(attributePaths = {"member"})
-	List<Notification> findAllByMemberAndDeletedAtIsNull(Member member);
+	List<Notification> findAllByMemberAndDeletedAtIsNullOrderByCreatedAtDesc(Member member);
 
 	Optional<Notification> findByIdAndDeletedAtIsNull(Long id);
 
