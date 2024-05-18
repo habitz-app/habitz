@@ -57,7 +57,7 @@ const ChildHome = () => {
           alignItems: 'center',
         })}
       >
-        <strong
+        <span
           className={css({
             fontFamily: 'yeoljeong',
             fontSize: '28px',
@@ -66,7 +66,7 @@ const ChildHome = () => {
           })}
         >
           habitz
-        </strong>
+        </span>
         <Button color="label.alternative" variant="link">
           <IonIcon
             icon={notifications}

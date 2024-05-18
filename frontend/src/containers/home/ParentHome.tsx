@@ -61,7 +61,7 @@ const ParentHome = () => {
           zIndex: 9999,
         })}
       >
-        <strong
+        <span
           className={css({
             fontFamily: 'yeoljeong',
             fontSize: '28px',
@@ -70,7 +70,7 @@ const ParentHome = () => {
           })}
         >
           habitz
-        </strong>
+        </span>
         <Button color="label.alternative" variant="link">
           <IonIcon
             icon={notifications}
