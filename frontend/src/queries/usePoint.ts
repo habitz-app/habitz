@@ -9,6 +9,7 @@ const usePoint = () =>
       const res = await axios.get<PointAmountResponse>('/point/amount');
       return res.data.data.point ?? 0;
     },
+    staleTime: 0,
   });
 
 export default usePoint;

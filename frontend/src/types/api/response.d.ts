@@ -315,21 +315,17 @@ export interface SchedulePostResponse {
   missionId?: number;
 }
 
+export interface PurchaseResponse {
+  purchaseId: number;
+}
+
 export interface PurchaseHistory {
   memberUuid: string;
   purchaseId: number;
   price: number;
   purchaseDate: string;
   totalPoint: number;
-  productInfo: {
-    producTId: number;
-    productName: string;
-    price: number;
-    productImage: string;
-    description: string;
-    category: string;
-    brand: string;
-  };
+  productInfo: ProductResponse;
 }
 
 export interface PurchaseHistoryResponse {

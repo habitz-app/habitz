@@ -7,7 +7,7 @@ interface GoodsCardProps extends Card.RootProps {
   url: string;
   brand: string;
   name: string;
-  price: number;
+  price?: number;
 }
 
 const GoodsCard = ({ url, brand, name, price, ...props }: GoodsCardProps) => {
@@ -18,13 +18,12 @@ const GoodsCard = ({ url, brand, name, price, ...props }: GoodsCardProps) => {
       borderWidth="1px"
       borderColor="neutral.300"
       bg="transparent"
-      width="sm"
+      w="full"
       {...props}
     >
       <Card.Body
         className={css({
           py: '1rem',
-          gap: '1rem',
           alignItems: 'center',
         })}
       >
@@ -62,36 +61,40 @@ const GoodsCard = ({ url, brand, name, price, ...props }: GoodsCardProps) => {
             </p>
           </Stack>
         </HStack>
-        <hr
-          className={css({
-            w: '100%',
-            color: 'neutral.300',
-            borderWidth: '1px',
-          })}
-        />
       </Card.Body>
-      <Card.Footer gap="3" className={css({ fontSize: '1rem' })}>
-        <HStack minW="full" justify="space-between">
-          <p
+      {price && (
+        <>
+          <hr
             className={css({
-              textStyle: 'label2.medium',
+              w: '100%',
+              color: 'neutral.300',
+              borderWidth: '1px',
             })}
-          >
-            결제 금액
-          </p>
-          <HStack textAlign="center" alignItems="center">
-            <p
-              className={css({
-                textStyle: 'headline1.bold',
-                color: 'label.normal',
-              })}
-            >
-              {price.toLocaleString()}
-            </p>
-            <Image src="/coin.svg" width={25} height={25} alt="coin" />
-          </HStack>
-        </HStack>
-      </Card.Footer>
+          />
+          <Card.Footer gap="4" fontSize="1rem" py="1rem">
+            <HStack minW="full" justify="space-between">
+              <p
+                className={css({
+                  textStyle: 'label2.medium',
+                })}
+              >
+                상품 금액
+              </p>
+              <HStack textAlign="center" alignItems="center" gap="0.25rem">
+                <p
+                  className={css({
+                    textStyle: 'headline1.bold',
+                    color: 'label.normal',
+                  })}
+                >
+                  {price.toLocaleString()}
+                </p>
+                <Image src="/coin.svg" width={20} height={20} alt="coin" />
+              </HStack>
+            </HStack>
+          </Card.Footer>
+        </>
+      )}
     </Card.Root>
   );
 };
