@@ -65,7 +65,8 @@ const Header = ({
         backdropBlur: 'sm',
         px: '1rem',
         justifyContent: 'space-between',
-        alignItems: 'end',
+        alignItems: 'center',
+        zIndex: 9999,
       })}
     >
       <Link

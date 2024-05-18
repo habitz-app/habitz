@@ -58,14 +58,15 @@ export default function RootLayout({
               display: 'block',
             },
             display: 'none',
-            textStyle: 'hero1.bold',
+            textStyle: 'hero1.regular',
             color: 'secondary.normal',
             position: 'fixed',
             bottom: '5rem',
             left: '7rem',
+            userSelect: 'none',
           })}
         >
-          HABITZ
+          habitz
         </div>
         <MobileLayout>
           <Providers>
