@@ -140,7 +140,7 @@ const ParentMissionDetail = ({ params }: { params: { id: number } }) => {
             <HStack justify={'space-between'}>
               <HStack>
                 <p className={css({ color: 'accent.lime' })}>
-                  + {missionDetail?.mission.point}
+                  + {missionDetail?.mission.point.toLocaleString()}
                 </p>
                 <Image src="/coin.svg" alt="coin" width="30" height="30" />
               </HStack>
@@ -153,26 +153,57 @@ const ParentMissionDetail = ({ params }: { params: { id: number } }) => {
             </HStack>
           </Stack>
         </Stack>
-        <Stack justify="space-between" align="center">
-          {missionDetail?.recognition?.image ? (
-            <Image
-              src={missionDetail ? missionDetail.recognition?.image : ''}
-              width={0}
-              height={0}
-              sizes="100vw"
-              alt="인증 이미지"
-              className={css({
-                w: 'full',
-                h: 'auto',
-                rounded: '1rem',
-                shadow: 'md',
-              })}
-            />
-          ) : null}
-          <p className={css({ textStyle: 'heading1.medium' })}>
-            {missionDetail?.recognition?.content}
-          </p>
+        {/* 인증 내용 */}
+        <Stack
+          justify="space-center"
+          align="center"
+          gap="1.5rem"
+          flexGrow={1}
+          w="full"
+        >
+          {missionDetail?.recognition ? (
+            <>
+              {missionDetail?.recognition?.image ? (
+                <Image
+                  src={missionDetail ? missionDetail.recognition?.image : ''}
+                  width={0}
+                  height={0}
+                  sizes="100vw"
+                  alt="인증 이미지"
+                  className={css({
+                    w: 'full',
+                    h: 'auto',
+                    rounded: '1rem',
+                    shadow: 'md',
+                  })}
+                />
+              ) : null}
+              <p className={css({ textStyle: 'heading1.bold' })}>
+                {missionDetail?.recognition?.content}
+              </p>
+            </>
+          ) : (
+            <Stack
+              w="full"
+              flexGrow={1}
+              alignItems="center"
+              justify={'center'}
+              gap={'2rem'}
+            >
+              <Image
+                src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Smilies/Dotted%20Line%20Face.png"
+                alt="image"
+                width={150}
+                height={150}
+                style={{ alignSelf: 'center' }}
+              />
+              <p className={css({ textStyle: 'heading1.bold' })}>
+                아직 아이가 인증하지 않았어요...
+              </p>
+            </Stack>
+          )}
         </Stack>
+        {/* 버튼 영역 */}
         <Stack w="full" gap="1.25rem">
           {missionDetail?.mission.status === 'EMPTY' ||
           missionDetail?.mission.status === 'PENDING' ? (
