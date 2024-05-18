@@ -81,6 +81,7 @@ const Category = () => {
           flexDir: 'column',
           gap: '1rem',
           px: '1rem',
+          mt: '1.25rem',
         })}
       >
         <div
