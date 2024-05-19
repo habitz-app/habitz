@@ -35,22 +35,28 @@ const RecentHistory = ({
           ></IonIcon>
         </IconButton>
       </HStack>
-      <ul className={css({ textAlign: 'center', textStyle: 'headline1.bold' })}>
+      <ul
+        className={css({
+          textAlign: 'center',
+          textStyle: 'headline1.bold',
+          gap: '1rem',
+        })}
+      >
         {history.map((history, id) => (
           <li key={id}>
-            <HStack w="full" maxW="full" justify="space-between">
+            <HStack w="full" maxW="full" justify="space-between" gap="1.5rem">
               <p className={css({ lineClamp: 1, textAlign: 'left' })}>
                 {history.historyInfo.content}
               </p>
               {history.historyInfo.point > 0 ? (
-                <HStack>
+                <HStack w="1/2" flexGrow={1} justify={'end'} flexShrink={1}>
                   <p className={css({ color: 'accent.lime' })}>
                     +{history.historyInfo.point}
                   </p>
                   <Image src="/coin.svg" alt="coin" width={20} height={20} />
                 </HStack>
               ) : (
-                <HStack>
+                <HStack w="1/2" flexGrow={1} justify={'end'} flexShrink={1}>
                   <p className={css({ color: 'status.negative' })}>
                     {history.historyInfo.point}
                   </p>
