@@ -2,8 +2,10 @@ package space.habitz.api.domain.mission.service;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.context.ApplicationEventPublisher;
@@ -34,8 +36,10 @@ import space.habitz.api.domain.mission.entity.StatusCode;
 import space.habitz.api.domain.mission.repository.MissionRecognitionRepository;
 import space.habitz.api.domain.mission.repository.MissionRepository;
 import space.habitz.api.domain.mission.util.MissionConverter;
+import space.habitz.api.domain.notification.dto.MultiNotificationEvent;
 import space.habitz.api.domain.notification.dto.ParentNotificationEvent;
 import space.habitz.api.domain.notification.dto.SingleNotificationEvent;
+import space.habitz.api.domain.notification.entity.NotificationType;
 import space.habitz.api.domain.point.entity.ChildPointHistory;
 import space.habitz.api.domain.point.entity.FamilyPointHistory;
 import space.habitz.api.domain.point.repository.ChildPointHistoryRepository;
@@ -212,7 +216,14 @@ public class MissionService {
 			.map(schedule -> MissionConverter.convertScheduleToMission(schedule, today))
 			.collect(Collectors.toList());
 
+		Set<Member> memberList = missionList.stream()
+			.map(Mission::getChild)
+			.collect(Collectors.toSet());
+
 		missionRepository.saveAll(missionList);
+		eventPublisher.publishEvent(
+			MultiNotificationEvent.createNotification(new ArrayList<>(memberList), NotificationType.MISSION_ARRIVED, today + " 미션이 부여되었습니다."));
+
 		log.info("Scheduled generateDailyMissions finished");
 	}
 
@@ -245,17 +256,17 @@ public class MissionService {
 		validateFamily(parent.getFamily().getId(), memChild.getFamily().getId());
 		// 만약 미션의 상태가 ACCEPT라면, 이미 성공한 미션이므로 상태 변경 불가능
 		validationMissionRequest(mission.getStatus(), requestDto.status());
-
+		String message = String.format("%s %s", mission.getEmoji(), mission.getTitle());
 		if (requestDto.status().equals(StatusCode.ACCEPT)) {
 			// 미션 상태 변경 (ACCEPT) / 아이에게 알림전송
 			missionSuccess(parent, mission, memChild, requestDto.status());
 			eventPublisher.publishEvent(
-				SingleNotificationEvent.missionResult(memChild.getId(), mission.getEmoji() + " " +  mission.getTitle(), true));
+				SingleNotificationEvent.missionResult(memChild.getId(), message, true));
 			return "MISSION ACCEPT / 포인트 지급 완료";
 		}
 		// 미션 decline / 아이에게 알림전송
 		mission.updateStatus(requestDto.status(), parent, requestDto.comment());
-		eventPublisher.publishEvent(SingleNotificationEvent.missionResult(memChild.getId(), mission.getEmoji() + " " + mission.getTitle(), false));
+		eventPublisher.publishEvent(SingleNotificationEvent.missionResult(memChild.getId(), message, false));
 		return "MISSION DECLINE";
 	}
 
@@ -339,8 +350,9 @@ public class MissionService {
 		// 미션 상태 업데이트
 		mission.setStatus(StatusCode.PENDING);
 		// 부모에게 알림 전송
+		String message = String.format("%s %s", mission.getEmoji(), mission.getTitle());
 		eventPublisher.publishEvent(
-			ParentNotificationEvent.missionSubmit(mission.getChild().getId(), mission.getEmoji() + " " + mission.getTitle()));
+			ParentNotificationEvent.missionSubmit(mission.getChild().getId(), message));
 		return Map.of("missionRecognitionId", missionRecognition.getId());
 	}
 
@@ -382,8 +394,9 @@ public class MissionService {
 		String imageUrl = getImageStoreURL(image);
 		missionRecognition.updateRecognition(imageUrl, content);
 		// 부모에게 알림 전송
+		String message = String.format("%s %s", mission.getEmoji(), mission.getTitle());
 		eventPublisher.publishEvent(
-			ParentNotificationEvent.missionSubmit(mission.getChild().getId(), mission.getEmoji() + " " + mission.getTitle()));
+			ParentNotificationEvent.missionSubmit(mission.getChild().getId(), message));
 		return Map.of("missionRecognitionId", missionRecognition.getId());
 	}
 }
