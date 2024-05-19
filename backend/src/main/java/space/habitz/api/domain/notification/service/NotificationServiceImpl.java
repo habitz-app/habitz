@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +24,7 @@ import space.habitz.api.domain.notification.entity.NotificationType;
 import space.habitz.api.domain.notification.exception.NotificationNotFoundException;
 import space.habitz.api.domain.notification.repository.NotificationRepository;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class NotificationServiceImpl implements NotificationService {
@@ -67,7 +69,7 @@ public class NotificationServiceImpl implements NotificationService {
 			.type(notificationType)
 			.member(member)
 			.build();
-
+		log.info("SingleNotification :: " + notification.toString());
 		return notificationRepository.save(notification);
 	}
 
