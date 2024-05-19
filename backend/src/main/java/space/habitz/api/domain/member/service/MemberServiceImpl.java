@@ -81,11 +81,7 @@ public class MemberServiceImpl implements MemberService {
 		Optional<Member> bySocialId = memberRepository.findBySocialId(userInfo.getSocialId());
 
 		if (bySocialId.isPresent()) {
-			Member member = bySocialId.get();
-			MemberProfile updatedProfile = member.getMemberProfile().update(userInfo);
-			Member updatedMember = member.update(userInfo);
-			memberProfileRepository.save(updatedProfile);
-			return memberRepository.saveAndFlush(updatedMember);
+			return bySocialId.get();
 		}
 
 		Member member = userInfo.toMemberEntity();
