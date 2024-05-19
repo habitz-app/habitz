@@ -8,6 +8,7 @@ import * as DatePicker from '~/components/ui/date-picker';
 import { IconButton } from '~/components/ui/icon-button';
 import { colors } from '@/app/(parent)/manage/mission/colors';
 import { CalendarResponse } from '@/types/api/response';
+import { getCurrentKSTDate } from '@/lib/date';
 
 // 달력 조회 시 아이의 일정 조회 API Response 데이터 구조
 interface childInfo {
@@ -118,7 +119,7 @@ export default function Calendar({
   return (
     <DatePicker.Root
       positioning={{ sameWidth: true }}
-      startOfWeek={1}
+      startOfWeek={0}
       selectionMode="single"
       open={true}
       onValueChange={(value) => {
@@ -134,6 +135,7 @@ export default function Calendar({
       {...props}
       className={css({ width: 'full' })}
       locale="ko-KR"
+      timeZone="Asia/Seoul"
     >
       <DatePicker.Content
         className={css({
