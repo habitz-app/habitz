@@ -125,7 +125,7 @@ const Product = ({ params }: { params: { productId: number } }) => {
 
         <p
           className={css({
-            textStyle: 'title2.bold',
+            textStyle: 'title3.bold',
           })}
         >
           상점 관리

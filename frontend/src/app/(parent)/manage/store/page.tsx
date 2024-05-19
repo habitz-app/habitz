@@ -115,7 +115,7 @@ const Store = () => {
       >
         <p
           className={css({
-            textStyle: 'title2.bold',
+            textStyle: 'title3.bold',
           })}
         >
           상점 관리
@@ -171,7 +171,7 @@ const Store = () => {
           <div>
             <p
               className={css({
-                textStyle: 'title3.bold',
+                textStyle: 'heading2.bold',
                 mb: '1rem',
               })}
             >
