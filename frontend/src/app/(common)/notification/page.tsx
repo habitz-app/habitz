@@ -1,6 +1,5 @@
 'use client';
 
-import { useMe } from '@/hooks/useAuth';
 import { css } from 'styled-system/css';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
@@ -49,7 +48,8 @@ const Notification = () => {
     return () => {
       readAllNotification.mutate();
     };
-  }, [readAllNotification]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <>
