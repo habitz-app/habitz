@@ -22,7 +22,7 @@ const Category = () => {
     { type: 'iceCream', name: '음료/아이스크림' },
   ];
 
-  const defaultBrand = ['드림아트', '', '', 'GS25', ''];
+  const defaultBrand = ['드림아트', '예림당', '리코즈', 'GS25', '배스킨라빈스'];
 
   const router = useRouter();
 
@@ -43,9 +43,15 @@ const Category = () => {
         className={css({
           display: 'flex',
           alignItems: 'center',
-          gap: '1rem',
-          p: '1rem',
           justifyContent: 'center',
+          position: 'sticky',
+          height: '3.75rem',
+          top: 0,
+          bg: 'background.normal.normal/80',
+          backdropFilter: 'auto',
+          backdropBlur: 'sm',
+          px: '1rem',
+          zIndex: 9999,
         })}
       >
         <IonIcon

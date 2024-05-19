@@ -98,10 +98,15 @@ const Product = ({ params }: { params: { productId: number } }) => {
         className={css({
           display: 'flex',
           alignItems: 'center',
-          gap: '1rem',
-          p: '1rem',
           justifyContent: 'center',
-          position: 'relative',
+          position: 'sticky',
+          height: '3.75rem',
+          top: 0,
+          bg: 'background.normal.normal/80',
+          backdropFilter: 'auto',
+          backdropBlur: 'sm',
+          px: '1rem',
+          zIndex: 9999,
         })}
       >
         <IonIcon
@@ -133,7 +138,25 @@ const Product = ({ params }: { params: { productId: number } }) => {
           price={productInfo.data?.price ?? 0}
           url={productInfo.data?.productImage ?? ''}
         />
-
+        {productInfo.data?.description.split(',').map((desc, id) => (
+          <div
+            key={id}
+            className={css({
+              position: 'relative',
+            })}
+          >
+            <Image
+              src={desc}
+              alt={productInfo.data?.productName}
+              fill
+              sizes="300px"
+              className={css({
+                position: 'relative!',
+                h: 'unset!',
+              })}
+            />
+          </div>
+        ))}
         <div
           className={css({
             display: 'flex',
