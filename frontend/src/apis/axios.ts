@@ -93,6 +93,12 @@ const client = {
     config?: AxiosRequestConfig,
   ): Promise<AxiosResponse<CommonResponse<T>>> =>
     await instance.put(url, data, config),
+  patch: async <T>(
+    url: string,
+    data?: any,
+    config?: AxiosRequestConfig,
+  ): Promise<AxiosResponse<CommonResponse<T>>> =>
+    await instance.patch(url, data, config),
   delete: async <T>(
     url: string,
     config?: AxiosRequestConfig,
