@@ -55,6 +55,7 @@ const Category = () => {
             color: 'label.alternative',
             position: 'absolute',
             left: '1rem',
+            cursor: 'pointer',
           })}
           onClick={() => {
             router.back();

@@ -123,6 +123,7 @@ const Store = () => {
             position: 'absolute',
             right: '1rem',
             color: 'label.alternative',
+            cursor: 'pointer',
           })}
           onClick={() => {
             router.push('/manage/store/menu');
