@@ -31,7 +31,7 @@ const Login = () => {
     >
       <h1
         className={css({
-          textStyle: 'hero1.bold',
+          textStyle: 'hero1.regular',
           color: 'secondary.normal',
           textAlign: 'center',
           display: 'flex',
@@ -40,7 +40,7 @@ const Login = () => {
           h: '1/3',
         })}
       >
-        HABITZ
+        habitz
       </h1>
       <KakaoLoginButton
         handleClick={() => {
