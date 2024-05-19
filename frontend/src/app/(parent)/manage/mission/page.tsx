@@ -188,6 +188,9 @@ const Page = () => {
                   mb: '0.5rem',
                   cursor: 'pointer',
                 })}
+                onClick={() => {
+                  router.push(`mission/update/${schedule.scheduleId}`);
+                }}
               >
                 <div>
                   <span>
