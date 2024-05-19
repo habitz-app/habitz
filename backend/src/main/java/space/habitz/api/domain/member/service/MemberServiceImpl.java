@@ -202,18 +202,15 @@ public class MemberServiceImpl implements MemberService {
 
 	@Transactional
 	public void updateUserInfo(Member member, String newNickname, MultipartFile image) throws IOException {
-		String imageUrl = getImageStoreURL(image);
-		member.setNickname(newNickname);
-		member.setImage(imageUrl);
+		if (newNickname != null) {
+			member.setNickname(newNickname);
+		}
+		if (image != null && !image.isEmpty()) {
+			String imageUrl = getImageStoreURL(image);
+			member.setImage(imageUrl);
+		}
 		memberRepository.save(member);
 
-	}
-
-	@Override
-	@Transactional
-	public void updateUserInfo(Member member, String newNickname) throws Exception {
-		member.setNickname(newNickname);
-		memberRepository.save(member);
 	}
 
 }

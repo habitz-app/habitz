@@ -30,5 +30,4 @@ public interface MemberService {
 
 	void updateUserInfo(Member member, String newNickname, MultipartFile image) throws Exception;
 
-	void updateUserInfo(Member member, String newNickname) throws Exception;
 }
