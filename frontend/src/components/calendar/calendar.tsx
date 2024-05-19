@@ -141,6 +141,7 @@ export default function Calendar({
           my: '5%',
           shadow: 'none',
           position: 'relative',
+          bg: 'transparent',
         })}
       >
         <DatePicker.View view="day">

@@ -125,8 +125,8 @@ const Page = () => {
       };
     } = {
       PENDING: { value: '검사중', color: 'colors.status.cautionary' },
-      ACCEPT: { value: '완료', color: 'colors.blue.500' },
-      DECLINE: { value: '실패', color: 'colors.red.500' },
+      ACCEPT: { value: '완료', color: 'colors.status.positive' },
+      DECLINE: { value: '실패', color: 'colors.status.negative' },
       EMPTY: { value: '미완료', color: 'colors.label.alternative' },
     };
 
@@ -159,7 +159,7 @@ const Page = () => {
                   justify: 'space-between',
                   mb: '0.5rem',
                   cursor: 'pointer',
-                  textStyle: 'headline1.bold',
+                  textStyle: 'headline1.medium',
                 })}
                 onClick={() => {
                   router.push(`mission/detail/${mission.missionId}`);
@@ -171,7 +171,9 @@ const Page = () => {
                   </span>
                 </HStack>
                 <p
-                  className={css({ color: statusMap[mission.status].color })}
+                  className={css({
+                    color: statusMap[mission.status].color,
+                  })}
                   style={{
                     color: token.var(statusMap[mission.status].color),
                   }}
@@ -188,7 +190,7 @@ const Page = () => {
                   justify: 'space-between',
                   mb: '0.5rem',
                   cursor: 'pointer',
-                  textStyle: 'headline1.bold',
+                  textStyle: 'headline1.medium',
                 })}
                 onClick={() => {
                   router.push(`mission/update/${schedule.scheduleId}`);

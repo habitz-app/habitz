@@ -39,7 +39,9 @@ const RecentHistory = ({
         {history.map((history, id) => (
           <li key={id}>
             <HStack w="full" justify="space-between">
-              <p>{history.historyInfo.content}</p>
+              <p className={css({ lineClamp: 1 })}>
+                {history.historyInfo.content}
+              </p>
               {history.historyInfo.point > 0 ? (
                 <HStack>
                   <p className={css({ color: 'accent.lime' })}>
