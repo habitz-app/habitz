@@ -75,9 +75,18 @@ const MissionPreview = ({
           alignItems: 'center',
           textStyle: 'headline1.bold',
           color: 'label.normal',
+          maxW: 'calc(100% - 4rem)',
+          gap: '0.25rem',
         })}
       >
-        {emoji} {title}
+        {emoji}
+        <p
+          className={css({
+            lineClamp: 1,
+          })}
+        >
+          {title}
+        </p>
       </p>
       <p className={item({ visual: status })}>{statusText}</p>
     </div>
