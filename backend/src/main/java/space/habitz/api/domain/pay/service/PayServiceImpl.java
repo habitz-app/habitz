@@ -93,7 +93,7 @@ public class PayServiceImpl implements PayService {
 		// 부모 계정만 알림을 보낸다.
 		List<Member> parentList = familyCustomRepository.findByFamilyIdOnlyParentMember(family.getId(), true, parentPayment.getMember().getId());
 
-		String message = String.format("%s 유저가 %d 만큼 가족 포인트를 충전했습니다.", parentPayment.getMember().getName(), parentPayment.getAmount());
+		String message = String.format("%s 님이  %d 만큼 포인트를 충전했습니다.", parentPayment.getMember().getName(), parentPayment.getAmount());
 		eventPublisher.publishEvent(MultiNotificationEvent.createNotification(parentList, NotificationType.POINT_CHARGE, message));
 		return "결제가 완료되었습니다.";
 

@@ -107,7 +107,7 @@ public enum NotificationType {
 
 		@Override
 		public String getChildContents(String content) {
-			return null;
+			return content;
 		}
 
 		@Override
