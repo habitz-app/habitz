@@ -52,7 +52,7 @@ const RecentHistory = ({
                   {history.historyInfo.content}
                 </p>
               </HStack>
-              {history.historyInfo.point > 0 ? (
+              {history.historyInfo.point >= 0 ? (
                 <HStack
                   w="20%"
                   flexGrow={1}
@@ -66,7 +66,8 @@ const RecentHistory = ({
                       textStyle: 'body2.normal.medium',
                     })}
                   >
-                    +{history.historyInfo.point.toLocaleString()}
+                    {history.historyInfo.point === 0 ? null : <span>+</span>}
+                    {history.historyInfo.point.toLocaleString()}
                   </p>
                   <Image src="/coin.svg" alt="coin" width={16} height={16} />
                 </HStack>
