@@ -29,4 +29,6 @@ public interface MemberService {
 	void updateMemberInfo(MemberUpdateRequestDto requestDto);
 
 	void updateUserInfo(Member member, String newNickname, MultipartFile image) throws Exception;
+
+	void updateUserInfo(Member member, String newNickname) throws Exception;
 }
