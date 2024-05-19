@@ -2,6 +2,7 @@ package space.habitz.api.domain.product.service;
 
 import java.util.List;
 
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,7 @@ import space.habitz.api.domain.member.entity.Member;
 import space.habitz.api.domain.member.entity.Role;
 import space.habitz.api.domain.member.repository.ChildRepository;
 import space.habitz.api.domain.member.repository.MemberRepository;
+import space.habitz.api.domain.notification.dto.ParentNotificationEvent;
 import space.habitz.api.domain.point.entity.ChildPointHistory;
 import space.habitz.api.domain.point.repository.ChildPointHistoryRepository;
 import space.habitz.api.domain.product.dto.BrandDto;
@@ -41,6 +43,7 @@ public class ProductServiceImpl implements ProductService {
 	private final ChildPointHistoryRepository childPointHistoryRepository;
 	private final MemberRepository memberRepository;
 	private final BrandRepository brandRepository;
+	private final ApplicationEventPublisher eventPublisher;
 
 	@Override
 	public ProductInfoDto getProductDetail(Member member, Long id) {
@@ -206,6 +209,11 @@ public class ProductServiceImpl implements ProductService {
 				.content(productInfoDto.getProductName() + " 구매")
 				.build();
 		childPointHistoryRepository.save(childPointHistory);
+
+		// 구매 알림
+		String message = String.format("%s이 %s 항목을 구매했습니다." , member.getName(), productInfoDto.getProductName());
+		eventPublisher.publishEvent(ParentNotificationEvent.purchaseItem(member.getId(),  message));
+
 		return PurchaseResultInfo.builder().purchaseId(childProductPaymentHistory.getId()).build();
 
 	}

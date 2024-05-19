@@ -25,4 +25,16 @@ public class ParentNotificationEvent {
 			.content(missionTitle)
 			.build();
 	}
+
+	/**
+	 * 부모에게 아이템 구매 시 알림 전송
+	 * */
+	public static ParentNotificationEvent purchaseItem(Long childId, String content) {
+		return ParentNotificationEvent.builder()
+			.notificationType(NotificationType.ITEM_BUYING)
+			.childMemberId(childId)
+			.content(content)
+			.build();
+	}
+
 }
