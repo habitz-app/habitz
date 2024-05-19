@@ -63,7 +63,7 @@ const MissionContent = ({
         className={css({
           display: 'flex',
           flexDir: 'column',
-          minW: '9.375rem',
+          w: '9.375rem',
           h: '11.25rem',
           borderRadius: '1.25rem',
           justifyContent: 'center',
@@ -133,9 +133,25 @@ const MissionContent = ({
           bg: 'background.elevated.normal',
         })}
       >
-        <p className={css({ textStyle: 'headline2.bold' })}>
-          {emoji} {title}
-        </p>
+        <div
+          className={css({
+            textStyle: 'headline2.bold',
+            display: 'flex',
+            gap: '0.25rem',
+          })}
+        >
+          {emoji}
+          <p
+            className={css({
+              textStyle: 'headline1.bold',
+              color: 'label.normal',
+              lineClamp: '1',
+              w: 'full',
+            })}
+          >
+            {title}
+          </p>
+        </div>
         <div
           className={css({
             display: 'flex',

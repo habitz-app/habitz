@@ -33,6 +33,7 @@ const MissionDetail = ({
     base: {
       display: 'flex',
       textStyle: 'label1.normal.bold',
+      minW: '3rem',
     },
     variants: {
       visual: {
@@ -64,7 +65,6 @@ const MissionDetail = ({
           justifyContent: 'flex-end',
           gap: '2.5rem',
           px: '1rem',
-          mt: '2.5rem',
         })}
       >
         <span
@@ -86,7 +86,7 @@ const MissionDetail = ({
           <div
             className={css({
               display: 'flex',
-              alignItems: 'baseline',
+              alignItems: 'flex-end',
               gap: '0.5rem',
             })}
           >
@@ -121,6 +121,7 @@ const MissionDetail = ({
                   alt="profile"
                   width={16}
                   height={16}
+                  style={{ borderRadius: '50%' }}
                 />
                 <p
                   className={css({
@@ -142,7 +143,7 @@ const MissionDetail = ({
               gap: '0.1rem',
             })}
           >
-            +{mission?.mission.point || 0}
+            +{mission?.mission.point.toLocaleString() || 0}
             <Image src="/coin.svg" alt="coin" width={16} height={16} />
           </span>
         </span>
