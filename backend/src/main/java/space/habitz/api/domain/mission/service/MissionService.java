@@ -393,6 +393,8 @@ public class MissionService {
 
 		String imageUrl = getImageStoreURL(image);
 		missionRecognition.updateRecognition(imageUrl, content);
+		// 미션 상태 업데이트
+		mission.setStatus(StatusCode.PENDING);
 		// 부모에게 알림 전송
 		String message = String.format("%s %s", mission.getEmoji(), mission.getTitle());
 		eventPublisher.publishEvent(
