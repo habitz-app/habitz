@@ -14,11 +14,9 @@ import lombok.RequiredArgsConstructor;
 import space.habitz.api.domain.member.entity.Member;
 import space.habitz.api.domain.member.exeption.MemberNotFoundException;
 import space.habitz.api.domain.member.repository.FamilyRepository;
+import space.habitz.api.domain.member.repository.MemberRepository;
 import space.habitz.api.domain.member.utils.AuthUtils;
-import space.habitz.api.domain.notification.dto.FamilyNotificationEvent;
-import space.habitz.api.domain.notification.dto.NotificationResponseDto;
-import space.habitz.api.domain.notification.dto.ParentNotificationEvent;
-import space.habitz.api.domain.notification.dto.SingleNotificationEvent;
+import space.habitz.api.domain.notification.dto.*;
 import space.habitz.api.domain.notification.entity.Notification;
 import space.habitz.api.domain.notification.entity.NotificationType;
 import space.habitz.api.domain.notification.exception.NotificationNotFoundException;
@@ -30,6 +28,7 @@ import space.habitz.api.domain.notification.repository.NotificationRepository;
 public class NotificationServiceImpl implements NotificationService {
 	private final NotificationRepository notificationRepository;
 	private final FamilyRepository familyRepository;
+	private final MemberRepository memberRepository;
 
 	@Override
 	@TransactionalEventListener(FamilyNotificationEvent.class)
@@ -53,6 +52,15 @@ public class NotificationServiceImpl implements NotificationService {
 		List<Notification> parentNotification = getParentNotification(parentNotificationEvent);
 		return notificationRepository.saveAll(parentNotification);
 	}
+
+	@Override
+	@TransactionalEventListener(MultiNotificationEvent.class)
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	public List<Notification> createMultiNotification(MultiNotificationEvent multiNotificationEvent) {
+		List<Notification> multiNotification = getMultiNotification(multiNotificationEvent);
+		return notificationRepository.saveAll(multiNotification);
+	}
+
 
 	@Override
 	@TransactionalEventListener(SingleNotificationEvent.class)
@@ -141,7 +149,7 @@ public class NotificationServiceImpl implements NotificationService {
 			.orElseThrow(() -> new MemberNotFoundException(childMemberId));
 
 		if (parentMemberId.isEmpty())
-			parentMembers = familyRepository.findByFamilyIdOnlyParentMember(childMember.getFamily().getId(), true);
+			parentMembers = familyRepository.findByFamilyIdOnlyParentMember(childMember.getFamily().getId(), true, null);
 
 		else
 			parentMembers = familyRepository.findByMemberIds(parentMemberId);
@@ -165,7 +173,7 @@ public class NotificationServiceImpl implements NotificationService {
 			.orElseThrow(() -> new MemberNotFoundException(childMemberId));
 
 		List<Member> parentMembers = familyRepository.findByFamilyIdOnlyParentMember(childMember.getFamily().getId(),
-			true);
+			true, null);
 
 		return parentMembers.stream().map(member -> {
 			return Notification.builder()
@@ -176,4 +184,20 @@ public class NotificationServiceImpl implements NotificationService {
 				.build();
 		}).toList();
 	}
+
+	private List<Notification> getMultiNotification(MultiNotificationEvent multiNotificationEvent) {
+		NotificationType notificationType = multiNotificationEvent.getNotificationType();
+		String content = multiNotificationEvent.getContent();
+		List<Member> targetMemberList = multiNotificationEvent.getTargetMemberList();
+		return targetMemberList.stream().map(member -> {
+			return Notification.builder()
+				.type(notificationType)
+				.title(notificationType.getTitle())
+				.content(notificationType.getChildContents(content))
+				.member(member)
+				.build();
+		}).toList();
+
+	}
+
 }
