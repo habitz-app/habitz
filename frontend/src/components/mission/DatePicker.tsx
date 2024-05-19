@@ -38,6 +38,8 @@ export const DatePicker = ({
         console.log(value);
         setDate(value.valueAsString);
       }}
+      locale="ko-KR"
+      timeZone="Asia/Seoul"
     >
       <DP.Label className={css({ textStyle: 'title3.bold' })}>일정</DP.Label>
       <DP.Control>
