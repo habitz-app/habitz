@@ -69,7 +69,6 @@ public class NotificationServiceImpl implements NotificationService {
 			.type(notificationType)
 			.member(member)
 			.build();
-		log.info("SingleNotification :: " + notification.toString());
 		return notificationRepository.save(notification);
 	}
 
