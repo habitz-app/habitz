@@ -236,7 +236,7 @@ public class MissionService {
 	 */
 	@Transactional
 	public String changeMissionStatus(Member parent, MissionApproveRequestDto requestDto) {
-
+		log.info("미션 상태 변경 :: {}이 {}에 대해 승인 / 거절 함", parent.getName(), requestDto.missionId());
 		Mission mission = missionRepository.findById(requestDto.missionId())
 			.orElseThrow(() -> new CustomErrorException(ErrorCode.MISSION_NOT_FOUND));
 		Member memChild = memberRepository.findById(mission.getChild().getId())
@@ -250,13 +250,17 @@ public class MissionService {
 		if (requestDto.status().equals(StatusCode.ACCEPT)) {
 			// 미션 상태 변경 (ACCEPT) / 아이에게 알림전송
 			missionSuccess(parent, mission, memChild, requestDto.status());
+			log.info("미션 상태 변경 :: 승인 완료");
 			eventPublisher.publishEvent(
 				SingleNotificationEvent.missionResult(memChild.getId(), mission.getTitle(), true));
+			log.info("이벤트 확인 전송 {}", mission.getTitle());
 			return "MISSION ACCEPT / 포인트 지급 완료";
 		}
 		// 미션 decline / 아이에게 알림전송
 		mission.updateStatus(requestDto.status(), parent, requestDto.comment());
+		log.info("미션 상태 변경 :: 거절완료", parent.getName(), requestDto.missionId());
 		eventPublisher.publishEvent(SingleNotificationEvent.missionResult(memChild.getId(), mission.getTitle(), false));
+		log.info("이벤트 확인 전송 {}", mission.getTitle());
 		return "MISSION DECLINE";
 	}
 
