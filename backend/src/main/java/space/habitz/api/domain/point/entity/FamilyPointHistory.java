@@ -1,6 +1,6 @@
 package space.habitz.api.domain.point.entity;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -58,6 +58,6 @@ public class FamilyPointHistory {
 	private Mission mission;
 
 	@CreationTimestamp
-	private Timestamp createdAt;
+	private LocalDateTime createdAt;
 
 }
