@@ -111,6 +111,7 @@ const Product = ({ params }: { params: { productId: number } }) => {
             color: 'label.alternative',
             position: 'absolute',
             left: '1rem',
+            cursor: 'pointer',
           })}
           onClick={() => {
             router.back();
