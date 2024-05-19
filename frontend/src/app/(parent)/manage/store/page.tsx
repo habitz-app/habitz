@@ -182,6 +182,7 @@ const Store = () => {
                 <div
                   className={css({
                     display: 'flex',
+                    mb: '1rem',
                   })}
                 >
                   <Image
@@ -189,14 +190,13 @@ const Store = () => {
                     width={100}
                     height={100}
                     className={css({
-                      mx: '1rem',
-                      mb: '1rem',
+                      mr: '1rem',
                     })}
                     alt="상품 이미지"
                   />
                   <div
                     className={css({
-                      w: '15rem',
+                      width: '70%',
                     })}
                   >
                     <div
