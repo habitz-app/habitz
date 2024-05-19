@@ -25,6 +25,8 @@ public class PayServiceImpl implements PayService {
 	private final ParentPaymentRepository parentPaymentRepository;
 	private final FamilyPointHistoryRepository familyPointHistoryRepository;
 	private final FamilyRepository familyRepository;
+	private final ApplicationEventPublisher eventPublisher;
+	private final FamilyCustomRepository familyCustomRepository;
 
 	@Override
 	public PayInfoDto getOrderId(Member member, int amount) {
@@ -81,6 +83,12 @@ public class PayServiceImpl implements PayService {
 			.build();
 		familyPointHistoryRepository.save(familyPointHistory);
 
+		// 포인트 충전
+		// 부모 계정만
+		List<Member> parentList = familyCustomRepository.findByFamilyIdOnlyParentMember(family.getId(), true, parentPayment.getMember().getId());
+
+		String message = String.format("%s 유저가 %d 만큼 가족 포인트를 충전했습니다.", parentPayment.getMember().getId(), parentPayment.getAmount());
+		eventPublisher.publishEvent(MultiNotificationEvent.createNotification(parentList, NotificationType.POINT_CHARGE, message));
 		return "결제가 완료되었습니다.";
 
 	}
