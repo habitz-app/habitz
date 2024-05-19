@@ -24,6 +24,9 @@ public class RedisConfig {
 	@Value("${spring.data.redis.password}")
 	public String password;
 
+	@Value("${spring.profiles.active}")
+	private String profile;
+
 	@Bean
 	public RedisConnectionFactory redisConnectionFactory() {
 		RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration();
@@ -31,6 +34,11 @@ public class RedisConfig {
 		redisStandaloneConfiguration.setHostName(host);
 		redisStandaloneConfiguration.setUsername(userName);
 		redisStandaloneConfiguration.setPassword(password);
+
+		// production Redis
+		if (profile.equals("prod")) {
+			redisStandaloneConfiguration.setDatabase(1);
+		}
 
 		return new LettuceConnectionFactory(redisStandaloneConfiguration);
 	}
