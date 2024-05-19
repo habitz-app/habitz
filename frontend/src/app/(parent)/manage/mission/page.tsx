@@ -165,21 +165,23 @@ const Page = () => {
                   router.push(`mission/detail/${mission.missionId}`);
                 }}
               >
-                <HStack>
-                  <span>
+                <HStack w="full" flexGrow={2} flexShrink={1}>
+                  <p className={css({ lineClamp: 1 })}>
                     {mission.emoji} {mission.title}
-                  </span>
+                  </p>
                 </HStack>
-                <p
-                  className={css({
-                    color: statusMap[mission.status].color,
-                  })}
-                  style={{
-                    color: token.var(statusMap[mission.status].color),
-                  }}
-                >
-                  {statusMap[mission.status].value}
-                </p>
+                <HStack w="1/2" justify={'end'} flexGrow={1} flexShrink={1}>
+                  <p
+                    className={css({
+                      color: statusMap[mission.status].color,
+                    })}
+                    style={{
+                      color: token.var(statusMap[mission.status].color),
+                    }}
+                  >
+                    {statusMap[mission.status].value}
+                  </p>
+                </HStack>
               </li>
             ))}
           {schedules &&
