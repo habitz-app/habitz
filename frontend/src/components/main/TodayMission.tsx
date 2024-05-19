@@ -38,7 +38,7 @@ const TodayMission = ({
       <ul className={css({ textAlign: 'center' })}>
         {missions.length > 0 ? (
           missions.map((mission, id) => (
-            <li key={id}>
+            <li key={id} className={css({ mb: '0.5rem' })}>
               <HStack>
                 <MissionPreview
                   missionId={mission.missionId}
