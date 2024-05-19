@@ -33,7 +33,7 @@ const MissionDetail = ({
     base: {
       display: 'flex',
       textStyle: 'label1.normal.bold',
-      minW: '3rem',
+      minW: '3.5rem',
     },
     variants: {
       visual: {
@@ -114,6 +114,7 @@ const MissionDetail = ({
                   alignItems: 'center',
                   gap: '0.1rem',
                   justifyContent: 'flex-end',
+                  minW: '3.5rem',
                 })}
               >
                 <Image
