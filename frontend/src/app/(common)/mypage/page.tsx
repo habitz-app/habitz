@@ -42,12 +42,9 @@ export default function Home() {
 
   const onSubmit = async () => {
     const formData = new FormData();
-    formData.append('nickName', nickname);
-    if (imgFile) {
-      formData.append('image', imgFile);
-      console.log('imgFile', imgFile);
-    }
-    const res = await axios.put<string>(`/member/edit`, formData, {
+    formData.append('nickname', nickname);
+    formData.append('image', imgFile ?? '');
+    const res = await axios.patch<string>(`/member/edit`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
