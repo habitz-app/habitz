@@ -5,6 +5,7 @@ import usePoint from '@/queries/usePoint';
 import {
   ChildListResponse,
   ChildRecentHistoryResponse,
+  NotificationCountResponse,
 } from '@/types/api/response';
 import { IonIcon } from '@ionic/react';
 import { useQueries, useQuery } from '@tanstack/react-query';
@@ -18,9 +19,24 @@ import {
 import Image from 'next/image';
 import Link from 'next/link';
 import { css } from 'styled-system/css';
+import { useCallback, useState } from 'react';
 
 const ParentHome = () => {
   const point = usePoint();
+
+  const hasNew = useCallback((count: number) => count > 0, []);
+
+  const { data: hasNewNotification } = useQuery({
+    queryKey: ['notification', 'count'],
+    queryFn: async () => {
+      const res = await axios.get<NotificationCountResponse>(
+        '/notification/count',
+      );
+      return res.data.data.count;
+    },
+    staleTime: 0,
+    select: hasNew,
+  });
 
   const children = useQuery({
     queryKey: ['children'],
@@ -78,6 +94,18 @@ const ParentHome = () => {
               w: '24px',
               h: '24px',
               color: 'label.alternative',
+              position: 'relative',
+              _after: {
+                content: '" "',
+                position: 'absolute',
+                display: hasNewNotification ? 'block' : 'none',
+                top: 0,
+                right: 0,
+                rounded: 'full',
+                w: '0.5rem',
+                h: '0.5rem',
+                bgColor: 'status.negative',
+              },
             })}
           />
         </Link>

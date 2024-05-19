@@ -1,8 +1,11 @@
 'use client';
+
 import ProfileCard from '@/components/common/ProfileCard';
-import { Button } from '@/components/ui/button';
 import { useMe } from '@/hooks/useAuth';
-import { MissionResponse } from '@/types/api/response';
+import {
+  MissionResponse,
+  NotificationCountResponse,
+} from '@/types/api/response';
 import { IonIcon } from '@ionic/react';
 import { useQuery } from '@tanstack/react-query';
 import axios from '@/apis/axios';
@@ -11,12 +14,26 @@ import { css } from 'styled-system/css';
 import { PointAmount } from '@/types/point';
 import Link from 'next/link';
 import MissionPreview from '@/components/mission/MissionPreview';
-import { useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 const ChildHome = () => {
   const date = new Date().toISOString().split('T')[0];
 
   const me = useMe();
+
+  const hasNew = useCallback((count: number) => count > 0, []);
+
+  const { data: hasNewNotification } = useQuery({
+    queryKey: ['notification', 'count'],
+    queryFn: async () => {
+      const res = await axios.get<NotificationCountResponse>(
+        '/notification/count',
+      );
+      return res.data.data.count;
+    },
+    staleTime: 0,
+    select: hasNew,
+  });
 
   const getPoint = async () => {
     return await axios.get<PointAmount>('/point/amount').then((res) => {
@@ -80,6 +97,18 @@ const ChildHome = () => {
               w: '24px',
               h: '24px',
               color: 'label.alternative',
+              position: 'relative',
+              _after: {
+                content: '" "',
+                position: 'absolute',
+                display: hasNewNotification ? 'block' : 'none',
+                top: 0,
+                right: 0,
+                rounded: 'full',
+                w: '0.5rem',
+                h: '0.5rem',
+                bgColor: 'status.negative',
+              },
             })}
           />
         </Link>

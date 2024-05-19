@@ -384,3 +384,7 @@ export type NotificationType =
   | 'ITEM_BUYING'
   | 'POINT_CHARGE'
   | 'SYSTEM';
+
+export interface NotificationCountResponse {
+  count: number;
+}
