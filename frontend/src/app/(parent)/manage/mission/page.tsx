@@ -159,6 +159,7 @@ const Page = () => {
                   justify: 'space-between',
                   mb: '0.5rem',
                   cursor: 'pointer',
+                  textStyle: 'headline1.bold',
                 })}
                 onClick={() => {
                   router.push(`mission/detail/${mission.missionId}`);
@@ -187,6 +188,7 @@ const Page = () => {
                   justify: 'space-between',
                   mb: '0.5rem',
                   cursor: 'pointer',
+                  textStyle: 'headline1.bold',
                 })}
                 onClick={() => {
                   router.push(`mission/update/${schedule.scheduleId}`);
