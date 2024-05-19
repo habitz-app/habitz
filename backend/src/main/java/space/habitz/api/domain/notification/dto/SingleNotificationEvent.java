@@ -26,4 +26,15 @@ public class SingleNotificationEvent {
 			.content(missionTitle)
 			.build();
 	}
+
+	/**
+	 * 미션 생성 시 아이에게 전송
+	 * */
+	public static SingleNotificationEvent createMission(Long memberId, String content) {
+		return SingleNotificationEvent.builder()
+			.notificationType(NotificationType.MISSION_ARRIVED)
+			.memberId(memberId)
+			.content(content)
+			.build();
+	}
 }
