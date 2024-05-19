@@ -138,25 +138,27 @@ const Product = ({ params }: { params: { productId: number } }) => {
           price={productInfo.data?.price ?? 0}
           url={productInfo.data?.productImage ?? ''}
         />
-        {productInfo.data?.description.split(',').map((desc, id) => (
-          <div
-            key={id}
-            className={css({
-              position: 'relative',
-            })}
-          >
-            <Image
-              src={desc}
-              alt={productInfo.data?.productName}
-              fill
-              sizes="300px"
+        {productInfo.data?.description &&
+          productInfo.data.description.trim() !== '' &&
+          productInfo.data.description.split(',').map((desc, id) => (
+            <div
+              key={id}
               className={css({
-                position: 'relative!',
-                h: 'unset!',
+                position: 'relative',
               })}
-            />
-          </div>
-        ))}
+            >
+              <Image
+                src={desc}
+                alt={productInfo.data?.productName}
+                fill
+                sizes="300px"
+                className={css({
+                  position: 'relative!',
+                  h: 'unset!',
+                })}
+              />
+            </div>
+          ))}
         <div
           className={css({
             display: 'flex',

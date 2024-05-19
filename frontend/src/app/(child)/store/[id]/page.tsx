@@ -24,7 +24,12 @@ const Product = ({ params }: { params: { id: number } }) => {
   });
 
   const buyHandler = () => {
-    route.push(`/store/bill/${params.id}`);
+    if (amount.data === undefined || productInfo.data === undefined) return;
+    if (amount.data?.point < productInfo.data?.price) {
+      alert('포인트가 부족합니다.');
+    } else {
+      route.push(`/store/bill/${params.id}`);
+    }
   };
 
   const getPoint = async () => {
@@ -93,6 +98,28 @@ const Product = ({ params }: { params: { id: number } }) => {
           price={productInfo.data?.price ?? 0}
           url={productInfo.data?.productImage ?? ''}
         />
+
+        {productInfo.data?.description &&
+          productInfo.data.description.trim() !== '' &&
+          productInfo.data.description.split(',').map((desc, id) => (
+            <div
+              key={id}
+              className={css({
+                position: 'relative',
+              })}
+            >
+              <Image
+                src={desc}
+                alt={productInfo.data?.productName}
+                fill
+                sizes="300px"
+                className={css({
+                  position: 'relative!',
+                  h: 'unset!',
+                })}
+              />
+            </div>
+          ))}
 
         <div
           className={css({
