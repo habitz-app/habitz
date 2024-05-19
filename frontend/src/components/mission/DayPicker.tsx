@@ -22,6 +22,12 @@ const button = cva({
         bg: 'transparent',
       },
     },
+    disabled: {
+      true: {
+        color: 'label.alternative',
+        cursor: 'not-allowed',
+      },
+    },
   },
 });
 
@@ -37,13 +43,10 @@ const Day = ({
   isDisabled: boolean;
 }) => {
   return (
-    <HStack
-      textStyle={'heading1.bold'}
-      color={isDisabled ? 'label.alternative' : 'initial'}
-    >
+    <HStack textStyle={'heading1.bold'}>
       <button
         onClick={handleClick}
-        className={button({ selected: isSelected })}
+        className={button({ selected: isSelected, disabled: isDisabled })}
         disabled={isDisabled}
       >
         {day}
