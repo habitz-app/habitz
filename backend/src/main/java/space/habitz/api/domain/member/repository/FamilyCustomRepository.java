@@ -14,7 +14,7 @@ public interface FamilyCustomRepository {
 
 	List<Member> findByFamilyIdOnlyChildMember(String familyId, boolean isAcs);
 
-	List<Member> findByFamilyIdOnlyParentMember(String familyId, boolean isAcs);
+	List<Member> findByFamilyIdOnlyParentMember(String familyId, boolean isAcs, Long exclusionMemberId);
 
 	Optional<Member> findByMemberId(Long id);
 
