@@ -2,10 +2,9 @@ import Image from 'next/image';
 import { css, cva } from 'styled-system/css';
 import * as Collapsible from '@/components/ui/collapsible';
 import { Button } from '../ui/button';
-import { IonIcon } from '@ionic/react';
-import { personCircleOutline } from 'ionicons/icons';
 import { MissionDetailResponse } from '@/types/api/response';
 import { useRouter } from 'next/navigation';
+import { getCurrentKSTDate } from '@/lib/date';
 const MissionDetail = ({
   mission,
 }: {
@@ -81,7 +80,7 @@ const MissionDetail = ({
               color: 'label.alternative',
             })}
           >
-            {new Date().toISOString().split('T')[0]}
+            {getCurrentKSTDate()}
           </p>
           <div
             className={css({

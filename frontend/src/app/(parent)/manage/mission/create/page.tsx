@@ -13,6 +13,7 @@ import Header from '@/components/common/Header';
 import { useQuery } from '@tanstack/react-query';
 import { Stack } from 'styled-system/jsx';
 import ChildProfileBox from '@/components/mission/ChildProfileBox';
+import { getCurrentKSTDate } from '@/lib/date';
 
 interface createSchedule {
   title: string;
@@ -68,8 +69,8 @@ const Page = () => {
   const [content, setContent] = useState<string>('');
   const [point, setPoint] = useState<number>(0);
   const [date, setDate] = useState<string[]>([
-    new Date().toISOString().slice(0, 10),
-    new Date().toISOString().slice(0, 10),
+    getCurrentKSTDate(),
+    getCurrentKSTDate(),
   ]);
   const [weekDays, setWeekDays] = useState<boolean[]>(
     Array.from({ length: 7 }, (_, i) => i === (new Date().getDay() + 6) % 7),

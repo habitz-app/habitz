@@ -6,8 +6,9 @@ import MissionContent from '@/components/mission/MissionContent';
 import { useQuery } from '@tanstack/react-query';
 import { MissionResponse } from '@/types/api/response';
 import axios from '@/apis/axios';
+import { getCurrentKSTDate } from '@/lib/date';
 const MissionPage = () => {
-  const date = new Date().toISOString().split('T')[0];
+  const date = getCurrentKSTDate();
   const getMission = async () => {
     return await axios
       .get<MissionResponse>(`/mission/list?date=${date}`)

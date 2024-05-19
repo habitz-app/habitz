@@ -14,6 +14,7 @@ import { IconButton } from '@/components/ui/icon-button';
 import { IonIcon } from '@ionic/react';
 import { addOutline } from 'ionicons/icons';
 import { useRouter } from 'next/navigation';
+import { getCurrentKSTDate } from '@/lib/date';
 // 날짜 별 전체 아이에 대한 미션 목록 인터페이스
 interface childMission {
   childInfo: {
@@ -46,9 +47,7 @@ interface childMission {
 const Page = () => {
   const router = useRouter();
   // 선택한 날짜 관리하는 State
-  const [selectedDate, setSelectedDate] = useState(
-    new Date().toISOString().slice(0, 10),
-  );
+  const [selectedDate, setSelectedDate] = useState(getCurrentKSTDate());
   const [year, setYear] = useState(new Date().getFullYear());
   const [month, setMonth] = useState(new Date().getMonth() + 1);
 

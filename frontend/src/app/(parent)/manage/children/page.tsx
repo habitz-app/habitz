@@ -15,6 +15,7 @@ import TodayMission from '@/components/main/TodayMission';
 import RecentHistory from '@/components/main/RecentHistory';
 import { useRouter } from 'next/navigation';
 import Header from '@/components/common/Header';
+import { getCurrentKSTDate } from '@/lib/date';
 
 const ManageChildren = () => {
   const router = useRouter();
@@ -27,7 +28,7 @@ const ManageChildren = () => {
     point: 0,
   });
   const date = new Date();
-  const today = date.toISOString().slice(0, 10);
+  const today = getCurrentKSTDate();
 
   const getChildList = async () => {
     const res = await axios.get<ChildListResponse[]>('/family/childList');

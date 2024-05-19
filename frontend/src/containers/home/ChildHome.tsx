@@ -15,9 +15,10 @@ import { PointAmount } from '@/types/point';
 import Link from 'next/link';
 import MissionPreview from '@/components/mission/MissionPreview';
 import { useCallback, useEffect, useState } from 'react';
+import { getCurrentKSTDate } from '@/lib/date';
 
 const ChildHome = () => {
-  const date = new Date().toISOString().split('T')[0];
+  const date = getCurrentKSTDate();
 
   const me = useMe();
 

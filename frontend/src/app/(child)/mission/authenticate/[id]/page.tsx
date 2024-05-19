@@ -13,6 +13,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as FileUpload from '@/components/ui/file-upload';
 import { IconButton } from '@/components/ui/icon-button';
+import { getCurrentKSTDate } from '@/lib/date';
 
 const AuthenticatePage = ({ params }: { params: { id: string } }) => {
   const queryClient = useQueryClient();
@@ -184,7 +185,7 @@ const AuthenticatePage = ({ params }: { params: { id: string } }) => {
             color: 'label.alternative',
           })}
         >
-          {new Date().toISOString().split('T')[0]}
+          {getCurrentKSTDate()}
         </p>
         <p
           className={css({
