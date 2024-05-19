@@ -72,7 +72,9 @@ const RecentHistory = ({ params }: { params: { uuid: string } }) => {
                 >
                   <HStack maxH="2rem">
                     <p>{history.emoji}</p>
-                    <p>{history.historyInfo.content}</p>
+                    <p className={css({ lineClamp: 1 })}>
+                      {history.historyInfo.content}
+                    </p>
                   </HStack>
                   {/* 포인트 */}
                   <HStack ps="2.25rem" gap="0.25rem" flexShrink={1}>

@@ -38,8 +38,8 @@ const RecentHistory = ({
       <ul className={css({ textAlign: 'center', textStyle: 'headline1.bold' })}>
         {history.map((history, id) => (
           <li key={id}>
-            <HStack w="full" justify="space-between">
-              <p className={css({ lineClamp: 1 })}>
+            <HStack w="full" maxW="full" justify="space-between">
+              <p className={css({ lineClamp: 1, textAlign: 'left' })}>
                 {history.historyInfo.content}
               </p>
               {history.historyInfo.point > 0 ? (
