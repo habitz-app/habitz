@@ -31,7 +31,7 @@ const Category = () => {
     queryFn: getPoint,
   });
 
-  const defaultBrand = ['드림아트', '', '리코즈', 'GS25', ''];
+  const defaultBrand = ['드림아트', '예림당', '리코즈', 'GS25', '배스킨라빈스'];
 
   return (
     <>
