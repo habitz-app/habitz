@@ -11,7 +11,6 @@ import {
   HabitzHistoryResponse,
 } from '@/types/api/response';
 import ProfileIcon from '@/components/common/ProfileIcon';
-import MonthlyPoint from '@/components/main/MonthlyPoint';
 import TodayMission from '@/components/main/TodayMission';
 import RecentHistory from '@/components/main/RecentHistory';
 import { useRouter } from 'next/navigation';

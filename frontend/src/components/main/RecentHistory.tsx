@@ -21,19 +21,15 @@ const RecentHistory = ({
     <Stack p="1.25rem" gap="0.625rem" rounded="0.75rem" shadow="normal">
       <HStack justify="space-between">
         <p className={css({ textStyle: 'title3.bold' })}>최근 활동</p>
-        <IconButton
-          variant="ghost"
+        <IonIcon
+          icon={chevronForwardOutline}
+          className={css({ fontSize: '1.5rem', cursor: 'pointer' })}
           onClick={() => {
             router.push(
               `/manage/activity/${uuid}${name ? '?name=' + name : ''}`,
             );
           }}
-        >
-          <IonIcon
-            icon={chevronForwardOutline}
-            className={css({ fontSize: '1.5rem' })}
-          ></IonIcon>
-        </IconButton>
+        ></IonIcon>
       </HStack>
       <ul
         className={css({

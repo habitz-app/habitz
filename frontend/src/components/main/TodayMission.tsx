@@ -23,17 +23,13 @@ const TodayMission = ({
     <Stack p="1.25rem" gap="0.625rem" rounded="0.75rem" shadow="normal">
       <HStack justify="space-between">
         <p className={css({ textStyle: 'title3.bold' })}>오늘의 미션</p>
-        <IconButton
-          variant={'ghost'}
+        <IonIcon
+          icon={addOutline}
+          className={css({ fontSize: '1.5rem', cursor: 'pointer' })}
           onClick={() => {
             router.push('/manage/mission/create');
           }}
-        >
-          <IonIcon
-            icon={addOutline}
-            className={css({ fontSize: '1.5rem' })}
-          ></IonIcon>
-        </IconButton>
+        ></IonIcon>
       </HStack>
       <ul className={css({ textAlign: 'center' })}>
         {missions.length > 0 ? (

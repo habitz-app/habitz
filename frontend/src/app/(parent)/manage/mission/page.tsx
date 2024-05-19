@@ -173,6 +173,7 @@ const Page = () => {
                 <HStack w="1/2" justify={'end'} flexGrow={1} flexShrink={1}>
                   <p
                     className={css({
+                      textStyle: 'caption1.medium',
                       color: statusMap[mission.status].color,
                     })}
                     style={{
