@@ -133,6 +133,7 @@ export default function Calendar({
       value={[selectedDate]}
       {...props}
       className={css({ width: 'full' })}
+      locale="ko-KR"
     >
       <DatePicker.Content
         className={css({
