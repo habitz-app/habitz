@@ -151,13 +151,11 @@ public class MemberController {
 
 	@PatchMapping(value = "/edit", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseData<?> editUserData(@AuthenticationPrincipal Member member,
-		String nickName,
+		@RequestPart(name = "nickname", required = false) String nickName,
 		@RequestPart(name = "image", required = false) MultipartFile image) throws Exception {
-		if (image != null && image.isEmpty()) {
-			memberService.updateUserInfo(member, nickName, image);
-		} else {
-			memberService.updateUserInfo(member, nickName);
-		}
+
+		memberService.updateUserInfo(member, nickName, image);
+
 		return ResponseData.success("회원 정보 수정 성공");
 	}
 }
