@@ -11,6 +11,7 @@ import { css } from 'styled-system/css';
 import { PointAmount } from '@/types/point';
 import Link from 'next/link';
 import MissionPreview from '@/components/mission/MissionPreview';
+import { useEffect } from 'react';
 
 const ChildHome = () => {
   const date = new Date().toISOString().split('T')[0];
@@ -35,6 +36,11 @@ const ChildHome = () => {
         return res.data.data;
       });
   };
+
+  useEffect(() => {
+    amount.refetch();
+    mission.refetch();
+  });
 
   const mission = useQuery({
     queryKey: ['mission'],
