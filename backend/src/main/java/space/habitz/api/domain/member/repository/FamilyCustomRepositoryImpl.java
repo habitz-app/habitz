@@ -9,6 +9,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
+import com.querydsl.core.BooleanBuilder;
 import org.springframework.stereotype.Repository;
 
 import com.querydsl.core.types.OrderSpecifier;
@@ -81,13 +82,21 @@ public class FamilyCustomRepositoryImpl implements FamilyCustomRepository {
 	}
 
 	@Override
-	public List<Member> findByFamilyIdOnlyParentMember(String familyId, boolean isAcs) {
+	public List<Member> findByFamilyIdOnlyParentMember(String familyId, boolean isAcs, Long exclusionMemberId) {
+
+		BooleanBuilder builder = new BooleanBuilder();
+		builder.and(family.id.eq(familyId))
+			.and(member.role.eq(Role.PARENT))
+			.and(member.memberProfile.deletedAt.isNull());
+
+		if (exclusionMemberId != null) {
+			builder.and(member.id.ne(exclusionMemberId));
+		}
+
 		return jpaQueryFactory.selectFrom(member)
 			.innerJoin(member.memberProfile, memberProfile).fetchJoin()
 			.innerJoin(member.family, family).fetchJoin()
-			.where(family.id.eq(familyId))
-			.where(member.role.eq(Role.PARENT))
-			.where(member.memberProfile.deletedAt.isNull())
+			.where(builder)
 			.orderBy(orderByChild(isAcs))
 			.fetch();
 	}
