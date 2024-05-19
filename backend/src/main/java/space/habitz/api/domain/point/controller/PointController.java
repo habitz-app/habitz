@@ -42,11 +42,11 @@ public class PointController {
 	) {
 		if (member.getRole() == Role.PARENT) {
 			return new ResponseData<>("success", "포인트 내역 조회 성공",
-				familyPointHistoryService.getPointHistory(member, startDate, endDate.plusDays(1)));
+				familyPointHistoryService.getPointHistory(member, startDate, endDate));
 		}
 		if (member.getRole() == Role.CHILD) {
 			return new ResponseData<>("success", "포인트 내역 조회 성공",
-				childPointHistoryService.getPointHistory(member, startDate, endDate.plusDays(1)));
+				childPointHistoryService.getPointHistory(member, startDate, endDate));
 		}
 
 		throw new CustomNotFoundException("부모, 자녀 계정이 아닙니다.");
@@ -65,12 +65,12 @@ public class PointController {
 		@RequestParam("childUuid") String childUuid
 	) {
 		List<PointHistory> result = childPointHistoryService.getMonthlyChildPointHistory(member,
-			childUuid, startDate, endDate.plusDays(1));
+			childUuid, startDate, endDate);
 		System.out.println("controller");
 		System.out.println(result.getFirst().getDate());
 		return ApiResponseData.success(result);
 	}
- 
+
 	@GetMapping("recent/history/{childUuid}")
 	@PreAuthorize("hasAnyRole('PARENT', 'ADMIN')")
 	public ResponseData<List<PointRecentHistoryDto>> getRecentPointHistory(@AuthenticationPrincipal Member member,
