@@ -1,0 +1,125 @@
+pipeline {
+    agent any
+
+    environment {
+        FRONTEND_URL = 'https://habitz.space'
+        KAKAO_SDK_KEY = credentials('kakao-sdk-key')
+        TOSS_SECRET_KEY = credentials('toss-secret-key')
+        TOSS_CLIENT_KEY = credentials('toss-client-key')
+        DOCKER_NETWORK = 'npm-network'
+        DOCKER_IMAGE_NAME = 'habitz-fe'
+        SERVER_URL = 'https://api.habitz.space'
+    }
+
+    stages {
+        stage('Environment Setup') {
+            steps {
+                script {
+                    env.ENV_TYPE = 'prod'
+                }
+            }
+        }
+
+        stage('dotenv') {
+            steps {
+                dir('frontend') {
+                    sh '''
+                    echo SERVER_URL=$SERVER_URL > .env
+                    echo TOSS_SECRET_KEY=$TOSS_SECRET_KEY >> .env
+                    echo NEXT_PUBLIC_KAKAO_SDK_KEY=$KAKAO_SDK_KEY >> .env
+                    echo NEXT_PUBLIC_KAKAO_REDIRECT_URL=$FRONTEND_URL >> .env
+                    echo NEXT_PUBLIC_TOSS_CLIENT_KEY=$TOSS_CLIENT_KEY >> .env
+                    echo NEXT_PUBLIC_TOSS_REDIRECT_URL=$FRONTEND_URL >> .env
+                    '''
+                }
+            }
+        }
+
+        stage('Docker Rm') {
+            steps {
+                sh 'echo "Docker Rm Start"'
+                sh """
+                docker ps -a -q --filter "name=${DOCKER_IMAGE_NAME}" \
+                    | grep -q . && docker stop ${DOCKER_IMAGE_NAME} && docker rm ${DOCKER_IMAGE_NAME} \
+                    | true
+                docker rmi -f ${DOCKER_IMAGE_NAME}
+                """
+            }
+
+            post {
+                success {
+                    sh 'echo "Docker Rm Success"'
+                }
+                failure {
+                    sh 'echo "Docker Rm Fail"'
+                }
+            }
+        }
+
+        stage('Build') {
+            steps {
+                dir('frontend') {
+                    sh 'echo " Image Bulid Start"'
+                    sh "docker build -t ${DOCKER_IMAGE_NAME} ."
+                }
+            }
+            post {
+                success {
+                    sh 'echo "Build Docker Image Success"'
+                }
+
+                failure {
+                    sh 'echo "Build Docker Image Fail"'
+                }
+            }
+        }
+
+        stage('Deploy') {
+            steps {
+                sh """
+                docker run \
+                --name ${DOCKER_IMAGE_NAME} \
+                --network ${DOCKER_NETWORK} \
+                --env NODE_ENV=${ENV_TYPE} \
+                -d \
+                ${DOCKER_IMAGE_NAME}
+                """
+            }
+
+            post {
+                success {
+                    echo 'docker run success'
+                }
+
+                failure {
+                    echo 'docker run failed'
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            script {
+                def authorId = sh(script: 'git show -s --pretty=%an', returnStdout: true).trim()
+                def authorName = sh(script: 'git show -s --pretty=%ae', returnStdout: true).trim()
+                mattermostSend(
+                    color: 'good',
+                    icon: 'https://cdn0.iconfinder.com/data/icons/famous-character-vol-1-colored/48/JD-41-512.png',
+                    message: "✅ 빌드 성공: ${env.JOB_NAME} #${env.BUILD_NUMBER} by ${authorId}(${authorName})\n(<${env.BUILD_URL}|Details>)",
+                )
+            }
+        }
+        failure {
+            script {
+                def authorId = sh(script: 'git show -s --pretty=%an', returnStdout: true).trim()
+                def authorName = sh(script: 'git show -s --pretty=%ae', returnStdout: true).trim()
+                mattermostSend(
+                    color: 'danger',
+                    icon: 'https://cdn0.iconfinder.com/data/icons/famous-character-vol-1-colored/48/JD-41-512.png',
+                    message: "❌ 빌드 실패: ${env.JOB_NAME} #${env.BUILD_NUMBER} by ${authorId}(${authorName})\n(<${env.BUILD_URL}|Details>)",
+                )
+            }
+        }
+    }
+}
