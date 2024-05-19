@@ -98,6 +98,9 @@ const ParentMissionDetail = ({ params }: { params: { id: number } }) => {
         queryClient.invalidateQueries({
           queryKey: ['MissionDetail', params.id],
         });
+        queryClient.invalidateQueries({
+          queryKey: ['recentHistory'],
+        });
         router.push('/manage/mission');
       })
       .catch((error) => {
