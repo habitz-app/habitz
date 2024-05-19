@@ -64,10 +64,13 @@ public class PointController {
 		@RequestParam("end") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate endDate,
 		@RequestParam("childUuid") String childUuid
 	) {
-		return ApiResponseData.success(childPointHistoryService.getMonthlyChildPointHistory(member,
-			childUuid, startDate, endDate.plusDays(1)));
+		List<PointHistory> result = childPointHistoryService.getMonthlyChildPointHistory(member,
+			childUuid, startDate, endDate.plusDays(1));
+		System.out.println("controller");
+		System.out.println(result.getFirst().getDate());
+		return ApiResponseData.success(result);
 	}
-
+ 
 	@GetMapping("recent/history/{childUuid}")
 	@PreAuthorize("hasAnyRole('PARENT', 'ADMIN')")
 	public ResponseData<List<PointRecentHistoryDto>> getRecentPointHistory(@AuthenticationPrincipal Member member,

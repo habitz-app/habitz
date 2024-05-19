@@ -1,6 +1,6 @@
 package space.habitz.api.domain.point.entity;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -49,7 +49,7 @@ public class ChildPointHistory {
 
 	@CreationTimestamp
 	@Column(name = "created_at")
-	private Timestamp createdAt;
+	private LocalDateTime createdAt;
 
 	@Column(name = "content")
 	private String content;
