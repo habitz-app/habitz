@@ -174,12 +174,14 @@ const Point = () => {
                 <div
                   className={css({
                     display: 'flex',
-                    flexDirection: 'column',
+                    flexDir: 'column',
+                    maxW: 'calc(100% - 5.25rem)',
                   })}
                 >
                   <span
                     className={css({
                       textStyle: 'body1.reading.regular',
+                      lineClamp: 1,
                     })}
                   >
                     {history.content}
