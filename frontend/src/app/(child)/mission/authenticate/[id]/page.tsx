@@ -288,6 +288,7 @@ const AuthenticatePage = ({ params }: { params: { id: string } }) => {
               h: '5rem',
               bg: 'background.normal.alternative',
               textStyle: 'body2.normal.medium',
+              p: '0.5rem',
             })}
           />
           {errors.content && (
