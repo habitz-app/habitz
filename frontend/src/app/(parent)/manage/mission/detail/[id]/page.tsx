@@ -125,13 +125,15 @@ const ParentMissionDetail = ({ params }: { params: { id: number } }) => {
             <p className={css({ w: 'full' })}>
               {missionDetail ? statusMap[missionDetail.mission.status] : ''}
             </p>
-            <MenuComponent
-              updateHandler={() => {
-                router.push(
-                  `/manage/mission/update/${missionDetail?.schedule.scheduleId}`,
-                );
-              }}
-            ></MenuComponent>
+            {missionDetail && missionDetail?.mission.status !== 'ACCEPT' ? (
+              <MenuComponent
+                updateHandler={() => {
+                  router.push(
+                    `/manage/mission/update/${missionDetail?.schedule.scheduleId}`,
+                  );
+                }}
+              ></MenuComponent>
+            ) : null}
           </HStack>
           <Stack w="full">
             <p className={css({ textStyle: 'title3.bold' })}>
