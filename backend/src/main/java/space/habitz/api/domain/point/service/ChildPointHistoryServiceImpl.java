@@ -1,6 +1,5 @@
 package space.habitz.api.domain.point.service;
 
-import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
@@ -39,13 +38,13 @@ public class ChildPointHistoryServiceImpl implements ChildPointHistoryService {
 
 	@Override
 	public List<PointHistory> getPointHistory(Member member, LocalDate startDate, LocalDate endDate) {
+		System.out.println("getPointHistory");
 		if (member.getRole() != Role.CHILD) {
 			throw new IllegalArgumentException("member is not child");
 		}
 		Child child = childRepository.findByMember_Id(member.getId());
-
-		return childPointHistoryRepository.findChildPointHistoriesByChild_IdAndCreatedAtBetweenOrderByCreatedAtDesc(
-				child.getId(), Timestamp.valueOf(startDate.atStartOfDay()), Timestamp.valueOf(endDate.atStartOfDay()))
+		List<PointHistory> result = childPointHistoryRepository.findChildPointHistoriesByChild_IdAndCreatedAtBetweenOrderByCreatedAtDesc(
+				child.getId(), startDate.atStartOfDay(), endDate.plusDays(1).atStartOfDay())
 			.stream()
 			.map(childPoint -> PointHistory.builder()
 				.point(childPoint.getPoint())
@@ -54,6 +53,8 @@ public class ChildPointHistoryServiceImpl implements ChildPointHistoryService {
 				.date(childPoint.getCreatedAt())
 				.build())
 			.collect(Collectors.toList());
+		System.out.println(result.getFirst().getDate());
+		return result;
 	}
 
 	private static void validateFamily(Member member, Member child) {
@@ -76,7 +77,7 @@ public class ChildPointHistoryServiceImpl implements ChildPointHistoryService {
 		Child child = childRepository.findByMember_Id(childMember.getId());
 
 		return childPointHistoryRepository.findChildPointHistoriesByChild_IdAndCreatedAtBetweenOrderByCreatedAtDesc(
-				child.getId(), Timestamp.valueOf(startDate.atStartOfDay()), Timestamp.valueOf(endDate.atStartOfDay()))
+				child.getId(), startDate.atStartOfDay(), endDate.plusDays(1).atStartOfDay())
 			.stream()
 			.map(childPoint -> PointHistory.builder()
 				.point(childPoint.getPoint())

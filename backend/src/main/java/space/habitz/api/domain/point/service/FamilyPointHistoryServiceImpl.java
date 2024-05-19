@@ -1,6 +1,5 @@
 package space.habitz.api.domain.point.service;
 
-import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,11 +23,9 @@ public class FamilyPointHistoryServiceImpl implements FamilyPointHistoryService 
 	@Override
 	public List<PointHistory> getPointHistory(Member member, LocalDate startDate, LocalDate endDate) {
 		String familyId = member.getFamily().getId();
-
 		List<FamilyPointHistory> familyPointHistories = familyPointHistoryRepository.findFamilyPointHistoriesByFamily_IdAndCreatedAtBetweenOrderByCreatedAtDesc(
 			familyId,
-			Timestamp.valueOf(startDate.atStartOfDay()), Timestamp.valueOf(endDate.atStartOfDay()));
-
+			startDate.atStartOfDay(), endDate.atStartOfDay().plusDays(1));
 		return familyPointHistories.stream()
 			.map(familyPoint -> PointHistory.builder()
 				.nickname(familyPoint.getMember().getNickname())

@@ -1,6 +1,6 @@
 package space.habitz.api.domain.point.dto;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 import com.querydsl.core.annotations.QueryProjection;
 
@@ -8,7 +8,7 @@ import lombok.Getter;
 
 @Getter
 public class PointRecentHistoryInfoDto {
-	private Timestamp date;
+	private LocalDateTime date;
 	private int point;
 	private int totalPoint;
 	private String content;
@@ -17,7 +17,7 @@ public class PointRecentHistoryInfoDto {
 	private Long productPaymentId;
 
 	@QueryProjection
-	public PointRecentHistoryInfoDto(Timestamp date, int point, int totalPoint, String content, String emoji,
+	public PointRecentHistoryInfoDto(LocalDateTime date, int point, int totalPoint, String content, String emoji,
 		Long missionId, Long productPaymentId) {
 		this.date = date;
 		this.point = point;
