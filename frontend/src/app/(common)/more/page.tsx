@@ -169,7 +169,7 @@ const More = () => {
                     })}
                     scroll={false}
                   >
-                    내정보
+                    내 정보
                   </Link>
                 </li>
                 <li
