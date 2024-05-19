@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +21,7 @@ import space.habitz.api.domain.mission.entity.Mission;
 import space.habitz.api.domain.mission.entity.StatusCode;
 import space.habitz.api.domain.mission.repository.MissionRepository;
 import space.habitz.api.domain.mission.util.MissionConverter;
+import space.habitz.api.domain.notification.dto.SingleNotificationEvent;
 import space.habitz.api.domain.schedule.dto.ScheduleDto;
 import space.habitz.api.domain.schedule.dto.ScheduleMissionDto;
 import space.habitz.api.domain.schedule.dto.ScheduleRequestDto;
@@ -43,6 +45,7 @@ public class ScheduleService {
 	private final MissionRepository missionRepository;
 	private final ScheduleCustomRepositoryImpl scheduleCustomRepository;
 	private final FamilyCustomRepositoryImpl familyCustomRepository;
+	private final ApplicationEventPublisher eventPublisher;
 
 	/**
 	 * 일정 생성
@@ -68,9 +71,12 @@ public class ScheduleService {
 			LocalDate today = LocalDate.now();
 			if (today.isEqual(schedule.getStartDate()) && ScheduleDateUtil.isActiveDay(schedule, today)) {
 				createMissionBySchedule(schedule);        // 미션 생성
+				// 당일 생성된 미션에 알림 부여
+				String message = String.format("%s %s \n금일 미션이 부여되었습니다.", schedule.getEmoji(), schedule.getTitle());
+				eventPublisher.publishEvent(SingleNotificationEvent.createMission(schedule.getChild().getId(), message));
 			}
 			// 아이별 스케줄 ID 추가
-			scheduleIdList.add(Map.of("childUUID", childUUID,"scheduleId", schedule.getId()) );
+			scheduleIdList.add(Map.of("childUUID", childUUID,"scheduleId", schedule.getId()));
 		}
 		return Map.of("schedule", scheduleIdList);
 	}
