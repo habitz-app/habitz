@@ -49,7 +49,7 @@ const Notification = () => {
     return () => {
       readAllNotification.mutate();
     };
-  }, []);
+  }, [readAllNotification]);
 
   return (
     <>
