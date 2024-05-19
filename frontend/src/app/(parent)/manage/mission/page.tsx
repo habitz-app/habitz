@@ -75,7 +75,7 @@ const Page = () => {
     });
   const getDateMissionData = async (date: string) => {
     const givenDate = new Date(date);
-    const currentDate = new Date();
+    const currentDate = new Date(getCurrentKSTDate());
     if (givenDate > currentDate) {
       const res = await axios.get<childMission[]>('/schedule/children/list', {
         params: { date: date },
