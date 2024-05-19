@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
 import space.habitz.api.domain.member.entity.Member;
+import space.habitz.api.domain.notification.dto.NotificationCountResponseDto;
 import space.habitz.api.domain.notification.dto.NotificationRequestDto;
 import space.habitz.api.domain.notification.dto.NotificationResponseDto;
 import space.habitz.api.domain.notification.service.NotificationService;
@@ -49,4 +50,15 @@ public class NotificationController {
 		notificationService.updateAllRead(member);
 		return ApiResponseData.success();
 	}
+
+	@GetMapping("/count")
+	public ResponseEntity<?> getNotificationCount(
+		@AuthenticationPrincipal Member member
+	) {
+		int count = notificationService.getNotificationCount(member);
+		return ApiResponseData.success(NotificationCountResponseDto.builder()
+			.count(count)
+			.build());
+	}
+
 }

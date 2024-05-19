@@ -23,4 +23,6 @@ public interface NotificationService {
 	void delete(Long id);
 
 	void updateAllRead(Member member);
+
+	int getNotificationCount(Member member);
 }

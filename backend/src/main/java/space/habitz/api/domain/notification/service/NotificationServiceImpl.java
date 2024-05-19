@@ -107,6 +107,11 @@ public class NotificationServiceImpl implements NotificationService {
 		notificationRepository.saveAll(notifications);
 	}
 
+	@Override
+	public int getNotificationCount(Member member) {
+		return notificationRepository.countByMember_IdAndReadAtIsNullAndDeletedAtIsNull(member.getId());
+	}
+
 	private Notification getChildNotification(FamilyNotificationEvent familyNotificationEvent) {
 		NotificationType notificationType = familyNotificationEvent.getNotificationType();
 		String content = familyNotificationEvent.getContent();
