@@ -1,6 +1,6 @@
 'use client';
 import { confirm } from '@/apis/toss';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import axios from '@/apis/axios';
 import usePoint from '@/queries/usePoint';
@@ -19,6 +19,7 @@ const ChargeSuccess = () => {
   const amount = searchParams.get('amount');
   const point = usePoint();
   const queryClient = useQueryClient();
+  const [isConfirmed, setIsConfirmed] = useState(false);
 
   useEffect(() => {
     const doConfirm = async (
@@ -47,10 +48,14 @@ const ChargeSuccess = () => {
           paymentKey: res.paymentKey,
           amount: res.card?.amount,
         })
-        .then(() => {
-          queryClient.invalidateQueries({
-            queryKey: ['me', 'point'],
-          });
+        .then(async () => {
+          await queryClient
+            .invalidateQueries({
+              queryKey: ['me', 'point'],
+            })
+            .then(() => {
+              setIsConfirmed(true);
+            });
         });
     });
   }, [queryClient, router, searchParams]);
@@ -167,7 +172,7 @@ const ChargeSuccess = () => {
                 color: 'secondary.strong',
               })}
             >
-              {Intl.NumberFormat('ko-KR').format(Number(amount))}
+              {Number(amount).toLocaleString()}
               <Image
                 src="/coin.svg"
                 alt="coin image"
@@ -205,7 +210,7 @@ const ChargeSuccess = () => {
                 color: 'secondary.strong',
               })}
             >
-              {Intl.NumberFormat('ko-KR').format(Number(point?.data ?? 0))}
+              {isConfirmed && point.data && point.data.toLocaleString()}
               <Image
                 src="/coin.svg"
                 alt="coin image"
