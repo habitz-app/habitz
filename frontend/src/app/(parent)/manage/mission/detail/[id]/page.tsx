@@ -1,7 +1,7 @@
 'use client';
 import { MissionDetailResponse } from '@/types/api/response';
 import axios from '@/apis/axios';
-import { useQuery } from '@tanstack/react-query';
+import { useQueryClient, useQuery } from '@tanstack/react-query';
 import Image from 'next/image';
 import { css } from 'styled-system/css';
 import { HStack, Stack } from 'styled-system/jsx';
@@ -68,6 +68,7 @@ const MenuComponent = ({
 
 const ParentMissionDetail = ({ params }: { params: { id: number } }) => {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const statusMap = {
     EMPTY: '미션 중',
     ACCEPT: '미션 완료',
@@ -94,6 +95,9 @@ const ParentMissionDetail = ({ params }: { params: { id: number } }) => {
       })
       .then((res) => {
         console.log('Post MissionApproval Success! 😊', res);
+        queryClient.invalidateQueries({
+          queryKey: ['MissionDetail', params.id],
+        });
         router.push('/manage/mission');
       })
       .catch((error) => {
@@ -192,16 +196,33 @@ const ParentMissionDetail = ({ params }: { params: { id: number } }) => {
               justify={'center'}
               gap={'2rem'}
             >
-              <Image
-                src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Smilies/Dotted%20Line%20Face.png"
-                alt="image"
-                width={150}
-                height={150}
-                style={{ alignSelf: 'center' }}
-              />
-              <p className={css({ textStyle: 'heading1.bold' })}>
-                아직 아이가 인증하지 않았어요...
-              </p>
+              {missionDetail?.mission?.status !== 'ACCEPT' ? (
+                <>
+                  <Image
+                    src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Smilies/Dotted%20Line%20Face.png"
+                    alt="image"
+                    width={150}
+                    height={150}
+                    style={{ alignSelf: 'center' }}
+                  />
+                  <p className={css({ textStyle: 'heading1.bold' })}>
+                    아직 아이가 인증하지 않았어요...
+                  </p>
+                </>
+              ) : (
+                <>
+                  <Image
+                    src="/stamp.png"
+                    alt="image"
+                    width={300}
+                    height={300}
+                    style={{ alignSelf: 'center' }}
+                  />
+                  <p className={css({ textStyle: 'heading1.bold' })}>
+                    인증 완료
+                  </p>
+                </>
+              )}
             </Stack>
           )}
         </Stack>
