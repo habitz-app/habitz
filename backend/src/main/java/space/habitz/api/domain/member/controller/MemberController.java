@@ -11,8 +11,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -149,11 +149,15 @@ public class MemberController {
 	// 	return ResponseEntity.status(HttpStatus.OK).body(ResponseData.success("회원 수정 성공"));
 	// }
 
-	@PutMapping(value = "/edit", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@PatchMapping(value = "/edit", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseData<?> editUserData(@AuthenticationPrincipal Member member,
 		String nickName,
 		@RequestPart(name = "image", required = false) MultipartFile image) throws Exception {
-		memberService.updateUserInfo(member, nickName, image);
+		if (image != null && image.isEmpty()) {
+			memberService.updateUserInfo(member, nickName, image);
+		} else {
+			memberService.updateUserInfo(member, nickName);
+		}
 		return ResponseData.success("회원 정보 수정 성공");
 	}
 }

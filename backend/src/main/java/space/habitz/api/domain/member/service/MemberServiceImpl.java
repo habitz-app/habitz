@@ -213,4 +213,11 @@ public class MemberServiceImpl implements MemberService {
 
 	}
 
+	@Override
+	@Transactional
+	public void updateUserInfo(Member member, String newNickname) throws Exception {
+		member.setNickname(newNickname);
+		memberRepository.save(member);
+	}
+
 }
