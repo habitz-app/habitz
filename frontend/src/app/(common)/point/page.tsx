@@ -9,6 +9,10 @@ import {
 } from '@/types/api/response';
 import DatePicker from '@/components/common/DatePicker';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { IonIcon } from '@ionic/react';
+import { Button } from '@/components/ui/button';
+import { chevronBackOutline } from 'ionicons/icons';
 
 const Point = () => {
   const point = useQuery<number>({
@@ -57,19 +61,69 @@ const Point = () => {
     },
   });
 
+  const router = useRouter();
+
   return (
     <div>
       <header
         className={css({
-          textStyle: 'title3.bold',
-          color: 'label.normal',
           display: 'flex',
-          h: '3.75rem',
-          justifyContent: 'center',
+          position: 'sticky',
+          height: '3.75rem',
+          top: 0,
+          bg: 'background.normal.normal/80',
+          backdropFilter: 'auto',
+          backdropBlur: 'sm',
+          px: '1rem',
+          justifyContent: 'flex-start',
           alignItems: 'center',
         })}
       >
-        내 포인트
+        <div
+          className={css({
+            position: 'relative',
+            display: 'flex',
+            w: 'full',
+            h: 'full',
+          })}
+        >
+          <div
+            className={css({
+              zIndex: '10',
+              display: 'flex',
+            })}
+          >
+            <Button
+              color="label.alternative"
+              variant="link"
+              onClick={() => {
+                router.push('/more');
+              }}
+            >
+              <IonIcon
+                icon={chevronBackOutline}
+                className={css({
+                  w: '24px',
+                  h: '24px',
+                })}
+              />
+            </Button>
+          </div>
+          <section
+            className={css({
+              width: 'full',
+              height: 'full',
+              left: 0,
+              textStyle: 'title3.bold',
+              position: 'absolute',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            })}
+          >
+            내 포인트
+          </section>
+        </div>
       </header>
       <div
         className={css({

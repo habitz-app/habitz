@@ -7,10 +7,11 @@ import { FormLabel } from '@/components/ui/form-label';
 import { Input, type InputProps } from '@/components/ui/input';
 import { useEffect, useState } from 'react';
 import { IonIcon } from '@ionic/react';
-import { pencilOutline } from 'ionicons/icons';
+import { chevronBackOutline, pencilOutline } from 'ionicons/icons';
 import { IconButton, type IconButtonProps } from '@/components/ui/icon-button';
 import axios from '@/apis/axios';
 import { Button } from '@/components/ui/button';
+import { useRouter } from 'next/navigation';
 
 export default function Home() {
   const me = useMe(); // Custom hook to fetch user data
@@ -65,25 +66,70 @@ export default function Home() {
     }
   }, [me.data]);
 
+  const router = useRouter();
+
   return (
     <>
       <div>
         <header
           className={css({
             display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            height: '3.75rem',
             position: 'sticky',
+            height: '3.75rem',
+            top: 0,
+            bg: 'background.normal.normal/80',
+            backdropFilter: 'auto',
+            backdropBlur: 'sm',
+            px: '1rem',
+            justifyContent: 'flex-start',
+            alignItems: 'center',
           })}
         >
-          <p
+          <div
             className={css({
-              textStyle: 'title2.bold',
+              position: 'relative',
+              display: 'flex',
+              w: 'full',
+              h: 'full',
             })}
           >
-            내 정보
-          </p>
+            <div
+              className={css({
+                zIndex: '10',
+                display: 'flex',
+              })}
+            >
+              <Button
+                color="label.alternative"
+                variant="link"
+                onClick={() => {
+                  router.push('/more');
+                }}
+              >
+                <IonIcon
+                  icon={chevronBackOutline}
+                  className={css({
+                    w: '24px',
+                    h: '24px',
+                  })}
+                />
+              </Button>
+            </div>
+            <section
+              className={css({
+                width: 'full',
+                height: 'full',
+                left: 0,
+                textStyle: 'title3.bold',
+                position: 'absolute',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              })}
+            >
+              내 정보
+            </section>
+          </div>
         </header>
         <div
           className={css({
