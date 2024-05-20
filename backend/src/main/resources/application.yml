@@ -1,0 +1,73 @@
+spring:
+  cloud:
+    aws:
+      credentials:
+        accessKey: ${S3_ACCESS_KEY}
+        secretKey: ${S3_SECRET_KEY}
+      s3:
+        bucket: ${S3_BUCKET_NAME}
+      region:
+        static: ${S3_BUCKET_REGION}
+      stack:
+        auto: false
+
+  application:
+    name: habitz
+  security:
+    oauth2:
+      client:
+        registration:
+          kakao:
+            client-id: ${KAKAO_CLIENT_ID}
+            authorization-grant-type: authorization_code
+            redirect-uri: ${KAKAO_REDIRECT_URI}/login/oauth2/code/kakao
+            scope: openid, profile_nickname, profile_image, account_email
+            adminKey: ${KAKAO_ADMIN_KEY}
+        provider:
+          kakao:
+            issuer-uri: https://kauth.kakao.com
+            authorization-uri: https://kauth.kakao.com/oauth/authorize
+            token-uri: https://kauth.kakao.com/oauth/token
+            user-info-uri: https://kapi.kakao.com/v1/oidc/userinfo
+            user-name-attribute: sub
+            logout-uri: https://kapi.kakao.com/v1
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    url: jdbc:mysql://${DB_HOST}:${DB_PORT}/${DB_NAME}?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+
+  jpa:
+    properties:
+      hibernate:
+        default_batch_fetch_size: 100
+    open-in-view: false
+
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
+      username: ${REDIS_USER}
+      password: ${REDIS_PWD}
+  batch:
+    job:
+      enabled: true
+
+jwt:
+  secret-key: ${JWT_SECRET_KEY}
+  access-token:
+    expiration: 86400000 # 1 day
+  refresh-token:
+    expiration: 604800000 # 7 days
+
+# SPRINGDOC SETUP
+springdoc:
+  show-actuator: true
+
+swaggerServerUrl: ${SWAGGER_SERVER_URL}
+
+
+# multipart 설정
+spring.servlet.multipart.max-file-size: 10MB
+spring.servlet.multipart.max-request-size: 10MB
