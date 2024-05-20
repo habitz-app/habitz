@@ -1,0 +1,56 @@
+version: '3'
+
+services:
+  gerrit:
+    container_name: gerrit
+    image: gerritcodereview/gerrit
+    user: root
+    ports:
+      - "8149:29418"
+      - "8989:8080"
+    depends_on:
+      - ldap
+    networks:
+      - npm-network
+    volumes:
+      - ./gerrit/etc:/var/gerrit/etc
+      - ./gerrit/git:/var/gerrit/git
+      - ./gerrit/db:/var/gerrit/db
+      - ./gerrit/index:/var/gerrit/index
+      - ./gerrit/cache:/var/gerrit/cache
+    environment:
+      - CANONICAL_WEB_URL=${CANONICAL_WEB_URL}
+      - TZ=Asia/Seoul
+    # init 이후 주석 처리
+    # command: init
+
+  ldap:
+    container_name: ldap
+    image: osixia/openldap
+    ports:
+      - "389:389"
+      - "636:636"
+    networks:
+      - npm-network
+    environment:
+      - LDAP_ADMIN_PASSWORD=${LDAP_ADMIN_PASSWORD}
+      - TZ=Asia/Seoul
+    volumes:
+      - ./gerrit/ldap/var:/var/lib/ldap
+      - ./gerrit/ldap/etc:/etc/ldap/slapd.d
+
+  ldap-admin:
+    container_name: ldap-admin
+    image: osixia/phpldapadmin
+    ports:
+      - "6443:443"
+    networks:
+      - npm-network
+    environment:
+      - PHPLDAPADMIN_LDAP_HOSTS=ldap
+      - TZ=Asia/Seoul
+
+networks:
+  npm-network:
+    name: npm-network
+    external: true
