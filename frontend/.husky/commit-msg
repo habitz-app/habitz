@@ -1,0 +1,2 @@
+pnpm exec commitlint --edit $1
+sh $(dirname "$0")/../../.husky/gerrit $1
