@@ -5,18 +5,20 @@
 
 > 삼성 청년 소프트웨어 아카데미(SSAFY) 10기 2학기 자율 프로젝트 (A309)
 
-🗓 **기간** : 2024.04.08 ~ 2024.05.17
-✨ **주제** : 미션과 보상을 통한 우리 아이 습관 형성 서비스
+🗓 **기간** : 2024.04.08 ~ 2024.05.17<br>
+✨ **주제** : 미션과 보상을 통한 우리 아이 습관 형성 서비스<br>
 
 <img src = "./assets/main.png">
 
 <br>
 <br>
-<p align="center">
+<div align="center">
   <a href="https://habitz.space/" > 🔗 HABITZ 서비스 구경가기 🔗</a>
-</p>
+</div>
+<br>
 <div align="center">
   <h3>📖 문서</h3> 
+  
   <p>
     <a href="https://www.notion.so/HABITZ-ac41f48516f24bad9cff4386a8c54eaf?pvs=4">📝 노션</a>
     &nbsp; | &nbsp; 
@@ -108,31 +110,9 @@ Habitz는 미션과 보상을 통해 자녀의 올바른 습관 형성을 만들
 
 ## 🛠 기술 스택 
 
-<style>
-  table, td, tr {
-    border : none;
-    text-align: center;
-  }
-  table {
-    width : 100%;
-  }
-</style>
-<table>
-  <thead>
-    <tr>
-      <th>Frontend</th>
-      <th>Backend</th>
-      <th>Infra</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td><img src = "./assets/system/front.png"></td>
-      <td><img src = "./assets/system/back.png"></td>
-      <td><img src = "./assets/system/infra.png"></td>
-    </tr>
-  </tbody>
-</table>
+| Frontend | Backend | Infra | 
+| :----:| :----:| :----:|
+| ![프론트엔드](./assets/system/front.png) | ![백엔드](./assets/system/back.png) | ![인프라](./assets/system/infra.png)|
 
 ### ✅ 구현 사항
 <il>
